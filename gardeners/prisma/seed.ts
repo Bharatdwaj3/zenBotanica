@@ -42,15 +42,15 @@ async function main() {
         email: f.email,
         username: f.username,
         password: hashedDefaultPassword,
-        role: 'master',
-        master: {
+        role: 'faculty',
+        faculty: {
           create: {
             email: f.email,
             Fname: f.Fname,
             Lname: f.Lname,
             age: f.age,
             gender: f.gender,
-            Expertise: f.Expertise,
+            Expertise: f.Expertise as any,
           },
         },
       },
@@ -66,15 +66,15 @@ async function main() {
         email: s.email,
         username: s.username,
         password: hashedDefaultPassword,
-        role: 'apprentice',
-        apprentice: {
+        role: 'student',
+        student: {
           create: {
             email: s.email,
             Fname: s.Fname,
             Lname: s.Lname,
             age: s.age,
             gender: s.gender,
-            Subjects: s.Subjects,
+            Subjects: s.Subjects as any,
           },
         },
       },

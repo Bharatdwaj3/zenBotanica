@@ -60,13 +60,13 @@ export const getUsersByIds = async (req: Request, res: Response): Promise<void> 
         id: true,
         email: true,
         role: true,
-        master: { select: { Fname: true, Lname: true } },
-        apprentice: { select: { Fname: true, Lname: true } },
+        faculty: { select: { Fname: true, Lname: true } },
+        student: { select: { Fname: true, Lname: true } },
       },
     });
 
     const result = users.map((u) => {
-      const profile = u.master || u.apprentice;
+      const profile = u.faculty || u.student;
       return {
         id: u.id,
         email: u.email,

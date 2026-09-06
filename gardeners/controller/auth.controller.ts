@@ -21,7 +21,7 @@ export const completeProfile = async (req: AuthRequest, res: Response): Promise<
     const { email, Fname, Lname, age, gender, Expertise, Subjects } = req.body;
 
     if (role === 'master') {
-      const master = await prisma.master.create({
+      const master = await prisma.faculty.create({
         data: { email, Fname, Lname, age: Number(age), gender, Expertise, userId },
       });
       res.status(201).json(master);
@@ -29,7 +29,7 @@ export const completeProfile = async (req: AuthRequest, res: Response): Promise<
     }
 
     if (role === 'apprentice') {
-      const apprentice = await prisma.apprentice.create({
+      const apprentice = await prisma.student.create({
         data: { email, Fname, Lname, age: Number(age), gender, Subjects, userId },
       });
       res.status(201).json(apprentice);
@@ -132,8 +132,8 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<void>
       where: { id: userId },
       select: {
         id: true, email: true, role: true, createdAt: true, avatar: true,
-        master: true,
-        apprentice: true,
+        faculty: true,
+        student: true,
       },
     });
 
