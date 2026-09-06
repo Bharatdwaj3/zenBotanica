@@ -12,7 +12,7 @@ export const getSessionCounts = async (req: Request, res: Response): Promise<voi
       ? { borrowedAt: { gte: new Date(Date.now() - days * 24 * 60 * 60 * 1000) } }
       : {};
 
-    const counts = await prisma.session.groupBy({
+    const counts = await prisma.loan.groupBy({
       by: ['bookId'],
       where,
       _count: { bookId: true },

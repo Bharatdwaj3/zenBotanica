@@ -1,9 +1,9 @@
-import nodenotificationer from 'nodenotificationer';
+import nodemailer from 'nodemailer';
 import { MAILHOG_HOST, MAILHOG_PORT } from './env.config.ts';
 
 // Notificationhog needs no auth/TLS — it's a local dev-only fake SMTP server.
 // Swapping to a real provider later only means changing this transport config.
-const transporter = nodenotificationer.createTransport({
+const transporter = nodemailer.createTransport({
   host: MAILHOG_HOST,
   port: MAILHOG_PORT,
   secure: false,
@@ -17,7 +17,7 @@ interface CareReminderEnotificationParams {
   daysOverdue: number;
 }
 
-export const sendCareReminderEnotification = async ({
+export const sendReminderEmail = async ({
   to,
   bookTitle,
   dueAt,
@@ -32,7 +32,7 @@ export const sendCareReminderEnotification = async ({
     ? `Your session of "${bookTitle}" was due on ${dueAt.toDateString()} and is now ${daysOverdue} day(s) overdue. Please return it as soon as possible to avoid further penaltys.`
     : `Your session of "${bookTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
 
-  await transporter.sendNotification({
+  await transporter.sendMail({
     from: '"Bonsai Library" <library@bonsai.local>',
     to,
     subject,

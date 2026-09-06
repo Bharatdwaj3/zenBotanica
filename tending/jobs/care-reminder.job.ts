@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import prisma from '../config/prisma-client.ts';
-import { sendCareReminderEmail } from '../config/notification.config.ts';
+import { sendReminderEmail } from '../config/notification.config.ts';
 import { CATALOG_SERVICE_URL, MEMBERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 
 const DUE_SOON_WINDOW_DAYS = 2;
@@ -38,7 +38,7 @@ export const runCareReminderCheck = async (): Promise<void> => {
   const dueSoonThreshold = new Date();
   dueSoonThreshold.setDate(dueSoonThreshold.getDate() + DUE_SOON_WINDOW_DAYS);
 
-  const sessionsToRemind = await prisma.session.findMany({
+  const sessionsToRemind = await prisma.loan.findMany({
     where: {
       returnedAt: null,
       dueAt: { lt: dueSoonThreshold },
@@ -64,7 +64,7 @@ export const runCareReminderCheck = async (): Promise<void> => {
     }
 
     try {
-      await sendCareReminderEmail({ to: email, bookTitle, dueAt: session.dueAt, isOverdue, daysOverdue });
+      await sendReminderEmail({ to: email, bookTitle, dueAt: session.dueAt, isOverdue, daysOverdue });
       console.log(`[care-reminder.job] Sent care-reminder to ${email} for session ${session.id}`);
     } catch (error) {
       console.error(`[care-reminder.job] Failed to send care-reminder for session ${session.id}:`, error);
