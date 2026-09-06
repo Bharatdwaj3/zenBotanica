@@ -5,7 +5,7 @@ import { setAccessToken, setRefreshToken, clearAuthCookies } from '../middleware
 import type { AuthRequest } from '../middleware/auth.middleware.ts';
 import PERMISSIONS from '../config/permissions.config.ts';
 
-const PUBLIC_SIGNUP_ROLES = ['faculty', 'student']; // admin excluded — seed-only
+const PUBLIC_SIGNUP_ROLES = ['master', 'apprentice']; // admin excluded — seed-only
 
 
 export const completeProfile = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -20,19 +20,19 @@ export const completeProfile = async (req: AuthRequest, res: Response): Promise<
 
     const { email, Fname, Lname, age, gender, Expertise, Subjects } = req.body;
 
-    if (role === 'faculty') {
-      const faculty = await prisma.faculty.create({
+    if (role === 'master') {
+      const master = await prisma.master.create({
         data: { email, Fname, Lname, age: Number(age), gender, Expertise, userId },
       });
-      res.status(201).json(faculty);
+      res.status(201).json(master);
       return;
     }
 
-    if (role === 'student') {
-      const student = await prisma.student.create({
+    if (role === 'apprentice') {
+      const apprentice = await prisma.apprentice.create({
         data: { email, Fname, Lname, age: Number(age), gender, Subjects, userId },
       });
-      res.status(201).json(student);
+      res.status(201).json(apprentice);
       return;
     }
 
@@ -132,8 +132,8 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<void>
       where: { id: userId },
       select: {
         id: true, email: true, role: true, createdAt: true, avatar: true,
-        faculty: true,
-        student: true,
+        master: true,
+        apprentice: true,
       },
     });
 

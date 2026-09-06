@@ -9,7 +9,7 @@ const transporter = nodenotificationer.createTransport({
   secure: false,
 });
 
-interface ReminderEnotificationParams {
+interface CareReminderEnotificationParams {
   to: string;
   bookTitle: string;
   dueAt: Date;
@@ -17,20 +17,20 @@ interface ReminderEnotificationParams {
   daysOverdue: number;
 }
 
-export const sendReminderEnotification = async ({
+export const sendCareReminderEnotification = async ({
   to,
   bookTitle,
   dueAt,
   isOverdue,
   daysOverdue,
-}: ReminderEnotificationParams): Promise<void> => {
+}: CareReminderEnotificationParams): Promise<void> => {
   const subject = isOverdue
     ? `Overdue: "${bookTitle}" is ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} late`
-    : `Reminder: "${bookTitle}" is due soon`;
+    : `CareReminder: "${bookTitle}" is due soon`;
 
   const body = isOverdue
-    ? `Your loan of "${bookTitle}" was due on ${dueAt.toDateString()} and is now ${daysOverdue} day(s) overdue. Please return it as soon as possible to avoid further fines.`
-    : `Your loan of "${bookTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
+    ? `Your session of "${bookTitle}" was due on ${dueAt.toDateString()} and is now ${daysOverdue} day(s) overdue. Please return it as soon as possible to avoid further penaltys.`
+    : `Your session of "${bookTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
 
   await transporter.sendNotification({
     from: '"Bonsai Library" <library@bonsai.local>',

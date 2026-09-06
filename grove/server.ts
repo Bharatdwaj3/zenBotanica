@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import bookRoutes from './routes/book.routes.ts';
+import specimenRoutes from './routes/specimen.routes.ts';
 import storageRoutes from './routes/storage.routes.ts';
 import cartRoutes from './routes/cart.routes.ts';
 import wishlistRoutes from './routes/wishlist.routes.ts';
@@ -14,7 +14,7 @@ app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/v1/book', bookRoutes);
+app.use('/api/v1/specimen', specimenRoutes);
 app.use('/api/v1/storage', storageRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/wishlist', wishlistRoutes);

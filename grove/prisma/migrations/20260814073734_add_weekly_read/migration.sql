@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "book" ADD COLUMN     "weeklyRead" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "specimen" ADD COLUMN     "weeklyRead" BOOLEAN NOT NULL DEFAULT false;

@@ -4,21 +4,21 @@ import type { AuthRequest } from "../middleware/auth.middleware.ts";
 
 const addToWishlist = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { bookId } = req.body;
+    const { specimenId } = req.body;
     const userId = req.user?.id;
 
-    if (!bookId) {
-      res.status(400).json({ message: "bookId is required" });
+    if (!specimenId) {
+      res.status(400).json({ message: "specimenId is required" });
       return;
     }
 
     const wishlistItem = await prisma.wishlist_item.create({
-      data: { userId: userId!, bookId: Number(bookId) },
+      data: { userId: userId!, specimenId: Number(specimenId) },
     });
     res.status(201).json(wishlistItem);
   } catch (error: any) {
     if (error.code === "P2002") {
-      res.status(409).json({ message: "This book is already in your wishlist" });
+      res.status(409).json({ message: "This specimen is already in your wishlist" });
       return;
     }
     const message = error instanceof Error ? error.message : "Failed to add to wishlist";
@@ -28,16 +28,16 @@ const addToWishlist = async (req: AuthRequest, res: Response): Promise<void> => 
 
 const removeFromWishlist = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const bookId = Number(req.params.bookId);
+    const specimenId = Number(req.params.specimenId);
     const userId = req.user?.id;
 
     await prisma.wishlist_item.delete({
-      where: { userId_bookId: { userId: userId!, bookId } },
+      where: { userId_specimenId: { userId: userId!, specimenId } },
     });
     res.status(200).json({ message: "Removed from wishlist" });
   } catch (error: any) {
     if (error.code === "P2025") {
-      res.status(404).json({ message: "This book is not in your wishlist" });
+      res.status(404).json({ message: "This specimen is not in your wishlist" });
       return;
     }
     const message = error instanceof Error ? error.message : "Failed to remove from wishlist";
@@ -50,7 +50,7 @@ const listWishlist = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.id;
     const wishlistItems = await prisma.wishlist_item.findMany({
       where: { userId },
-      include: { book: true },
+      include: { specimen: true },
       orderBy: { addedAt: "desc" },
     });
     res.status(200).json(wishlistItems);

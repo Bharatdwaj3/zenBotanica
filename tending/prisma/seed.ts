@@ -2,8 +2,8 @@ import prisma from '../config/prisma-client.ts';
 import { MEMBERS_SERVICE_URL, CATALOG_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 
 // NOTE: this script is not idempotent like gardeners'/grove's seed scripts —
-// loan/fine have no unique field to upsert on. Running it twice creates
-// duplicate rows. Fine for a one-off test seed, just don't re-run blindly.
+// session/penalty have no unique field to upsert on. Running it twice creates
+// duplicate rows. Penalty for a one-off test seed, just don't re-run blindly.
 
 const ADMIN_EMAIL = 'admin@library.local';
 
@@ -67,8 +67,8 @@ async function main() {
     bookIds.push(await resolveBookId(isbn));
   }
 
-  // Mix of loan states: active (not due yet), overdue, returned
-  const loanPlan = [
+  // Mix of session states: active (not due yet), overdue, returned
+  const sessionPlan = [
     { userIndex: 0, bookIndex: 0, dueInDays: 10, returned: false },  // active
     { userIndex: 1, bookIndex: 1, dueInDays: -3, returned: false },  // overdue
     { userIndex: 2, bookIndex: 2, dueInDays: -1, returned: true },   // returned late
@@ -79,23 +79,23 @@ async function main() {
     { userIndex: 7, bookIndex: 7, dueInDays: -5, returned: false },  // overdue
   ];
 
-  console.log('Seeding loans...');
-  for (const l of loanPlan) {
-    await prisma.loan.create({
+  console.log('Seeding sessions...');
+  for (const l of sessionPlan) {
+    await prisma.session.create({
       data: {
         userId: userIds[l.userIndex],
         bookId: bookIds[l.bookIndex],
         borrowedAt: daysFromNow(l.dueInDays - 14),
         dueAt: daysFromNow(l.dueInDays),
         returnedAt: l.returned ? daysFromNow(l.dueInDays - 2) : null,
-        fineAmount: !l.returned && l.dueInDays < 0 ? Math.abs(l.dueInDays) * 5 : 0,
+        penaltyAmount: !l.returned && l.dueInDays < 0 ? Math.abs(l.dueInDays) * 5 : 0,
       },
     });
   }
-  console.log(`Seeded ${loanPlan.length} loans.`);
+  console.log(`Seeded ${sessionPlan.length} sessions.`);
 
-  // Fines: mix of paid and unpaid
-  const finePlan = [
+  // Penaltys: mix of paid and unpaid
+  const penaltyPlan = [
     { userIndex: 1, amount: 15, reason: 'Overdue return', paid: false },
     { userIndex: 4, amount: 35, reason: 'Overdue return', paid: false },
     { userIndex: 7, amount: 25, reason: 'Overdue return', paid: false },
@@ -103,9 +103,9 @@ async function main() {
     { userIndex: 5, amount: 5, reason: 'Damaged cover', paid: true },
   ];
 
-  console.log('Seeding fines...');
-  for (const f of finePlan) {
-    await prisma.fine.create({
+  console.log('Seeding penaltys...');
+  for (const f of penaltyPlan) {
+    await prisma.penalty.create({
       data: {
         userId: userIds[f.userIndex],
         amount: f.amount,
@@ -115,7 +115,7 @@ async function main() {
       },
     });
   }
-  console.log(`Seeded ${finePlan.length} fines.`);
+  console.log(`Seeded ${penaltyPlan.length} penaltys.`);
 
   console.log('Done.');
 }

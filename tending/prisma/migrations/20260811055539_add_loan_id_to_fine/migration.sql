@@ -1,11 +1,11 @@
 /*
   Warnings:
 
-  - A unique constraint covering the columns `[loanId]` on the table `fine` will be added. If there are existing duplicate values, this will fail.
+  - A unique constraint covering the columns `[sessionId]` on the table `penalty` will be added. If there are existing duplicate values, this will fail.
 
 */
 -- AlterTable
-ALTER TABLE "fine" ADD COLUMN     "loanId" INTEGER;
+ALTER TABLE "penalty" ADD COLUMN     "sessionId" INTEGER;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "fine_loanId_key" ON "fine"("loanId");
+CREATE UNIQUE INDEX "penalty_sessionId_key" ON "penalty"("sessionId");

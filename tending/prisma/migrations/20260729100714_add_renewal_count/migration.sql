@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "loan" ADD COLUMN     "renewalCount" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "session" ADD COLUMN     "renewalCount" INTEGER NOT NULL DEFAULT 0;

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "fine" ADD COLUMN     "waived" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "penalty" ADD COLUMN     "waived" BOOLEAN NOT NULL DEFAULT false;

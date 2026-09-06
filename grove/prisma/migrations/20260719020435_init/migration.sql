@@ -2,7 +2,7 @@
 CREATE TYPE "Genre" AS ENUM ('FICTION', 'NON_FICTION', 'FANTASY', 'SCIENCE', 'SCIENCE_FICTION', 'MYSTERY', 'ROMANCE', 'HORROR', 'HISTORY', 'BIOGRAPHY', 'POETRY', 'DRAMA', 'SELF_HELP', 'TECHNOLOGY', 'PHILOSOPHY', 'CHILDREN');
 
 -- CreateTable
-CREATE TABLE "book" (
+CREATE TABLE "specimen" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "author" TEXT NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE "book" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
 
-    CONSTRAINT "book_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "specimen_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "book_isbn_key" ON "book"("isbn");
+CREATE UNIQUE INDEX "specimen_isbn_key" ON "specimen"("isbn");

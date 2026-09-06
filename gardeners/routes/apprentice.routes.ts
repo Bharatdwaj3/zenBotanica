@@ -5,36 +5,36 @@ import { requireRole } from '../middleware/role.middleware.ts';
 const router = Router();
 
 import {
-  listStudent,
-  getStudent,
-  registerStudent,
-  updateStudent,
-  removeStudent,
-} from '../controller/student.controller.ts';
+  listApprentice,
+  getApprentice,
+  registerApprentice,
+  updateApprentice,
+  removeApprentice,
+} from '../controller/apprentice.controller.ts';
 
 router.get('/',
     authUser,
-    requireRole(['admin', 'faculty', 'student']),
-    listStudent);
+    requireRole(['admin', 'master', 'apprentice']),
+    listApprentice);
 
 router.get('/profile/:id',
     authUser,
-    requireRole(['faculty', 'student', 'admin']),
-    getStudent);
+    requireRole(['master', 'apprentice', 'admin']),
+    getApprentice);
 
 router.post('/',
     authUser,
     requireRole(['admin']),
-    registerStudent);
+    registerApprentice);
 
 router.put('/profile/:id',
     authUser,
     requireRole(['admin']),
-    updateStudent);
+    updateApprentice);
 
 router.delete('/profile/:id',
     authUser,
     requireRole(['admin']),
-    removeStudent);
+    removeApprentice);
 
 export default router;

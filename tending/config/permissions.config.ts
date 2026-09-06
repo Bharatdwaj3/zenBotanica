@@ -1,7 +1,7 @@
 const PERMISSIONS: Record<string, string[]> = {
-  admin: ['listLoan', 'viewLoan', 'returnBook', 'forceReturnBook', 'issueFine', 'issueLoan'],
-  faculty: ['borrowBook', 'returnBook', 'viewLoan', 'payFine'],
-  student: ['borrowBook', 'returnBook', 'viewLoan', 'payFine'],
+  admin: ['listSession', 'viewSession', 'returnBook', 'forceReturnBook', 'issuePenalty', 'issueSession'],
+  faculty: ['borrowBook', 'returnBook', 'viewSession', 'payPenalty'],
+  student: ['borrowBook', 'returnBook', 'viewSession', 'payPenalty'],
 };
 
 export default PERMISSIONS;

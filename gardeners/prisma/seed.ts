@@ -4,18 +4,18 @@ import { ADMIN_EMAIL, ADMIN_PASSWORD, DEFAULT_USER_PASSWORD } from '../config/en
 
 const ADMIN_USERNAME = 'admin';
 
-const facultyUsers = [
-  { email: 'ravi.sharma@library.local', username: 'ravi.faculty', Fname: 'Ravi', Lname: 'Sharma', age: 34, gender: 'Male', Expertise: 'Computer_Science' },
-  { email: 'meera.iyer@library.local', username: 'meera.faculty', Fname: 'Meera', Lname: 'Iyer', age: 41, gender: 'Female', Expertise: 'History' },
-  { email: 'arjun.verma@library.local', username: 'arjun.faculty', Fname: 'Arjun', Lname: 'Verma', age: 29, gender: 'Male', Expertise: 'Literature' },
-  { email: 'priya.nair@library.local', username: 'priya.faculty', Fname: 'Priya', Lname: 'Nair', age: 37, gender: 'Female', Expertise: 'Geography' },
+const masterUsers = [
+  { email: 'ravi.sharma@library.local', username: 'ravi.master', Fname: 'Ravi', Lname: 'Sharma', age: 34, gender: 'Male', Expertise: 'Computer_Science' },
+  { email: 'meera.iyer@library.local', username: 'meera.master', Fname: 'Meera', Lname: 'Iyer', age: 41, gender: 'Female', Expertise: 'History' },
+  { email: 'arjun.verma@library.local', username: 'arjun.master', Fname: 'Arjun', Lname: 'Verma', age: 29, gender: 'Male', Expertise: 'Literature' },
+  { email: 'priya.nair@library.local', username: 'priya.master', Fname: 'Priya', Lname: 'Nair', age: 37, gender: 'Female', Expertise: 'Geography' },
 ];
 
-const studentUsers = [
-  { email: 'aditya.rao@library.local', username: 'aditya.student', Fname: 'Aditya', Lname: 'Rao', age: 20, gender: 'Male', Subjects: 'Computer_Science' },
-  { email: 'sneha.kulkarni@library.local', username: 'sneha.student', Fname: 'Sneha', Lname: 'Kulkarni', age: 21, gender: 'Female', Subjects: 'Social_Studies' },
-  { email: 'karan.mehta@library.local', username: 'karan.student', Fname: 'Karan', Lname: 'Mehta', age: 19, gender: 'Male', Subjects: 'Literature' },
-  { email: 'divya.menon@library.local', username: 'divya.student', Fname: 'Divya', Lname: 'Menon', age: 22, gender: 'Female', Subjects: 'History' },
+const apprenticeUsers = [
+  { email: 'aditya.rao@library.local', username: 'aditya.apprentice', Fname: 'Aditya', Lname: 'Rao', age: 20, gender: 'Male', Subjects: 'Computer_Science' },
+  { email: 'sneha.kulkarni@library.local', username: 'sneha.apprentice', Fname: 'Sneha', Lname: 'Kulkarni', age: 21, gender: 'Female', Subjects: 'Social_Studies' },
+  { email: 'karan.mehta@library.local', username: 'karan.apprentice', Fname: 'Karan', Lname: 'Mehta', age: 19, gender: 'Male', Subjects: 'Literature' },
+  { email: 'divya.menon@library.local', username: 'divya.apprentice', Fname: 'Divya', Lname: 'Menon', age: 22, gender: 'Female', Subjects: 'History' },
 ];
 
 async function main() {
@@ -34,7 +34,7 @@ async function main() {
 
   const hashedDefaultPassword = await bcrypt.hash(DEFAULT_USER_PASSWORD, 10);
 
-  for (const f of facultyUsers) {
+  for (const f of masterUsers) {
     const user = await prisma.user.upsert({
       where: { email: f.email },
       update: {},
@@ -42,8 +42,8 @@ async function main() {
         email: f.email,
         username: f.username,
         password: hashedDefaultPassword,
-        role: 'faculty',
-        faculty: {
+        role: 'master',
+        master: {
           create: {
             email: f.email,
             Fname: f.Fname,
@@ -55,10 +55,10 @@ async function main() {
         },
       },
     });
-    console.log(`Faculty ready: ${user.email} (username: ${user.username})`);
+    console.log(`Master ready: ${user.email} (username: ${user.username})`);
   }
 
-  for (const s of studentUsers) {
+  for (const s of apprenticeUsers) {
     const user = await prisma.user.upsert({
       where: { email: s.email },
       update: {},
@@ -66,8 +66,8 @@ async function main() {
         email: s.email,
         username: s.username,
         password: hashedDefaultPassword,
-        role: 'student',
-        student: {
+        role: 'apprentice',
+        apprentice: {
           create: {
             email: s.email,
             Fname: s.Fname,
@@ -79,10 +79,10 @@ async function main() {
         },
       },
     });
-    console.log(`Student ready: ${user.email} (username: ${user.username})`);
+    console.log(`Apprentice ready: ${user.email} (username: ${user.username})`);
   }
 
-  console.log(`Done. Seeded ${facultyUsers.length + studentUsers.length} non-admin users.`);
+  console.log(`Done. Seeded ${masterUsers.length + apprenticeUsers.length} non-admin users.`);
 }
 
 main()

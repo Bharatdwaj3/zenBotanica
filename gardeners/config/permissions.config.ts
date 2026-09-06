@@ -1,10 +1,10 @@
 const PERMISSIONS: Record<string, string[]> = {
   admin: [
-    'listFaculty', 'addFaculty', 'viewFaculty', 'editFaculty', 'delFaculty',
-    'listStudent', 'addStudent', 'viewStudent', 'editStudent', 'delStudent',
+    'listMaster', 'addMaster', 'viewMaster', 'editMaster', 'delMaster',
+    'listApprentice', 'addApprentice', 'viewApprentice', 'editApprentice', 'delApprentice',
   ],
-  faculty: ['viewFaculty', 'editFaculty', 'delFaculty', 'viewStudent', 'addStudent'],
-  student: ['listFaculty', 'viewFaculty'],
+  master: ['viewMaster', 'editMaster', 'delMaster', 'viewApprentice', 'addApprentice'],
+  apprentice: ['listMaster', 'viewMaster'],
 };
 
 export default PERMISSIONS;

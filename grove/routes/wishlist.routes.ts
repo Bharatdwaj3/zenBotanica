@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/", authUser, listWishlist);
 router.post("/", authUser, addToWishlist);
-router.delete("/:bookId", authUser, removeFromWishlist);
+router.delete("/:specimenId", authUser, removeFromWishlist);
 
 export default router;

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "book" ADD COLUMN     "pdfUrl" TEXT;
+ALTER TABLE "specimen" ADD COLUMN     "pdfUrl" TEXT;
