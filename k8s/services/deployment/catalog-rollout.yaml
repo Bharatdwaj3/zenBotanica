@@ -4,7 +4,7 @@ kind: Rollout
 
 metadata:
   labels:
-    hon-khana-service: catalog
+    bonsai-service: catalog
   name: catalog
 spec:
   strategy:
@@ -23,11 +23,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      hon-khana-service: catalog
+      bonsai-service: catalog
   template:
     metadata:
       labels:
-        hon-khana-service: catalog
+        bonsai-service: catalog
     spec:
       imagePullSecrets:
         - name: ghcr-secret

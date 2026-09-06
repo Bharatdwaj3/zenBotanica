@@ -1,4 +1,4 @@
-name: hon-khana CI/CD
+name: bonsai CI/CD
 
 on:
   push:

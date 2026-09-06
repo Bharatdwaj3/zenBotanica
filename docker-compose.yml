@@ -1,4 +1,4 @@
-name: hon-khana
+name: bonsai
 
 services:
   catalog-db:

@@ -55,7 +55,7 @@ export default function Signup() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-card rounded-2xl border border-border shadow-lg p-8">
-        <h1 className="text-3xl font-black text-foreground text-center mb-2">Join HonKhana</h1>
+        <h1 className="text-3xl font-black text-foreground text-center mb-2">Join Bonsai</h1>
         <p className="text-foreground/60 text-sm text-center mb-6">Create your library account</p>
 
         {error && (

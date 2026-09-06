@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend-ingress
-  namespace: hon-khana
+  namespace: bonsai
   annotations:
     cert-manager.io/cluster-issuer: selfsigned-issuer
     nginx.ingress.kubernetes.io/proxy-body-size: "300m"
@@ -10,10 +10,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - hon-khana.local
+        - bonsai.local
       secretName: frontend-tls
   rules:
-    - host: hon-khana.local
+    - host: bonsai.local
       http:
         paths:
           - path: /

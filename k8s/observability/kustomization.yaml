@@ -1,4 +1,4 @@
-namespace: hon-khana
+namespace: bonsai
 
 # 1. Automatically turn your local config files into ConfigMaps
 configMapGenerator:

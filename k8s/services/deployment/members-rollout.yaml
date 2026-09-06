@@ -3,7 +3,7 @@ kind: Rollout
 
 metadata:
   labels:
-    hon-khana-service: members
+    bonsai-service: members
   name: members
 spec:
   strategy:
@@ -22,11 +22,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      hon-khana-service: members
+      bonsai-service: members
   template:
     metadata:
       labels:
-        hon-khana-service: members
+        bonsai-service: members
     spec:
       imagePullSecrets:
         - name: ghcr-secret

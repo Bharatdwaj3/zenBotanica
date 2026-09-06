@@ -1,4 +1,4 @@
-namespace: hon-khana
+namespace: bonsai
 
 resources:
   - frontend-ingress.yaml
