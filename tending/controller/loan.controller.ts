@@ -14,12 +14,12 @@ const MAX_ACTIVE_LOANS: Record<string, number> = {
   admin: 0,
 };
 
-const withOverdueInfo = (loan: any) => {
-  const isOverdue = !loan.returnedAt && loan.dueAt < new Date();
+const withOverdueInfo = (care-session: any) => {
+  const isOverdue = !care-session.returnedAt && care-session.dueAt < new Date();
   const daysOverdue = isOverdue
-    ? Math.ceil((new Date().getTime() - loan.dueAt.getTime()) / (1000 * 60 * 60 * 24))
+    ? Math.ceil((new Date().getTime() - care-session.dueAt.getTime()) / (1000 * 60 * 60 * 24))
     : 0;
-  return { ...loan, isOverdue, daysOverdue };
+  return { ...care-session, isOverdue, daysOverdue };
 };
 
 const adjustBookCopies = async (bookId: number, delta: number): Promise<Response> => {
@@ -57,14 +57,14 @@ const attemptBorrow = async (userId: number, userRole: string, bookId: number) =
     return { status: 409, body: { message: "No copies currently available" } };
   }
 
-  const activeLoanCount = await prisma.loan.count({
+  const activeCare SessionCount = await prisma.care-session.count({
     where: { userId, returnedAt: null },
   });
-  if (activeLoanCount >= maxActive) {
-    return { status: 403, body: { message: `You have reached the maximum of ${maxActive} active loans` } };
+  if (activeCare SessionCount >= maxActive) {
+    return { status: 403, body: { message: `You have reached the maximum of ${maxActive} active care-sessions` } };
   }
 
-  const unpaidLoanFines = await prisma.loan.aggregate({
+  const unpaidCare SessionFines = await prisma.care-session.aggregate({
     where: { userId, fineAmount: { gt: 0 } },
     _sum: { fineAmount: true },
   });
@@ -72,7 +72,7 @@ const attemptBorrow = async (userId: number, userRole: string, bookId: number) =
     where: { userId, paid: false },
     _sum: { amount: true },
   });
-  const totalUnpaid = (unpaidLoanFines._sum.fineAmount || 0) + (unpaidIssuedFines._sum.amount || 0);
+  const totalUnpaid = (unpaidCare SessionFines._sum.fineAmount || 0) + (unpaidIssuedFines._sum.amount || 0);
   if (totalUnpaid > MAX_UNPAID_FINES) {
     return { status: 403, body: { message: `You have unpaid fines of ${totalUnpaid} — please clear them before borrowing` } };
   }
@@ -80,17 +80,17 @@ const attemptBorrow = async (userId: number, userRole: string, bookId: number) =
   const dueAt = new Date();
   dueAt.setDate(dueAt.getDate() + LOAN_PERIOD_DAYS);
 
-  const loan = await prisma.loan.create({
+  const care-session = await prisma.care-session.create({
     data: { bookId: book.id, userId, dueAt },
   });
 
   const groveRes = await adjustBookCopies(book.id, -1);
   if (!groveRes.ok) {
-    await prisma.loan.delete({ where: { id: loan.id } });
+    await prisma.care-session.delete({ where: { id: care-session.id } });
     return { status: 502, body: { message: "Could not reserve a copy right now — please try again" } };
   }
 
-  return { status: 201, body: loan };
+  return { status: 201, body: care-session };
 };
 
 const borrowBook = async (req: AuthRequest, res: ExpressResponse): Promise<void> => {
@@ -112,12 +112,12 @@ const borrowBook = async (req: AuthRequest, res: ExpressResponse): Promise<void>
   }
 };
 
-// Admin-only: issues a loan on behalf of a chosen member. `borrowBook` above
+// Admin-only: issues a care-session on behalf of a chosen member. `borrowBook` above
 // always uses the caller's own id/role — that's correct for self-service
 // borrowing, but useless for an admin issuing on someone else's behalf
-// (admins have a 0-loan cap, so it would always 403). This looks up the
+// (admins have a 0-care-session cap, so it would always 403). This looks up the
 // target member's real role server-side rather than trusting the client.
-const issueLoanForMember = async (req: AuthRequest, res: ExpressResponse): Promise<void> => {
+const issueCare SessionForMember = async (req: AuthRequest, res: ExpressResponse): Promise<void> => {
   try {
     const { bookId, userId } = req.body;
     if (!bookId || !userId) {
@@ -142,234 +142,234 @@ const issueLoanForMember = async (req: AuthRequest, res: ExpressResponse): Promi
     const result = await attemptBorrow(Number(userId), member.role, Number(bookId));
     res.status(result.status).json(result.body);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to issue loan";
+    const message = error instanceof Error ? error.message : "Failed to issue care-session";
     res.status(500).json({ message });
   }
 };
 
 const returnBook = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const loanId = Number(req.params.id);
+    const care-sessionId = Number(req.params.id);
     const userId = req.user?.id;
     const isAdmin = req.user?.role === "admin";
 
-    const loan = await prisma.loan.findUnique({ where: { id: loanId } });
-    if (!loan) {
-      res.status(404).json({ message: "Loan not found" });
+    const care-session = await prisma.care-session.findUnique({ where: { id: care-sessionId } });
+    if (!care-session) {
+      res.status(404).json({ message: "Care Session not found" });
       return;
     }
-    if (loan.returnedAt) {
+    if (care-session.returnedAt) {
       res.status(409).json({ message: "This book was already returned" });
       return;
     }
-    if (loan.userId !== userId && !isAdmin) {
-      res.status(403).json({ message: "You can only return your own loans" });
+    if (care-session.userId !== userId && !isAdmin) {
+      res.status(403).json({ message: "You can only return your own care-sessions" });
       return;
     }
 
     const returnedAt = new Date();
-    const daysLate = Math.max(0, Math.ceil((returnedAt.getTime() - loan.dueAt.getTime()) / (1000 * 60 * 60 * 24)));
+    const daysLate = Math.max(0, Math.ceil((returnedAt.getTime() - care-session.dueAt.getTime()) / (1000 * 60 * 60 * 24)));
     const fineAmount = daysLate * FINE_PER_DAY;
 
-    const updatedLoan = await prisma.loan.update({
-      where: { id: loanId },
+    const updatedCare Session = await prisma.care-session.update({
+      where: { id: care-sessionId },
       data: { returnedAt, fineAmount },
     });
-    const groveRes = await adjustBookCopies(loan.bookId, 1);
+    const groveRes = await adjustBookCopies(care-session.bookId, 1);
     if (!groveRes.ok) {
-      console.error(`Loan ${loanId} returned, but Catalog copy count was not incremented. Needs manual fix.`);
+      console.error(`Care Session ${care-sessionId} returned, but Catalog copy count was not incremented. Needs manual fix.`);
     }
 
-    res.status(200).json(updatedLoan);
+    res.status(200).json(updatedCare Session);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to return book";
     res.status(500).json({ message });
   }
 };
 
-const listMyLoans = async (req: AuthRequest, res: Response): Promise<void> => {
+const listMyCare Sessions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const loans = await prisma.loan.findMany({
+    const care-sessions = await prisma.care-session.findMany({
       where: { userId: req.user?.id },
       orderBy: { borrowedAt: "desc" },
     });
-    res.status(200).json(loans.map(withOverdueInfo));
+    res.status(200).json(care-sessions.map(withOverdueInfo));
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to fetch loans";
+    const message = error instanceof Error ? error.message : "Failed to fetch care-sessions";
     res.status(500).json({ message });
   }
 };
 
-// Enriches loans with { role, Fname, Lname } from gardeners, via one bulk call
-// per request instead of one lookup per loan. Fails open — if gardeners is
-// briefly unreachable, loans still return, just without the extra info.
-const attachUserInfo = async (loans: any[]) => {
-  const uniqueUserIds = [...new Set(loans.map((loan) => loan.userId))];
-  if (uniqueUserIds.length === 0) return loans;
+// Enriches care-sessions with { role, Fname, Lname } from gardeners, via one bulk call
+// per request instead of one lookup per care-session. Fails open — if gardeners is
+// briefly unreachable, care-sessions still return, just without the extra info.
+const attachUserInfo = async (care-sessions: any[]) => {
+  const uniqueUserIds = [...new Set(care-sessions.map((care-session) => care-session.userId))];
+  if (uniqueUserIds.length === 0) return care-sessions;
   try {
     const response = await fetch(
       `${MEMBERS_SERVICE_URL}/api/v1/internal/users/by-ids?ids=${uniqueUserIds.join(",")}`,
       { headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET } }
     );
-    if (!response.ok) return loans;
+    if (!response.ok) return care-sessions;
     const users = await response.json();
     const userMap = new Map(users.map((u: any) => [u.id, u]));
-    return loans.map((loan) => ({ ...loan, user: userMap.get(loan.userId) ?? null }));
+    return care-sessions.map((care-session) => ({ ...care-session, user: userMap.get(care-session.userId) ?? null }));
   } catch {
-    return loans;
+    return care-sessions;
   }
 };
 
-const listAllLoans = async (req: AuthRequest, res: Response): Promise<void> => {
+const listAllCare Sessions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const loans = await prisma.loan.findMany({ orderBy: { borrowedAt: "desc" } });
-    const loansWithInfo = loans.map(withOverdueInfo);
-    const enrichedLoans = await attachUserInfo(loansWithInfo);
-    res.status(200).json(enrichedLoans);
+    const care-sessions = await prisma.care-session.findMany({ orderBy: { borrowedAt: "desc" } });
+    const care-sessionsWithInfo = care-sessions.map(withOverdueInfo);
+    const enrichedCare Sessions = await attachUserInfo(care-sessionsWithInfo);
+    res.status(200).json(enrichedCare Sessions);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to fetch loans";
+    const message = error instanceof Error ? error.message : "Failed to fetch care-sessions";
     res.status(500).json({ message });
   }
 };
 
-const listOverdueLoans = async (req: AuthRequest, res: Response): Promise<void> => {
+const listOverdueCare Sessions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const loans = await prisma.loan.findMany({
+    const care-sessions = await prisma.care-session.findMany({
       where: {
         returnedAt: null,
         dueAt: { lt: new Date() },
       },
       orderBy: { dueAt: "asc" },
     });
-    res.status(200).json(loans.map(withOverdueInfo));
+    res.status(200).json(care-sessions.map(withOverdueInfo));
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to fetch overdue loans";
+    const message = error instanceof Error ? error.message : "Failed to fetch overdue care-sessions";
     res.status(500).json({ message });
   }
 };
 
 const renewBook = async (req: AuthRequest, res: ExpressResponse): Promise<void> => {
   try {
-    const loanId = Number(req.params.id);
+    const care-sessionId = Number(req.params.id);
     const userId = req.user?.id;
     const isAdmin = req.user?.role === "admin";
 
-    const loan = await prisma.loan.findUnique({ where: { id: loanId } });
-    if (!loan) {
-      res.status(404).json({ message: "Loan not found" });
+    const care-session = await prisma.care-session.findUnique({ where: { id: care-sessionId } });
+    if (!care-session) {
+      res.status(404).json({ message: "Care Session not found" });
       return;
     }
-    if (loan.returnedAt) {
+    if (care-session.returnedAt) {
       res.status(409).json({ message: "This book was already returned" });
       return;
     }
-    if (loan.userId !== userId && !isAdmin) {
-      res.status(403).json({ message: "You can only renew your own loans" });
+    if (care-session.userId !== userId && !isAdmin) {
+      res.status(403).json({ message: "You can only renew your own care-sessions" });
       return;
     }
 
-    if (loan.renewalCount >= MAX_RENEWALS) {
-      res.status(400).json({ message: `You have reached the maximum of ${MAX_RENEWALS} renewals for this loan` });
+    if (care-session.renewalCount >= MAX_RENEWALS) {
+      res.status(400).json({ message: `You have reached the maximum of ${MAX_RENEWALS} renewals for this care-session` });
       return;
     }
 
-    const newDueAt = new Date(loan.dueAt);
+    const newDueAt = new Date(care-session.dueAt);
     newDueAt.setDate(newDueAt.getDate() + LOAN_PERIOD_DAYS);
 
-    const updatedLoan = await prisma.loan.update({
-      where: { id: loanId },
+    const updatedCare Session = await prisma.care-session.update({
+      where: { id: care-sessionId },
       data: { dueAt: newDueAt, renewalCount: { increment: 1 } },
     });
 
-    res.status(200).json(updatedLoan);
+    res.status(200).json(updatedCare Session);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to renew book";
     res.status(500).json({ message });
   }
 };
 
-export { borrowBook, issueLoanForMember, returnBook, listMyLoans, listAllLoans, listOverdueLoans, renewBook, attemptBorrow, createLoanFine, waiveLoanFine };
+export { borrowBook, issueCare SessionForMember, returnBook, listMyCare Sessions, listAllCare Sessions, listOverdueCare Sessions, renewBook, attemptBorrow, createCare SessionFine, waiveCare SessionFine };
 
-// Creates (or returns the existing) payable `fine` record for an overdue loan's
+// Creates (or returns the existing) payable `fine` record for an overdue care-session's
 // fineAmount, so the existing Razorpay fine-payment flow can handle it. Idempotent —
 // safe to call every time the "Pay Fine" button is clicked.
-const createLoanFine = async (req: AuthRequest, res: Response): Promise<void> => {
+const createCare SessionFine = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const loanId = Number(req.params.id);
+    const care-sessionId = Number(req.params.id);
     const userId = req.user?.id;
 
-    const loan = await prisma.loan.findUnique({ where: { id: loanId } });
-    if (!loan) {
-      res.status(404).json({ message: "Loan not found" });
+    const care-session = await prisma.care-session.findUnique({ where: { id: care-sessionId } });
+    if (!care-session) {
+      res.status(404).json({ message: "Care Session not found" });
       return;
     }
-    if (loan.userId !== userId) {
-      res.status(403).json({ message: "You can only pay fines on your own loans" });
+    if (care-session.userId !== userId) {
+      res.status(403).json({ message: "You can only pay fines on your own care-sessions" });
       return;
     }
-    if (!loan.fineAmount || loan.fineAmount <= 0) {
-      res.status(400).json({ message: "This loan has no outstanding fine" });
+    if (!care-session.fineAmount || care-session.fineAmount <= 0) {
+      res.status(400).json({ message: "This care-session has no outstanding fine" });
       return;
     }
 
     const fine = await prisma.fine.upsert({
-      where: { loanId: loan.id },
+      where: { care-sessionId: care-session.id },
       update: {},
       create: {
-        userId: loan.userId,
-        amount: loan.fineAmount,
+        userId: care-session.userId,
+        amount: care-session.fineAmount,
         reason: "Late",
-        issuedBy: loan.userId,
-        loanId: loan.id,
+        issuedBy: care-session.userId,
+        care-sessionId: care-session.id,
       },
     });
 
     res.status(200).json(fine);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create fine for loan";
+    const message = error instanceof Error ? error.message : "Failed to create fine for care-session";
     res.status(500).json({ message });
   }
 };
 
-// Admin-only: writes off a loan's outstanding fine entirely. Unlike createLoanFine
+// Admin-only: writes off a care-session's outstanding fine entirely. Unlike createCare SessionFine
 // (self-service, owner-only), this has no ownership check — that's the whole point,
-// since it also covers orphaned loans where the original user no longer exists.
-const waiveLoanFine = async (req: AuthRequest, res: Response): Promise<void> => {
+// since it also covers orphaned care-sessions where the original user no longer exists.
+const waiveCare SessionFine = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const loanId = Number(req.params.id);
+    const care-sessionId = Number(req.params.id);
     const adminId = req.user?.id;
 
-    const loan = await prisma.loan.findUnique({ where: { id: loanId } });
-    if (!loan) {
-      res.status(404).json({ message: "Loan not found" });
+    const care-session = await prisma.care-session.findUnique({ where: { id: care-sessionId } });
+    if (!care-session) {
+      res.status(404).json({ message: "Care Session not found" });
       return;
     }
-    if (!loan.fineAmount || loan.fineAmount <= 0) {
-      res.status(400).json({ message: "This loan has no outstanding fine" });
+    if (!care-session.fineAmount || care-session.fineAmount <= 0) {
+      res.status(400).json({ message: "This care-session has no outstanding fine" });
       return;
     }
 
-    const waivedAmount = loan.fineAmount;
+    const waivedAmount = care-session.fineAmount;
 
     await prisma.fine.upsert({
-      where: { loanId: loan.id },
+      where: { care-sessionId: care-session.id },
       update: { waived: true },
       create: {
-        userId: loan.userId,
+        userId: care-session.userId,
         amount: waivedAmount,
         reason: "Waived by admin",
-        issuedBy: adminId ?? loan.userId,
-        loanId: loan.id,
+        issuedBy: adminId ?? care-session.userId,
+        care-sessionId: care-session.id,
         waived: true,
       },
     });
 
-    const updatedLoan = await prisma.loan.update({
-      where: { id: loan.id },
+    const updatedCare Session = await prisma.care-session.update({
+      where: { id: care-session.id },
       data: { fineAmount: 0 },
     });
 
-    res.status(200).json(updatedLoan);
+    res.status(200).json(updatedCare Session);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to waive fine";
     res.status(500).json({ message });

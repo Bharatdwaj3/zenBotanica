@@ -1,15 +1,15 @@
-import nodemailer from 'nodemailer';
+import nodenotificationer from 'nodenotificationer';
 import { MAILHOG_HOST, MAILHOG_PORT } from './env.config.ts';
 
-// Mailhog needs no auth/TLS — it's a local dev-only fake SMTP server.
+// Notificationhog needs no auth/TLS — it's a local dev-only fake SMTP server.
 // Swapping to a real provider later only means changing this transport config.
-const transporter = nodemailer.createTransport({
+const transporter = nodenotificationer.createTransport({
   host: MAILHOG_HOST,
   port: MAILHOG_PORT,
   secure: false,
 });
 
-interface ReminderEmailParams {
+interface ReminderEnotificationParams {
   to: string;
   bookTitle: string;
   dueAt: Date;
@@ -17,13 +17,13 @@ interface ReminderEmailParams {
   daysOverdue: number;
 }
 
-export const sendReminderEmail = async ({
+export const sendReminderEnotification = async ({
   to,
   bookTitle,
   dueAt,
   isOverdue,
   daysOverdue,
-}: ReminderEmailParams): Promise<void> => {
+}: ReminderEnotificationParams): Promise<void> => {
   const subject = isOverdue
     ? `Overdue: "${bookTitle}" is ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} late`
     : `Reminder: "${bookTitle}" is due soon`;
@@ -32,7 +32,7 @@ export const sendReminderEmail = async ({
     ? `Your loan of "${bookTitle}" was due on ${dueAt.toDateString()} and is now ${daysOverdue} day(s) overdue. Please return it as soon as possible to avoid further fines.`
     : `Your loan of "${bookTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
 
-  await transporter.sendMail({
+  await transporter.sendNotification({
     from: '"Bonsai Library" <library@bonsai.local>',
     to,
     subject,
