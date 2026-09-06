@@ -25,12 +25,12 @@ const GENRE_LABELS = {
 };
 const formatGenre = (genre) => GENRE_LABELS[genre] || genre.charAt(0) + genre.slice(1).toLowerCase();
 
-const SpecimenListItem = ({ book, selected, onToggle, onToggleFeatured, onToggleWeeklyRead }) => {
-  const outOfStock = book.availableCopies === 0;
+const SpecimenListItem = ({ specimen, selected, onToggle, onToggleFeatured, onToggleWeeklyRead }) => {
+  const outOfStock = specimen.availableCopies === 0;
 
   return (
     <div
-      onClick={() => onToggle(book.id)}
+      onClick={() => onToggle(specimen.id)}
       className={`bg-card rounded-2xl border p-3 cursor-pointer transition-all flex flex-col h-full ${
         selected ? 'border-primary ring-1 ring-primary' : 'border-border hover:border-primary/50'
       }`}
@@ -39,7 +39,7 @@ const SpecimenListItem = ({ book, selected, onToggle, onToggleFeatured, onToggle
         <input
           type="checkbox"
           checked={selected}
-          onChange={() => onToggle(book.id)}
+          onChange={() => onToggle(specimen.id)}
           onClick={(e) => e.stopPropagation()}
           className="w-4 h-4 flex-shrink-0"
         />
@@ -51,8 +51,8 @@ const SpecimenListItem = ({ book, selected, onToggle, onToggleFeatured, onToggle
       </div>
 
       <div className="relative aspect-[3/4] bg-foreground/5 overflow-hidden rounded-xl mb-3">
-        {book.coverUrl ? (
-          <img src={book.coverUrl} className="w-full h-full object-cover" alt={book.title} />
+        {specimen.coverUrl ? (
+          <img src={specimen.coverUrl} className="w-full h-full object-cover" alt={specimen.title} />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
             <SpecimenOpen size={40} className="text-foreground/20" strokeWidth={1.5} />
@@ -60,12 +60,12 @@ const SpecimenListItem = ({ book, selected, onToggle, onToggleFeatured, onToggle
         )}
       </div>
 
-      <p className="font-bold leading-snug mb-0.5 line-clamp-2">{book.title}</p>
-      <p className="text-sm text-foreground/70 truncate mb-2">{book.author}</p>
+      <p className="font-bold leading-snug mb-0.5 line-clamp-2">{specimen.title}</p>
+      <p className="text-sm text-foreground/70 truncate mb-2">{specimen.author}</p>
 
-      {book.genre?.length > 0 && (
+      {specimen.genre?.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-3">
-          {book.genre.map((g) => (
+          {specimen.genre.map((g) => (
             <span key={g} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-foreground/5 text-foreground/60">
               {formatGenre(g)}
             </span>
@@ -74,19 +74,19 @@ const SpecimenListItem = ({ book, selected, onToggle, onToggleFeatured, onToggle
       )}
 
       <p className="text-xs text-foreground/50 mb-3">
-        {book.availableCopies} / {book.totalCopies} available
+        {specimen.availableCopies} / {specimen.totalCopies} available
       </p>
 
       <div className="mt-auto pt-3 border-t border-border space-y-2">
         <ToggleSwitch
-          checked={book.featured}
-          onChange={() => onToggleFeatured(book)}
+          checked={specimen.featured}
+          onChange={() => onToggleFeatured(specimen)}
           label={<span className="flex items-center gap-1"><Star size={12} /> Featured</span>}
           activeColor="bg-primary"
         />
         <ToggleSwitch
-          checked={book.weeklyRead}
-          onChange={() => onToggleWeeklyRead(book)}
+          checked={specimen.weeklyRead}
+          onChange={() => onToggleWeeklyRead(specimen)}
           label={<span className="flex items-center gap-1"><Repeat size={12} /> Weekly Read</span>}
           activeColor="bg-green-500"
         />

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { BookOpen, Star, Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useBooks } from '../hooks/useBooks';
-import BookListItem from '../components/BookListItem';
+import { SpecimenOpen, Star, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSpecimens } from '../hooks/useSpecimens';
+import SpecimenListItem from '../components/SpecimenListItem';
 
 const STATUS_FILTERS = ['All', 'Featured', 'Weekly Reads', 'Out of Stock'];
 const PAGE_SIZE = 12;
@@ -13,19 +13,19 @@ const GENRE_LABELS = {
 };
 const formatGenre = (genre) => GENRE_LABELS[genre] || genre.charAt(0) + genre.slice(1).toLowerCase();
 
-const BooksSection = () => {
+const SpecimensSection = () => {
   const {
-    bookList,
+    specimenList,
     loading,
     error,
-    selectedBookIds,
+    selectedSpecimenIds,
     bulkSaving,
-    toggleBookSelection,
+    toggleSpecimenSelection,
     handleBulkFeatured,
     handleBulkWeeklyRead,
     toggleFeatured,
     toggleWeeklyRead,
-  } = useBooks();
+  } = useSpecimens();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -34,26 +34,26 @@ const BooksSection = () => {
 
   const availableGenres = useMemo(() => {
     const genres = new Set();
-    bookList.forEach((book) => book.genre?.forEach((g) => genres.add(g)));
+    specimenList.forEach((specimen) => specimen.genre?.forEach((g) => genres.add(g)));
     return [...genres].sort();
-  }, [bookList]);
+  }, [specimenList]);
 
-  const visibleBooks = bookList.filter((book) => {
+  const visibleSpecimens = specimenList.filter((specimen) => {
     const matchesSearch =
-      book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchQuery.toLowerCase());
+      specimen.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      specimen.author.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
       statusFilter === 'All' ||
-      (statusFilter === 'Featured' && book.featured) ||
-      (statusFilter === 'Weekly Reads' && book.weeklyRead) ||
-      (statusFilter === 'Out of Stock' && book.availableCopies === 0);
-    const matchesGenre = !genreFilter || book.genre?.includes(genreFilter);
+      (statusFilter === 'Featured' && specimen.featured) ||
+      (statusFilter === 'Weekly Reads' && specimen.weeklyRead) ||
+      (statusFilter === 'Out of Stock' && specimen.availableCopies === 0);
+    const matchesGenre = !genreFilter || specimen.genre?.includes(genreFilter);
     return matchesSearch && matchesStatus && matchesGenre;
   });
 
-  const totalPages = Math.max(1, Math.ceil(visibleBooks.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(visibleSpecimens.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
-  const pageBooks = visibleBooks.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const pageSpecimens = visibleSpecimens.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const resetToFirstPage = (setter) => (value) => {
     setter(value);
@@ -84,13 +84,13 @@ const BooksSection = () => {
           />
         </div>
 
-      {/* Add New Book quick action */}
+      {/* Add New Specimen quick action */}
       <button
         type="button"
         onClick={() => window.location.href = "/staff/new"}
         className="btn-primary whitespace-nowrap"
       >
-        <span className="text-lg leading-none">+</span> Add New Book
+        <span className="text-lg leading-none">+</span> Add New Specimen
       </button>
         <div className="flex gap-2 flex-wrap">
           {STATUS_FILTERS.map((status) => (
@@ -127,9 +127,9 @@ const BooksSection = () => {
         </div>
       )}
 
-      {selectedBookIds.size > 0 && (
+      {selectedSpecimenIds.size > 0 && (
         <div className="flex items-center gap-3 mb-4 p-3 bg-card border border-border rounded-xl flex-wrap">
-          <span className="text-sm font-semibold text-foreground/70">{selectedBookIds.size} selected</span>
+          <span className="text-sm font-semibold text-foreground/70">{selectedSpecimenIds.size} selected</span>
           <button
             onClick={() => handleBulkFeatured(true)}
             disabled={bulkSaving}
@@ -161,20 +161,20 @@ const BooksSection = () => {
         </div>
       )}
 
-      {visibleBooks.length === 0 ? (
+      {visibleSpecimens.length === 0 ? (
         <div className="bg-card rounded-2xl border border-border p-12 text-center text-foreground/60">
-          <BookOpen size={32} className="mx-auto mb-3 text-foreground/20" />
-          No books found.
+          <SpecimenOpen size={32} className="mx-auto mb-3 text-foreground/20" />
+          No specimens found.
         </div>
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {pageBooks.map((book) => (
-              <BookListItem
-                key={book.id}
-                book={book}
-                selected={selectedBookIds.has(book.id)}
-                onToggle={toggleBookSelection}
+            {pageSpecimens.map((specimen) => (
+              <SpecimenListItem
+                key={specimen.id}
+                specimen={specimen}
+                selected={selectedSpecimenIds.has(specimen.id)}
+                onToggle={toggleSpecimenSelection}
                 onToggleFeatured={toggleFeatured}
                 onToggleWeeklyRead={toggleWeeklyRead}
               />
@@ -210,4 +210,4 @@ const BooksSection = () => {
   );
 };
 
-export default BooksSection;
+export default SpecimensSection;

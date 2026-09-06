@@ -29,7 +29,7 @@ export default function Explore() {
         <div className="max-w-[1400px] mx-auto px-6 mb-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="font-display text-4xl md:text-5xl tracking-wide mb-3">Explore Specimens</h1>
-            <p className="text-foreground/60 text-lg">Discover books from the Bonsai library</p>
+            <p className="text-foreground/60 text-lg">Discover specimens from the Bonsai grove</p>
           </motion.div>
         </div>
 
@@ -60,7 +60,7 @@ export default function Explore() {
         </div>
 
         <div className="px-6 max-w-[1400px] mx-auto">
-          <SpecimenGrid books={filteredSpecimens} loading={loading} showAdminActions={isAdmin} />
+          <SpecimenGrid specimens={filteredSpecimens} loading={loading} showAdminActions={isAdmin} />
           {error && <p className="text-sm text-primary text-center mt-6">{error}</p>}
         </div>
       </div>

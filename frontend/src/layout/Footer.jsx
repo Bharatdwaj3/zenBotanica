@@ -17,18 +17,18 @@ const Footer = () => {
               </h3>
             </Link>
             <p className="mt-4 text-foreground/50 text-sm max-w-xs">
-              Your digital and walk-in library.<br />
+              Your digital and walk-in grove.<br />
               Borrow, read, and renew — all in one place.
             </p>
           </div>
 
           <div>
             <h4 className="footer-heading">
-              Library
+              Grove
             </h4>
             <ul className="space-y-3 text-foreground/50 text-sm">
-              <li><Link to="/explore" className="hover:text-primary transition-colors">Explore Books</Link></li>
-              <li><Link to="/my-loans" className="hover:text-primary transition-colors">My Loans</Link></li>
+              <li><Link to="/explore" className="hover:text-primary transition-colors">Explore Specimens</Link></li>
+              <li><Link to="/my-tendings" className="hover:text-primary transition-colors">My Tendings</Link></li>
             </ul>
           </div>
 

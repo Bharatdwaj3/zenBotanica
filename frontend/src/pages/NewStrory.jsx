@@ -38,7 +38,7 @@ export default function NewStory() {
   const [suggestedCoverUrl, setSuggestedCoverUrl] = useState(null);
   const [useSuggestedCover, setUseSuggestedCover] = useState(false);
 
-  // Edit mode: load the existing book once and prefill the form.
+  // Edit mode: load the existing specimen once and prefill the form.
   useEffect(() => {
     if (!isEditing) return;
     const loadSpecimen = async () => {
@@ -57,7 +57,7 @@ export default function NewStory() {
         setExistingCoverUrl(data.coverUrl || '');
         setExistingPdfUrl(data.pdfUrl || '');
       } catch {
-        setError('Could not load this book for editing');
+        setError('Could not load this specimen for editing');
       } finally {
         setLoadingExisting(false);
       }
@@ -153,7 +153,7 @@ export default function NewStory() {
         navigate('/content');
       }
     } catch (err) {
-      setError(err.response?.data?.message || `Failed to ${isEditing ? 'update' : 'add'} book`);
+      setError(err.response?.data?.message || `Failed to ${isEditing ? 'update' : 'add'} specimen`);
     } finally {
       setSaving(false);
     }
@@ -173,7 +173,7 @@ export default function NewStory() {
         <div className="text-center">
           <ShieldAlert size={48} className="text-foreground/20 mx-auto mb-4" />
           <h1 className="text-xl font-bold mb-2">Admins Only</h1>
-          <p className="text-foreground/50 text-sm">Only admins can add new books to the grove.</p>
+          <p className="text-foreground/50 text-sm">Only admins can add new specimens to the grove.</p>
         </div>
       </div>
     );
@@ -276,7 +276,7 @@ export default function NewStory() {
                 value={form.description}
                 onChange={handleChange}
                 rows={4}
-                placeholder="A short summary readers will see on the book's page..."
+                placeholder="A short summary readers will see on the specimen's page..."
                 className="w-full px-4 py-2.5 bg-card border border-border rounded-xl focus:outline-none focus:border-primary transition-colors resize-none"
               />
             </div>

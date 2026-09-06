@@ -13,7 +13,7 @@ const Wishlist = () => {
     dispatch(fetchWishlist());
   }, [dispatch]);
 
-  const handleRemove = (bookId) => dispatch(removeSpecimenFromWishlist(bookId));
+  const handleRemove = (specimenId) => dispatch(removeSpecimenFromWishlist(specimenId));
 
   if (loading) {
     return (
@@ -43,10 +43,10 @@ const Wishlist = () => {
               <div key={item.id} className="bg-card rounded-2xl border border-border p-4 flex gap-4 items-center">
                 <div
                   className="w-14 h-20 rounded-lg bg-foreground/5 overflow-hidden flex-shrink-0 cursor-pointer"
-                  onClick={() => navigate(`/content/${item.bookId}`)}
+                  onClick={() => navigate(`/content/${item.specimenId}`)}
                 >
-                  {item.book?.coverUrl ? (
-                    <img src={item.book.coverUrl} className="w-full h-full object-cover" alt={item.book.title} />
+                  {item.specimen?.coverUrl ? (
+                    <img src={item.specimen.coverUrl} className="w-full h-full object-cover" alt={item.specimen.title} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <SpecimenOpen size={20} className="text-foreground/20" />
@@ -54,11 +54,11 @@ const Wishlist = () => {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold truncate">{item.book?.title ?? 'Unknown book'}</p>
-                  <p className="text-sm text-foreground/60">{item.book?.author}</p>
+                  <p className="font-bold truncate">{item.specimen?.title ?? 'Unknown specimen'}</p>
+                  <p className="text-sm text-foreground/60">{item.specimen?.author}</p>
                 </div>
                 <button
-                  onClick={() => handleRemove(item.bookId)}
+                  onClick={() => handleRemove(item.specimenId)}
                   className="p-2 rounded-lg hover:bg-foreground/5 text-foreground/40 hover:text-red-500 transition-colors"
                 >
                   <X size={18} />

@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { BookOpen } from 'lucide-react';
-import { useMemberDirectory } from '../hooks/useMemberDirectory';
-import { buildMemberRows } from '../util/buildMemberRows';
-import LoanListItem from '../components/LoanListItem';
+import { SpecimenOpen } from 'lucide-react';
+import { useGardenerDirectory } from '../hooks/useGardenerDirectory';
+import { buildGardenerRows } from '../util/buildGardenerRows';
+import TendingListItem from '../components/TendingListItem';
 import StatCard from '../components/StatCard';
-import LoansTable from './LoansTable';
-import MembersTable from './MembersTable';
-import MemberDrawer from './MemberDrawer';
-import MemberSearchFilter from './MemberSearchFilter';
-import FinesSection from './FinesSection';
-import { issueLoan } from '../util/tendingApi';
-import { useBooks } from '../hooks/useBooks';
+import TendingsTable from './TendingsTable';
+import GardenersTable from './GardenersTable';
+import GardenerDrawer from './GardenerDrawer';
+import GardenerSearchFilter from './GardenerSearchFilter';
+import PenaltysSection from './PenaltysSection';
+import { issueTending } from '../util/tendingApi';
+import { useSpecimens } from '../hooks/useSpecimens';
 
-const LoansSection = ({
+const TendingsSection = ({
   isAdmin,
-  loans,
+  tendings,
   loading,
   error,
   returnError,
@@ -24,30 +24,30 @@ const LoansSection = ({
   renewError,
   handleRenew,
   isOverdue,
-  totalFinesOwed,
-  handlePayFine,
-  payingFineForLoanId,
-  payFineError,
-  handleWaiveFine,
-  waivingFineForLoanId,
-  waiveFineError,
+  totalPenaltysOwed,
+  handlePayPenalty,
+  payingPenaltyForTendingId,
+  payPenaltyError,
+  handleWaivePenalty,
+  waivingPenaltyForTendingId,
+  waivePenaltyError,
 }) => {
-  const { facultyList, studentList, directoryLoading } = useMemberDirectory(isAdmin);
+  const { facultyList, studentList, directoryLoading } = useGardenerDirectory(isAdmin);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedGardener, setSelectedGardener] = useState(null);
   const [showOverdueOnly, setShowOverdueOnly] = useState(false);
   const [showIssueModal, setShowIssueModal] = useState(false);
-  const [issueBook, setIssueBook] = useState(null);
-  const [bookQuery, setBookQuery] = useState('');
+  const [issueSpecimen, setIssueSpecimen] = useState(null);
+  const [specimenQuery, setSpecimenQuery] = useState('');
   const [issueUserId, setIssueUserId] = useState('');
   const [issuing, setIssuing] = useState(false);
   const [issueError, setIssueError] = useState('');
   const [issueSuccess, setIssueSuccess] = useState('');
-  const { bookList: issueBookOptions } = useBooks({ enabled: showIssueModal });
-  const bookResults = bookQuery.trim()
-    ? issueBookOptions
-        .filter((b) => `${b.title} ${b.author}`.toLowerCase().includes(bookQuery.trim().toLowerCase()))
+  const { specimenList: issueSpecimenOptions } = useSpecimens({ enabled: showIssueModal });
+  const specimenResults = specimenQuery.trim()
+    ? issueSpecimenOptions
+        .filter((b) => `${b.title} ${b.author}`.toLowerCase().includes(specimenQuery.trim().toLowerCase()))
         .slice(0, 8)
     : [];
 
@@ -59,15 +59,15 @@ const LoansSection = ({
     );
   }
 
-  const renderLoanItem = (loan) => (
-    <LoanListItem
-      key={loan.id}
-      loan={loan}
-      overdue={isOverdue(loan)}
-      returning={returningId === loan.id}
+  const renderTendingItem = (tending) => (
+    <TendingListItem
+      key={tending.id}
+      tending={tending}
+      overdue={isOverdue(tending)}
+      returning={returningId === tending.id}
       onReturn={handleReturn}
-      payingFine={payingFineForLoanId === loan.id}
-      onPayFine={handlePayFine}
+      payingPenalty={payingPenaltyForTendingId === tending.id}
+      onPayPenalty={handlePayPenalty}
       isAdmin={isAdmin}
     />
   );
@@ -78,9 +78,9 @@ const LoansSection = ({
         {error && <p className="text-sm text-primary mb-6">{error}</p>}
         {returnError && <p className="text-sm text-primary mb-6">{returnError}</p>}
         {renewError && <p className="text-sm text-primary mb-6">{renewError}</p>}
-        {payFineError && <p className="text-sm text-red-500 mb-6">{payFineError}</p>}
-        <LoansTable
-          loans={loans}
+        {payPenaltyError && <p className="text-sm text-red-500 mb-6">{payPenaltyError}</p>}
+        <TendingsTable
+          tendings={tendings}
           isOverdue={isOverdue}
           onReturn={handleReturn}
           returningId={returningId}
@@ -88,15 +88,15 @@ const LoansSection = ({
           renewingId={renewingId}
         />
         <div className="mt-8">
-          <FinesSection />
+          <PenaltysSection />
         </div>
       </div>
     );
   }
 
-  const allRows = buildMemberRows(facultyList, studentList, loans, isOverdue);
+  const allRows = buildGardenerRows(facultyList, studentList, tendings, isOverdue);
   const directoryUserIds = new Set(allRows.map((row) => row.userId).filter(Boolean));
-  const unresolvedLoans = loans.filter((loan) => !directoryUserIds.has(loan.userId));
+  const unresolvedTendings = tendings.filter((tending) => !directoryUserIds.has(tending.userId));
 
   const visibleRows = allRows.filter((row) => {
     const matchesRole = roleFilter === 'all' || row.role === roleFilter;
@@ -105,16 +105,16 @@ const LoansSection = ({
     return matchesRole && matchesSearch && matchesOverdue;
   });
 
-  const activeLoanCount = loans.filter((loan) => !loan.returnedAt).length;
-  const overdueCount = loans.filter(isOverdue).length;
-  const totalMembers = facultyList.length + studentList.length;
+  const activeTendingCount = tendings.filter((tending) => !tending.returnedAt).length;
+  const overdueCount = tendings.filter(isOverdue).length;
+  const totalGardeners = facultyList.length + studentList.length;
 
   return (
     <div>
       {error && <p className="text-sm text-primary mb-6">{error}</p>}
       {returnError && <p className="text-sm text-primary mb-6">{returnError}</p>}
-      {payFineError && <p className="text-sm text-red-500 mb-6">{payFineError}</p>}
-      {waiveFineError && <p className="text-sm text-red-500 mb-6">{waiveFineError}</p>}
+      {payPenaltyError && <p className="text-sm text-red-500 mb-6">{payPenaltyError}</p>}
+      {waivePenaltyError && <p className="text-sm text-red-500 mb-6">{waivePenaltyError}</p>}
 
       {/* Admin quick-action buttons */}
       <div className="flex flex-wrap gap-3 mb-6">
@@ -123,19 +123,19 @@ const LoansSection = ({
           onClick={() => { setShowIssueModal(true); setIssueError(""); setIssueSuccess(""); }}
           className="btn-primary"
         >
-          <span className="text-lg leading-none">+</span> Issue Loan
+          <span className="text-lg leading-none">+</span> Issue Tending
         </button>
         <button
           type="button"
           onClick={() => window.location.href = "/staff/new"}
           className="btn-outline"
         >
-          <span className="text-lg leading-none">+</span> Add New Book
+          <span className="text-lg leading-none">+</span> Add New Specimen
         </button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Active Loans" value={activeLoanCount} />
+        <StatCard label="Active Tendings" value={activeTendingCount} />
         <StatCard
           label="Overdue Items"
           value={overdueCount}
@@ -143,11 +143,11 @@ const LoansSection = ({
           onClick={() => setShowOverdueOnly((prev) => !prev)}
           active={showOverdueOnly}
         />
-        <StatCard label="Unpaid Fines" value={`₹${totalFinesOwed}`} danger={totalFinesOwed > 0} />
-        <StatCard label="Total Members" value={totalMembers} />
+        <StatCard label="Unpaid Penaltys" value={`₹${totalPenaltysOwed}`} danger={totalPenaltysOwed > 0} />
+        <StatCard label="Total Gardeners" value={totalGardeners} />
       </div>
 
-      <MemberSearchFilter
+      <GardenerSearchFilter
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         roleFilter={roleFilter}
@@ -156,62 +156,62 @@ const LoansSection = ({
 
       {visibleRows.length === 0 ? (
         <div className="bg-card rounded-2xl border border-border p-12 text-center text-foreground/60">
-          <BookOpen size={32} className="mx-auto mb-3 text-foreground/20" />
+          <SpecimenOpen size={32} className="mx-auto mb-3 text-foreground/20" />
           No gardeners match this search.
         </div>
       ) : (
-        <MembersTable rows={visibleRows} onSelect={setSelectedMember} />
+        <GardenersTable rows={visibleRows} onSelect={setSelectedGardener} />
       )}
 
-      {unresolvedLoans.length > 0 && (
+      {unresolvedTendings.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-lg font-bold mb-1">Unresolved Loans</h3>
+          <h3 className="text-lg font-bold mb-1">Unresolved Tendings</h3>
           <p className="text-sm text-foreground/50 mb-3">
-            These loans reference a user not found in the current directory.
+            These tendings reference a user not found in the current directory.
           </p>
-          <LoansTable
-            loans={unresolvedLoans}
+          <TendingsTable
+            tendings={unresolvedTendings}
             isOverdue={isOverdue}
             onReturn={handleReturn}
             returningId={returningId}
-            onWaiveFine={handleWaiveFine}
-            waivingFineForLoanId={waivingFineForLoanId}
+            onWaivePenalty={handleWaivePenalty}
+            waivingPenaltyForTendingId={waivingPenaltyForTendingId}
             checkedOutLabel="Checked out"
-            emptyNoun="orphaned loans"
+            emptyNoun="orphaned tendings"
           />
         </div>
       )}
 
-      {/* Issue Loan Modal */}
+      {/* Issue Tending Modal */}
       {showIssueModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-card border border-border rounded-2xl p-6 w-full max-w-md shadow-xl">
-            <h3 className="text-lg font-bold mb-4">Issue Loan</h3>
+            <h3 className="text-lg font-bold mb-4">Issue Tending</h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1.5">Book</label>
-                {issueBook ? (
+                <label className="block text-sm font-medium mb-1.5">Specimen</label>
+                {issueSpecimen ? (
                   <div className="flex items-center justify-between px-3 py-2 rounded-xl border border-border bg-background text-sm">
-                    <span className="truncate">{issueBook.title} — {issueBook.author}</span>
-                    <button type="button" onClick={() => setIssueBook(null)} className="text-xs text-foreground/50 hover:text-foreground ml-2">Change</button>
+                    <span className="truncate">{issueSpecimen.title} — {issueSpecimen.author}</span>
+                    <button type="button" onClick={() => setIssueSpecimen(null)} className="text-xs text-foreground/50 hover:text-foreground ml-2">Change</button>
                   </div>
                 ) : (
                   <div>
                     <input
                       type="text"
-                      value={bookQuery}
-                      onChange={(e) => setBookQuery(e.target.value)}
+                      value={specimenQuery}
+                      onChange={(e) => setSpecimenQuery(e.target.value)}
                       placeholder="Search title or author…"
                       className="w-full px-3 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                     />
-                    {bookResults.length > 0 && (
+                    {specimenResults.length > 0 && (
                       <div className="mt-1 max-h-40 overflow-y-auto rounded-xl border border-border bg-background">
-                        {bookResults.map((b) => (
+                        {specimenResults.map((b) => (
                           <button
                             key={b.id}
                             type="button"
-                            onClick={() => { setIssueBook(b); setBookQuery(''); }}
+                            onClick={() => { setIssueSpecimen(b); setSpecimenQuery(''); }}
                             className="w-full text-left px-3 py-2 text-sm hover:bg-foreground/5"
                           >
                             {b.title} — {b.author}
@@ -224,16 +224,16 @@ const LoansSection = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5">Member</label>
+                <label className="block text-sm font-medium mb-1.5">Gardener</label>
                 <select
                   value={issueUserId}
                   onChange={(e) => setIssueUserId(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                 >
-                  <option value="">Select a member…</option>
+                  <option value="">Select a gardener…</option>
                   {[...facultyList, ...studentList].map((m) => (
                     <option key={m.id || m.userId} value={m.id || m.userId}>
-                      {m.name || m.displayName || m.email} ({m.role || "member"})
+                      {m.name || m.displayName || m.email} ({m.role || "gardener"})
                     </option>
                   ))}
                 </select>
@@ -246,27 +246,27 @@ const LoansSection = ({
             <div className="flex gap-3 mt-6">
               <button
                 type="button"
-                disabled={issuing || !issueBook || !issueUserId}
+                disabled={issuing || !issueSpecimen || !issueUserId}
                 onClick={async () => {
                   setIssuing(true);
                   setIssueError("");
                   setIssueSuccess("");
                   try {
-                    await issueLoan({ bookId: issueBook.id, userId: Number(issueUserId) });
-                    setIssueSuccess("Loan issued successfully");
-                    setIssueBook(null);
-                    setBookQuery("");
+                    await issueTending({ specimenId: issueSpecimen.id, userId: Number(issueUserId) });
+                    setIssueSuccess("Tending issued successfully");
+                    setIssueSpecimen(null);
+                    setSpecimenQuery("");
                     setIssueUserId("");
                     setTimeout(() => setShowIssueModal(false), 1200);
                   } catch (err) {
-                    setIssueError(err.response?.data?.message || "Failed to issue loan");
+                    setIssueError(err.response?.data?.message || "Failed to issue tending");
                   } finally {
                     setIssuing(false);
                   }
                 }}
                 className="flex-1 btn-primary disabled:opacity-50"
               >
-                {issuing ? "Issuing…" : "Issue Loan"}
+                {issuing ? "Issuing…" : "Issue Tending"}
               </button>
               <button
                 type="button"
@@ -280,9 +280,9 @@ const LoansSection = ({
         </div>
       )}
 
-      <MemberDrawer member={selectedMember} renderLoan={renderLoanItem} onClose={() => setSelectedMember(null)} />
+      <GardenerDrawer gardener={selectedGardener} renderTending={renderTendingItem} onClose={() => setSelectedGardener(null)} />
     </div>
   );
 };
 
-export default LoansSection;
+export default TendingsSection;

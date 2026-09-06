@@ -2,7 +2,7 @@ const STEPS = [
   {
     number: '01',
     title: 'Scan & Borrow',
-    description: 'Pick up physical copies on campus or instantly unlock e-books.',
+    description: 'Pick up physical copies on campus or instantly unlock e-specimens.',
   },
   {
     number: '02',
@@ -12,7 +12,7 @@ const STEPS = [
   {
     number: '03',
     title: 'Auto Reminders',
-    description: 'Get notified before the due date, so late fines never sneak up on you.',
+    description: 'Get notified before the due date, so late penaltys never sneak up on you.',
   },
 ];
 
@@ -20,10 +20,10 @@ export const ValueProp = () => (
   <section className="py-24 text-center container mx-auto px-6">
     <h2 className="font-display text-5xl tracking-wide mb-4">How It Works</h2>
     <h3 className="font-accent text-primary text-2xl font-semibold mb-6">
-      &ldquo;One library card, every format.&rdquo;
+      &ldquo;One grove card, every format.&rdquo;
     </h3>
     <p className="max-w-2xl mx-auto text-lg text-foreground/60 mb-16">
-      Borrow physical books from the shelf, or read digital copies straight in your browser.
+      Borrow physical specimens from the shelf, or read digital copies straight in your browser.
       We&apos;ll even remind you before something&apos;s due.
     </p>
 
