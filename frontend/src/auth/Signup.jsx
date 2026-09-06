@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser, loginUser } from '../util/membersApi';
+import { registerUser, loginUser } from '../util/gardenersApi';
 import { fetchUser } from '../store/avatarSlice';
 
 export default function Signup() {

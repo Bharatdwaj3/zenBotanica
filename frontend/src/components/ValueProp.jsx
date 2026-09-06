@@ -6,7 +6,7 @@ const STEPS = [
   },
   {
     number: '02',
-    title: 'Read & Renew',
+    title: 'Read & Renew Tending',
     description: 'Seamless in-browser reading, with a one-click renewal before your due date.',
   },
   {

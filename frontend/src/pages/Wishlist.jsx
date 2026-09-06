@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Heart, BookOpen, X } from 'lucide-react';
-import { fetchWishlist, removeBookFromWishlist } from '../store/wishlistSlice';
+import { Heart, SpecimenOpen, X } from 'lucide-react';
+import { fetchWishlist, removeSpecimenFromWishlist } from '../store/wishlistSlice';
 
 const Wishlist = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const Wishlist = () => {
     dispatch(fetchWishlist());
   }, [dispatch]);
 
-  const handleRemove = (bookId) => dispatch(removeBookFromWishlist(bookId));
+  const handleRemove = (bookId) => dispatch(removeSpecimenFromWishlist(bookId));
 
   if (loading) {
     return (
@@ -49,7 +49,7 @@ const Wishlist = () => {
                     <img src={item.book.coverUrl} className="w-full h-full object-cover" alt={item.book.title} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <BookOpen size={20} className="text-foreground/20" />
+                      <SpecimenOpen size={20} className="text-foreground/20" />
                     </div>
                   )}
                 </div>

@@ -101,7 +101,7 @@ async function main() {
   }
   console.log(`Done. Seeded ${books.length} books.`);
 
-  console.log("Resolving user IDs from members service...");
+  console.log("Resolving user IDs from gardeners service...");
   const userIds = [];
   for (const email of userEmails) {
     userIds.push(await resolveUserId(email));

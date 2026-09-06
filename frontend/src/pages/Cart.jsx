@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, BookOpen, X, CheckCircle2, AlertCircle } from 'lucide-react';
-import { fetchCart, removeBookFromCart, checkout, clearCheckoutResults } from '../store/cartSlice';
+import { ShoppingCart, SpecimenOpen, X, CheckCircle2, AlertCircle } from 'lucide-react';
+import { fetchCart, removeSpecimenFromCart, checkout, clearCheckoutResults } from '../store/cartSlice';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const Cart = () => {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  const handleRemove = (bookId) => dispatch(removeBookFromCart(bookId));
+  const handleRemove = (bookId) => dispatch(removeSpecimenFromCart(bookId));
   const handleCheckout = () => dispatch(checkout());
 
   if (loading) {
@@ -69,7 +69,7 @@ const Cart = () => {
                       <img src={item.book.coverUrl} className="w-full h-full object-cover" alt={item.book.title} />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <BookOpen size={20} className="text-foreground/20" />
+                        <SpecimenOpen size={20} className="text-foreground/20" />
                       </div>
                     )}
                   </div>

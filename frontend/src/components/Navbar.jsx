@@ -5,7 +5,7 @@ import { Search, Menu, X, User, LogOut, ShoppingCart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchUser, clearUser } from '../store/avatarSlice';
 import { fetchCart } from '../store/cartSlice';
-import { logoutUser } from '../util/membersApi';
+import { logoutUser } from '../util/gardenersApi';
 
 const getProfile = (user) => user?.faculty || user?.student || null;
 
@@ -53,7 +53,7 @@ const Navbar = () => {
     }
   };
 
-  // Hands off to Explore's ?q= param, which useExploreBooks already reads
+  // Hands off to Explore's ?q= param, which useExploreSpecimens already reads
   // on mount — this was the missing half of that wiring.
   const handleSearchSubmit = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {

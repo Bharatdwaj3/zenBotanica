@@ -2,14 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app-name: circulation-db
-  name: circulation-db
+    app-name: tending-db
+  name: tending-db
 spec:
   ports:
     - name: "7434"
       port: 5432
       targetPort: 5432
   selector:
-    app-name: circulation-db
+    app-name: tending-db
 status:
   loadBalancer: {}

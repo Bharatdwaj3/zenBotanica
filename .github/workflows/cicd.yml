@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        service: [catalog, circulation, members, frontend]
+        service: [grove, tending, gardeners, frontend]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -43,7 +43,7 @@ jobs:
 
     strategy:
       matrix:
-        service: [catalog, circulation, members, frontend]
+        service: [grove, tending, gardeners, frontend]
 
     steps:
       - uses: actions/checkout@v4
@@ -84,9 +84,9 @@ jobs:
       - name: Update image tags in kustomization.yaml
         run: |
           sed -i \
-            -e "/^  - name: catalog$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: circulation$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: members$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
+            -e "/^  - name: grove$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
+            -e "/^  - name: tending$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
+            -e "/^  - name: gardeners$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
             -e "/^  - name: ghcr.io\/bharatdwaj3\/frontend$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
             k8s/services/kustomization.yaml
 

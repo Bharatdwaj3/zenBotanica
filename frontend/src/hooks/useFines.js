@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getMyFines, createPayOrder, verifyPayment } from '../util/circulationApi';
+import { getMyFines, createPayOrder, verifyPayment } from '../util/tendingApi';
 import { loadRazorpayScript } from '../util/razorpay';
 
 

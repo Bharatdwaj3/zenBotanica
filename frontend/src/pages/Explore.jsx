@@ -2,15 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import BookGrid from '../components/BookGrid';
+import SpecimenGrid from '../components/SpecimenGrid';
 import SortButtons from '../components/SortButtons';
 import CategoryFilter from '../components/CategoryFilter';
-import { useExploreBooks } from '../hooks/useExploreBooks';
+import { useExploreSpecimens } from '../hooks/useExploreSpecimens';
 
 export default function Explore() {
   const { user } = useSelector((state) => state.avatar);
   const {
-    filteredBooks,
+    filteredSpecimens,
     loading,
     error,
     selectedGenre,
@@ -19,7 +19,7 @@ export default function Explore() {
     setSearchQuery,
     setSelectedGenre,
     setSortBy,
-  } = useExploreBooks();
+  } = useExploreSpecimens();
 
   const isAdmin = user?.role === 'admin';
 
@@ -28,7 +28,7 @@ export default function Explore() {
       <div className="pt-24 pb-16">
         <div className="max-w-[1400px] mx-auto px-6 mb-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="font-display text-4xl md:text-5xl tracking-wide mb-3">Explore Books</h1>
+            <h1 className="font-display text-4xl md:text-5xl tracking-wide mb-3">Explore Specimens</h1>
             <p className="text-foreground/60 text-lg">Discover books from the Bonsai library</p>
           </motion.div>
         </div>
@@ -60,7 +60,7 @@ export default function Explore() {
         </div>
 
         <div className="px-6 max-w-[1400px] mx-auto">
-          <BookGrid books={filteredBooks} loading={loading} showAdminActions={isAdmin} />
+          <SpecimenGrid books={filteredSpecimens} loading={loading} showAdminActions={isAdmin} />
           {error && <p className="text-sm text-primary text-center mt-6">{error}</p>}
         </div>
       </div>

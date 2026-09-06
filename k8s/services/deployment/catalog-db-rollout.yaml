@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: catalog-db
+  name: grove-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: catalog-db
+      app: grove-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: catalog-db
+        app: grove-db
     spec:
       containers:
         - env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: catalog-secrets
+                  name: grove-secrets
                   key: PgSql_User
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: catalog-secrets
+                  name: grove-secrets
                   key: PgSql_Password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: catalog-secrets
+                  name: grove-secrets
                   key: PgSql_Database
           image: postgres:15-alpine
           livenessProbe:
@@ -37,23 +37,23 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - catalog_user
+                - grove_user
                 - -d
-                - catalog_db
+                - grove_db
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-          name: catalog-db-ctr
+          name: grove-db-ctr
           ports:
             - containerPort: 5432
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: catalog-data
+              name: grove-data
       restartPolicy: Always
       volumes:
-        - name: catalog-data
+        - name: grove-data
           persistentVolumeClaim:
-            claimName: catalog-data
+            claimName: grove-data
 status: {}

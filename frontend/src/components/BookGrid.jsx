@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen } from 'lucide-react';
-import BookCard from './BookCard';
+import { SpecimenOpen } from 'lucide-react';
+import SpecimenCard from './SpecimenCard';
 
-const BookGrid = ({ books, loading, showAdminActions = false, onBookDeleted }) => {
+const SpecimenGrid = ({ books, loading, showAdminActions = false, onSpecimenDeleted }) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -23,7 +23,7 @@ const BookGrid = ({ books, loading, showAdminActions = false, onBookDeleted }) =
   if (books.length === 0) {
     return (
       <div className="bg-card border border-border rounded-2xl p-12 text-center text-foreground/60">
-        <BookOpen size={32} className="mx-auto mb-3 text-foreground/20" />
+        <SpecimenOpen size={32} className="mx-auto mb-3 text-foreground/20" />
         No books found.
       </div>
     );
@@ -36,16 +36,16 @@ const BookGrid = ({ books, loading, showAdminActions = false, onBookDeleted }) =
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
     >
       {books.map((book, index) => (
-        <BookCard
+        <SpecimenCard
           key={book.id}
           book={book}
           index={index}
           showAdminActions={showAdminActions}
-          onDeleted={onBookDeleted}
+          onDeleted={onSpecimenDeleted}
         />
       ))}
     </motion.div>
   );
 };
 
-export default BookGrid;
+export default SpecimenGrid;

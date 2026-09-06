@@ -9,7 +9,7 @@ export const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:
 export const PgSql_User = process.env.PgSql_User as string;
 export const PgSql_Password = process.env.PgSql_Password as string;
 export const PgSql_Database = process.env.PgSql_Database as string;
-export const PgSql_Host = process.env.PgSql_Host || 'circulation-db';
+export const PgSql_Host = process.env.PgSql_Host || 'tending-db';
 export const PgSql_Port = process.env.PgSql_Port || '5432';
 const EPword = encodeURIComponent(PgSql_Password);
 export const DATABASE_URL = `postgresql://${PgSql_User}:${EPword}@${PgSql_Host}:${PgSql_Port}/${PgSql_Database}?schema=public`;

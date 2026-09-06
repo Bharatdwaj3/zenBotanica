@@ -9,7 +9,7 @@ import MembersTable from './MembersTable';
 import MemberDrawer from './MemberDrawer';
 import MemberSearchFilter from './MemberSearchFilter';
 import FinesSection from './FinesSection';
-import { issueLoan } from '../util/circulationApi';
+import { issueLoan } from '../util/tendingApi';
 import { useBooks } from '../hooks/useBooks';
 
 const LoansSection = ({
@@ -157,7 +157,7 @@ const LoansSection = ({
       {visibleRows.length === 0 ? (
         <div className="bg-card rounded-2xl border border-border p-12 text-center text-foreground/60">
           <BookOpen size={32} className="mx-auto mb-3 text-foreground/20" />
-          No members match this search.
+          No gardeners match this search.
         </div>
       ) : (
         <MembersTable rows={visibleRows} onSelect={setSelectedMember} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Star, Repeat } from 'lucide-react';
+import { SpecimenOpen, Star, Repeat } from 'lucide-react';
 
 const ToggleSwitch = ({ checked, onChange, label, activeColor }) => (
   <button
@@ -25,7 +25,7 @@ const GENRE_LABELS = {
 };
 const formatGenre = (genre) => GENRE_LABELS[genre] || genre.charAt(0) + genre.slice(1).toLowerCase();
 
-const BookListItem = ({ book, selected, onToggle, onToggleFeatured, onToggleWeeklyRead }) => {
+const SpecimenListItem = ({ book, selected, onToggle, onToggleFeatured, onToggleWeeklyRead }) => {
   const outOfStock = book.availableCopies === 0;
 
   return (
@@ -55,7 +55,7 @@ const BookListItem = ({ book, selected, onToggle, onToggleFeatured, onToggleWeek
           <img src={book.coverUrl} className="w-full h-full object-cover" alt={book.title} />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
-            <BookOpen size={40} className="text-foreground/20" strokeWidth={1.5} />
+            <SpecimenOpen size={40} className="text-foreground/20" strokeWidth={1.5} />
           </div>
         )}
       </div>
@@ -95,4 +95,4 @@ const BookListItem = ({ book, selected, onToggle, onToggleFeatured, onToggleWeek
   );
 };
 
-export default BookListItem;
+export default SpecimenListItem;

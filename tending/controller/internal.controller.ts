@@ -31,7 +31,7 @@ export const getLoanCounts = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-// Called by catalog's cart checkout — borrows one book on behalf of a user, using the same
+// Called by grove's cart checkout — borrows one book on behalf of a user, using the same
 // caps (active-loan limit, fine threshold, role-based block) as the public borrowBook route.
 // userId/role are passed in the body since there's no real user session on an internal call.
 export const internalBorrow = async (req: Request, res: Response): Promise<void> => {

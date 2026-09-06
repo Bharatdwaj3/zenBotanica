@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: catalog-data
-  name: catalog-data
+    io.kompose.service: grove-data
+  name: grove-data
 spec:
   accessModes:
     - ReadWriteOnce

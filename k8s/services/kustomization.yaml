@@ -1,28 +1,28 @@
 namespace: bonsai
 
 resources:
-  - deployment/catalog-rollout.yaml
-  - deployment/circulation-rollout.yaml
-  - deployment/members-rollout.yaml
+  - deployment/grove-rollout.yaml
+  - deployment/tending-rollout.yaml
+  - deployment/gardeners-rollout.yaml
   - deployment/frontend-rollout.yaml
   - deployment/firebase-rollout.yaml
   - deployment/mailhog-rollout.yaml
-  - deployment/catalog-db-rollout.yaml
-  - deployment/circulation-db-rollout.yaml
-  - deployment/members-db-rollout.yaml
+  - deployment/grove-db-rollout.yaml
+  - deployment/tending-db-rollout.yaml
+  - deployment/gardeners-db-rollout.yaml
 
-  - deployment/catalog-data-persistentvolumeclaim.yaml
-  - deployment/circulation-data-persistentvolumeclaim.yaml
-  - deployment/members-data-persistentvolumeclaim.yaml
+  - deployment/grove-data-persistentvolumeclaim.yaml
+  - deployment/tending-data-persistentvolumeclaim.yaml
+  - deployment/gardeners-data-persistentvolumeclaim.yaml
   - deployment/firebase-data-persistentvolumeclaim.yaml
 
-  - service/catalog-service.yaml
-  - service/circulation-service.yaml
-  - service/members-service.yaml
+  - service/grove-service.yaml
+  - service/tending-service.yaml
+  - service/gardeners-service.yaml
 
-  - service/catalog-db-service.yaml
-  - service/circulation-db-service.yaml
-  - service/members-db-service.yaml
+  - service/grove-db-service.yaml
+  - service/tending-db-service.yaml
+  - service/gardeners-db-service.yaml
 
   - service/frontend-service.yaml
   - service/firebase-service.yaml
@@ -32,14 +32,14 @@ resources:
   - service/frontend-nginx-config.yaml
 
 images:
-  - name: catalog
-    newName: ghcr.io/bharatdwaj3/catalog
+  - name: grove
+    newName: ghcr.io/bharatdwaj3/grove
     newTag: 4b4fc0e
-  - name: circulation
-    newName: ghcr.io/bharatdwaj3/circulation
+  - name: tending
+    newName: ghcr.io/bharatdwaj3/tending
     newTag: 4b4fc0e
-  - name: members
-    newName: ghcr.io/bharatdwaj3/members
+  - name: gardeners
+    newName: ghcr.io/bharatdwaj3/gardeners
     newTag: 4b4fc0e
   - name: firebase
     newName: ghcr.io/bharatdwaj3/firebase

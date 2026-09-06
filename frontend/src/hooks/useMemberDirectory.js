@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFacultyList, getStudentList } from '../util/membersApi';
+import { getFacultyList, getStudentList } from '../util/gardenersApi';
 
 // Loads the faculty/student directory once, only when isAdmin is true.
 // Used by LoansSection's admin view to build the member roster table.

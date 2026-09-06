@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BookOpen, Users } from 'lucide-react';
+import { SpecimenOpen, Users } from 'lucide-react';
 
 const STACK_CONFIG = [
   { rotate: -10, translateY: 28, z: 10, widthClass: 'w-28 sm:w-32', heightClass: 'h-80 sm:h-96', marginClass: '' },
@@ -25,7 +25,7 @@ const SpineCover = ({ book, config }) => (
         <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
       ) : (
         <div className="w-full h-full bg-card flex items-center justify-center">
-          <BookOpen size={32} className="text-foreground/10" />
+          <SpecimenOpen size={32} className="text-foreground/10" />
         </div>
       )}
     </Link>
@@ -47,9 +47,9 @@ const FloatingTitleCard = ({ book, position, delay }) => (
   </motion.div>
 );
 
-export const Hero = ({ spotlightBook, floatingBooks = [] }) => {
-  const [left, right] = floatingBooks;
-  const stackBooks = [left, spotlightBook, right];
+export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
+  const [left, right] = floatingSpecimens;
+  const stackSpecimens = [left, spotlightSpecimen, right];
 
   return (
     <header className="relative min-h-screen w-full flex bg-background overflow-x-hidden">
@@ -66,7 +66,7 @@ export const Hero = ({ spotlightBook, floatingBooks = [] }) => {
         className="w-full lg:w-[35%] lg:min-w-[380px] flex flex-col justify-center px-8 lg:px-16 xl:px-24 z-20 bg-card/50 backdrop-blur-md border-r border-border"
       >
         <div className="inline-flex items-center gap-2 w-fit mb-8 px-4 py-1.5 rounded-full border border-border bg-background/60 text-xs font-semibold text-foreground/60">
-          <BookOpen size={13} strokeWidth={2.5} className="text-primary" />
+          <SpecimenOpen size={13} strokeWidth={2.5} className="text-primary" />
           Your campus library, online and on the shelf
         </div>
 
@@ -85,15 +85,15 @@ export const Hero = ({ spotlightBook, floatingBooks = [] }) => {
             to="/explore"
             className="btn-primary hover:scale-105"
           >
-            Explore the Library
+            Explore the Grove
           </Link>
 
           <Link
             to="/profile"
             className="btn-outline"
           >
-            <BookOpen size={14} strokeWidth={2.5} />
-            View My Loans
+            <SpecimenOpen size={14} strokeWidth={2.5} />
+            View My Tendings
           </Link>
         </div>
 
@@ -115,9 +115,9 @@ export const Hero = ({ spotlightBook, floatingBooks = [] }) => {
           “There is no friend as loyal as a book.”
         </blockquote>
 
-        {spotlightBook && (
+        {spotlightSpecimen && (
           <div className="relative flex items-end z-10">
-            {stackBooks.map((book, i) =>
+            {stackSpecimens.map((book, i) =>
               book ? <SpineCover key={book.id} book={book} config={STACK_CONFIG[i]} /> : null
             )}
 

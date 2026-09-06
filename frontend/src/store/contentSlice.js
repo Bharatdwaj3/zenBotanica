@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getNewArrivals, getTrending, getFeatured, getBooks } from '../util/catalogApi';
+import { getNewArrivals, getTrending, getFeatured, getBooks } from '../util/groveApi';
 
 export const fetchBooks = createAsyncThunk(
   'content/fetchBooks',
