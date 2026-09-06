@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 .env.prod
 lerna-debug.log*
-
+admin-cookies.txt
 node_modules
 dist
 dist-ssr
