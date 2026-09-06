@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('admin', 'faculty', 'student');
+CREATE TYPE "Role" AS ENUM ('admin', 'master', 'apprentice');
 
 -- CreateEnum
 CREATE TYPE "Subject" AS ENUM ('Geography', 'Social_Studies', 'Computer_Science', 'Literature', 'History');
@@ -20,7 +20,7 @@ CREATE TABLE "user" (
 );
 
 -- CreateTable
-CREATE TABLE "faculty" (
+CREATE TABLE "master" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "Fname" TEXT NOT NULL,
@@ -33,11 +33,11 @@ CREATE TABLE "faculty" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
 
-    CONSTRAINT "faculty_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "master_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "student" (
+CREATE TABLE "apprentice" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "Fname" TEXT NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE "student" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
 
-    CONSTRAINT "student_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "apprentice_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -60,19 +60,19 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "faculty_email_key" ON "faculty"("email");
+CREATE UNIQUE INDEX "master_email_key" ON "master"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "faculty_userId_key" ON "faculty"("userId");
+CREATE UNIQUE INDEX "master_userId_key" ON "master"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "student_email_key" ON "student"("email");
+CREATE UNIQUE INDEX "apprentice_email_key" ON "apprentice"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "student_userId_key" ON "student"("userId");
+CREATE UNIQUE INDEX "apprentice_userId_key" ON "apprentice"("userId");
 
 -- AddForeignKey
-ALTER TABLE "faculty" ADD CONSTRAINT "faculty_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "master" ADD CONSTRAINT "master_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "student" ADD CONSTRAINT "student_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "apprentice" ADD CONSTRAINT "apprentice_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;

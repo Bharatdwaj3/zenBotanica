@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import prisma from '../config/prisma-client.ts';
-import { sendReminderEmail } from '../config/mailer.config.ts';
+import { sendCareReminderEmail } from '../config/notification.config.ts';
 import { CATALOG_SERVICE_URL, MEMBERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 
 const DUE_SOON_WINDOW_DAYS = 2;
@@ -29,53 +29,53 @@ const getUserEmail = async (userId: number): Promise<string | null> => {
   }
 };
 
-// Sends reminders for: (a) loans overdue right now, and (b) loans due within 
+// Sends care-reminders for: (a) sessions overdue right now, and (b) sessions due within 
 // the next DUE_SOON_WINDOW_DAYS days. Runs once a day.
-export const runReminderCheck = async (): Promise<void> => {
-  console.log('[reminder.job] Running daily overdue/due-soon check...');
+export const runCareReminderCheck = async (): Promise<void> => {
+  console.log('[care-reminder.job] Running daily overdue/due-soon check...');
 
   const now = new Date();
   const dueSoonThreshold = new Date();
   dueSoonThreshold.setDate(dueSoonThreshold.getDate() + DUE_SOON_WINDOW_DAYS);
 
-  const loansToRemind = await prisma.loan.findMany({
+  const sessionsToRemind = await prisma.session.findMany({
     where: {
       returnedAt: null,
       dueAt: { lt: dueSoonThreshold },
     },
   });
 
-  console.log(`[reminder.job] Found ${loansToRemind.length} loan(s) needing a reminder.`);
+  console.log(`[care-reminder.job] Found ${sessionsToRemind.length} session(s) needing a care-reminder.`);
 
-  for (const loan of loansToRemind) {
-    const isOverdue = loan.dueAt < now;
+  for (const session of sessionsToRemind) {
+    const isOverdue = session.dueAt < now;
     const daysOverdue = isOverdue
-      ? Math.ceil((now.getTime() - loan.dueAt.getTime()) / (1000 * 60 * 60 * 24))
+      ? Math.ceil((now.getTime() - session.dueAt.getTime()) / (1000 * 60 * 60 * 24))
       : 0;
 
     const [bookTitle, email] = await Promise.all([
-      getBookTitle(loan.bookId),
-      getUserEmail(loan.userId),
+      getBookTitle(session.bookId),
+      getUserEmail(session.userId),
     ]);
 
     if (!email) {
-      console.error(`[reminder.job] No email found for user ${loan.userId}, skipping loan ${loan.id}`);
+      console.error(`[care-reminder.job] No email found for user ${session.userId}, skipping session ${session.id}`);
       continue;
     }
 
     try {
-      await sendReminderEmail({ to: email, bookTitle, dueAt: loan.dueAt, isOverdue, daysOverdue });
-      console.log(`[reminder.job] Sent reminder to ${email} for loan ${loan.id}`);
+      await sendCareReminderEmail({ to: email, bookTitle, dueAt: session.dueAt, isOverdue, daysOverdue });
+      console.log(`[care-reminder.job] Sent care-reminder to ${email} for session ${session.id}`);
     } catch (error) {
-      console.error(`[reminder.job] Failed to send reminder for loan ${loan.id}:`, error);
+      console.error(`[care-reminder.job] Failed to send care-reminder for session ${session.id}:`, error);
     }
   }
 };
 
 // Runs every day at 8:00 AM server time.
-export const startReminderCron = (): void => {
+export const startCareReminderCron = (): void => {
   cron.schedule('0 8 * * *', () => {
-    runReminderCheck().catch((err) => console.error('[reminder.job] Unhandled error:', err));
+    runCareReminderCheck().catch((err) => console.error('[care-reminder.job] Unhandled error:', err));
   });
-  console.log('[reminder.job] Cron scheduled: daily at 08:00');
+  console.log('[care-reminder.job] Cron scheduled: daily at 08:00');
 };

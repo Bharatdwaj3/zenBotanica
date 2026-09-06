@@ -8,11 +8,11 @@ import { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } from "../config/env.config.ts";
 const razorpay = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_KEY_SECRET });
 
 // Fixed-amount presets. "Late" is handled separately since it's computed from `days`.
-const FINE_PRESETS: Record<string, number> = {
+const PENALTY_PRESETS: Record<string, number> = {
   Damaged: 300,
   Lost: 700,
 };
-const LATE_FINE_PER_DAY = 50;
+const LATE_PENALTY_PER_DAY = 50;
 
 const issuePenalty = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -30,11 +30,11 @@ const issuePenalty = async (req: AuthRequest, res: Response): Promise<void> => {
         res.status(400).json({ message: "days is required and must be greater than 0 for a Late penalty" });
         return;
       }
-      amount = LATE_FINE_PER_DAY * days;
-    } else if (reason in FINE_PRESETS) {
-      amount = FINE_PRESETS[reason];
+      amount = LATE_PENALTY_PER_DAY * days;
+    } else if (reason in PENALTY_PRESETS) {
+      amount = PENALTY_PRESETS[reason];
     } else {
-      res.status(400).json({ message: `reason must be one of: ${Object.keys(FINE_PRESETS).join(", ")}, Late` });
+      res.status(400).json({ message: `reason must be one of: ${Object.keys(PENALTY_PRESETS).join(", ")}, Late` });
       return;
     }
 
@@ -50,7 +50,7 @@ const issuePenalty = async (req: AuthRequest, res: Response): Promise<void> => {
 };
 
 // Lists the current user's own admin-issued penaltys (the `penalty` table only —
-// automatic late fees on loans are shown separately via /loan/mine).
+// automatic late fees on sessions are shown separately via /session/mine).
 const listMyPenaltys = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const penaltys = await prisma.penalty.findMany({
@@ -135,9 +135,9 @@ const verifyPayment = async (req: AuthRequest, res: Response): Promise<void> => 
       data: { paid: true },
     });
 
-    if (updatedPenalty.loanId) {
-      await prisma.loan.update({
-        where: { id: updatedPenalty.loanId },
+    if (updatedPenalty.sessionId) {
+      await prisma.session.update({
+        where: { id: updatedPenalty.sessionId },
         data: { penaltyAmount: 0 },
       });
     }

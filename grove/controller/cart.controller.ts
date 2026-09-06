@@ -5,21 +5,21 @@ import type { AuthRequest } from "../middleware/auth.middleware.ts";
 
 const addToCart = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { bookId } = req.body;
+    const { specimenId } = req.body;
     const userId = req.user?.id;
 
-    if (!bookId) {
-      res.status(400).json({ message: "bookId is required" });
+    if (!specimenId) {
+      res.status(400).json({ message: "specimenId is required" });
       return;
     }
 
     const cartItem = await prisma.cart_item.create({
-      data: { userId: userId!, bookId: Number(bookId) },
+      data: { userId: userId!, specimenId: Number(specimenId) },
     });
     res.status(201).json(cartItem);
   } catch (error: any) {
     if (error.code === "P2002") {
-      res.status(409).json({ message: "This book is already in your cart" });
+      res.status(409).json({ message: "This specimen is already in your cart" });
       return;
     }
     const message = error instanceof Error ? error.message : "Failed to add to cart";
@@ -29,16 +29,16 @@ const addToCart = async (req: AuthRequest, res: Response): Promise<void> => {
 
 const removeFromCart = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const bookId = Number(req.params.bookId);
+    const specimenId = Number(req.params.specimenId);
     const userId = req.user?.id;
 
     await prisma.cart_item.delete({
-      where: { userId_bookId: { userId: userId!, bookId } },
+      where: { userId_specimenId: { userId: userId!, specimenId } },
     });
     res.status(200).json({ message: "Removed from cart" });
   } catch (error: any) {
     if (error.code === "P2025") {
-      res.status(404).json({ message: "This book is not in your cart" });
+      res.status(404).json({ message: "This specimen is not in your cart" });
       return;
     }
     const message = error instanceof Error ? error.message : "Failed to remove from cart";
@@ -51,7 +51,7 @@ const listCart = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.id;
     const cartItems = await prisma.cart_item.findMany({
       where: { userId },
-      include: { book: true },
+      include: { specimen: true },
       orderBy: { addedAt: "desc" },
     });
     res.status(200).json(cartItems);
@@ -61,7 +61,7 @@ const listCart = async (req: AuthRequest, res: Response): Promise<void> => {
   }
 };
 
-// Borrows every book currently in the user's cart, one at a time, via tending's
+// Borrows every specimen currently in the user's cart, one at a time, via tending's
 // internal /borrow endpoint (so the same caps apply as a normal borrow). Runs sequentially
 // (not Promise.all) since each borrow can change whether the next one is still allowed
 // (e.g. hitting the active-loan cap partway through the cart).
@@ -86,10 +86,10 @@ const checkout = async (req: AuthRequest, res: Response): Promise<void> => {
           "Content-Type": "application/json",
           "x-internal-secret": INTERNAL_SERVICE_SECRET,
         },
-        body: JSON.stringify({ userId, role: userRole, bookId: item.bookId }),
+        body: JSON.stringify({ userId, role: userRole, specimenId: item.specimenId }),
       });
       const body = await borrowRes.json();
-      results.push({ bookId: item.bookId, success: borrowRes.ok, message: borrowRes.ok ? "Borrowed" : body.message });
+      results.push({ specimenId: item.specimenId, success: borrowRes.ok, message: borrowRes.ok ? "Borrowed" : body.message });
 
       if (borrowRes.ok) {
         await prisma.cart_item.delete({ where: { id: item.id } });

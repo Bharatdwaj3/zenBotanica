@@ -1,1 +1,1 @@
-ALTER TABLE "book" ADD COLUMN "description" TEXT;
+ALTER TABLE "specimen" ADD COLUMN "description" TEXT;

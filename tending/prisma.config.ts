@@ -1,4 +1,4 @@
-import { defineConfig } from '@prisma/config';
+import { depenaltyConfig } from '@prisma/config';
 import {
   PgSql_User,
   PgSql_Password,
@@ -9,7 +9,7 @@ import {
 
 const EPword = encodeURIComponent(PgSql_Password);
 
-export default defineConfig({
+export default depenaltyConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
     seed: 'node --loader ts-node/esm prisma/seed.ts',

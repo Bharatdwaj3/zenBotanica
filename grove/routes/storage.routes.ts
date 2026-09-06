@@ -33,6 +33,6 @@ router.get('/files', listFiles);
 router.delete('/file/:fileName', authUser, deleteFile);
 
 // Extract metadata + suggested cover from PDF (admin only)
-router.post('/extract', authUser, checkPermission('addBook'), upload.single('file'), extractPdf);
+router.post('/extract', authUser, checkPermission('addSpecimen'), upload.single('file'), extractPdf);
 
 export default router;
