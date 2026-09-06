@@ -15,14 +15,14 @@ const cookieOpts = (maxAgeSeconds: number, path = '/') => ({
 
 export const setAccessToken = (res: Response, user: SafeUser): string => {
   const payload = { user: { id: user.id, role: user.role } };
-  const token = jwt.sign(payload, JWT_ACC_SECRECT, { expiresIn: JWT_ACC_EXPIRES_IN });
+  const token = jwt.sign(payload, JWT_ACC_SECRECT, { expiresIn: JWT_ACC_EXPIRES_IN as any });
   res.cookie('accessToken', token, cookieOpts(15 * 60));
   return token;
 };
 
 export const setRefreshToken = async (res: Response, user: SafeUser): Promise<string> => {
   const payload = { user: { id: user.id } };
-  const token = jwt.sign(payload, JWT_REF_SECRECT, { expiresIn: JWT_REF_EXPIRES_IN });
+  const token = jwt.sign(payload, JWT_REF_SECRECT, { expiresIn: JWT_REF_EXPIRES_IN as any });
 
   await prisma.user.update({ where: { id: user.id }, data: { refreshToken: token } });
 
