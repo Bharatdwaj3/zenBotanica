@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    hon-khana-service: mailhog
+  name: mailhog
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 100
+  replicas: 1
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      hon-khana-service: mailhog
+  template:
+    metadata:
+      labels:
+        hon-khana-service: mailhog
+    spec:
+      containers:
+        - image: mailhog/mailhog:latest
+          name: mailhog-ctr
+          ports:
+            - containerPort: 8025
+              protocol: TCP
+            - containerPort: 1025
+              protocol: TCP
+          resources: {}
+          readinessProbe:
+            tcpSocket:
+              port: 1025
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Genre {
+  FICTION
+  NON_FICTION
+  FANTASY
+  SCIENCE
+  SCIENCE_FICTION
+  MYSTERY
+  ROMANCE
+  HORROR
+  HISTORY
+  BIOGRAPHY
+  POETRY
+  DRAMA
+  SELF_HELP
+  TECHNOLOGY
+  PHILOSOPHY
+  CHILDREN
+}
+
+model book {
+  id              Int       @id @default(autoincrement())
+  title           String
+  author          String
+  publisher       String
+  isbn            String    @unique
+  genre           Genre[]
+  totalCopies     Int       @default(1)
+  availableCopies Int       @default(1)
+  coverUrl        String?
+  pdfUrl          String?
+  description     String?
+  addedByUserId   Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  featured        Boolean   @default(false)
+  weeklyRead      Boolean   @default(false)
+  deletedAt       DateTime?
+  cartItems       cart_item[]
+  wishlistItems   wishlist_item[]
+}
+model cart_item {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  book      book     @relation(fields: [bookId], references: [id])
+  addedAt   DateTime @default(now())
+
+  @@unique([userId, bookId])
+}
+
+model wishlist_item {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  book      book     @relation(fields: [bookId], references: [id])
+  addedAt   DateTime @default(now())
+
+  @@unique([userId, bookId])
+}

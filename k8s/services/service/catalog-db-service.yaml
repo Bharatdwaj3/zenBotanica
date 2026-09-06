@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: catalog-db
+  name: catalog-db
+spec:
+  ports:
+    - name: "7433"
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: catalog-db
+status:
+  loadBalancer: {}

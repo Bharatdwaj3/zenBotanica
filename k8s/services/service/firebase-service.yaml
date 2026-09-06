@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    hon-khana-service: firebase
+  name: firebase
+spec:
+  ports:
+    - name: "9099"
+      port: 9099
+      targetPort: 9099
+    - name: "9199"
+      port: 9199
+      targetPort: 9199
+    - name: "4000"
+      port: 4000
+      targetPort: 4000
+  selector:
+    hon-khana-service: firebase
+status:
+  loadBalancer: {}

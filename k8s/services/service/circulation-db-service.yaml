@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app-name: circulation-db
+  name: circulation-db
+spec:
+  ports:
+    - name: "7434"
+      port: 5432
+      targetPort: 5432
+  selector:
+    app-name: circulation-db
+status:
+  loadBalancer: {}

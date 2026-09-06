@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": false,
+    "strict": false,
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "checkJs": false,
+    "noEmit": true,
+    
+    "allowJs": true
+  },
+  "include": ["**/*.ts", "**/*.js"],
+  "exclude": ["node_modules", "dist"],
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true
+  }
+}

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hon-khana-observability
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Bharatdwaj3/HonKhana
+    targetRevision: main
+    path: k8s/observability
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hon-khana
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

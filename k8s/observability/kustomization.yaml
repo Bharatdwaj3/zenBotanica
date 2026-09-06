@@ -1,0 +1,28 @@
+namespace: hon-khana
+
+# 1. Automatically turn your local config files into ConfigMaps
+configMapGenerator:
+- name: prometheus-config
+  files:
+    - prometheus.yml
+- name: loki-config
+  files:
+    - loki-config.yml
+- name: promtail-config
+  files:
+    - promtail-config.yml
+
+# 2. List the resources to be managed
+resources:
+  - prometheus-data-persistentvolumeclaim.yaml
+  - grafana-data-persistentvolumeclaim.yaml
+  - deployment/cadvisor-deployment.yaml
+  - deployment/grafana-deployment.yaml
+  - deployment/loki-deployment.yaml
+  - deployment/prometheus-deployment.yaml
+  - deployment/promtail-deployment.yaml
+  - service/cadvisor-service.yaml
+  - service/grafana-service.yaml
+  - service/loki-service.yaml
+  - service/prometheus-service.yaml
+  - service/promtail-service.yaml

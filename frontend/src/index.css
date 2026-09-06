@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@import "@fontsource/unifrakturmaguntia";
+@import "@fontsource/dancing-script/600.css";
+@import "@fontsource/dancing-script/700.css";
+
+@theme {
+  /* Literary & Editorial Theme — Manuscript palette */
+
+  /* Backgrounds & Text */
+  --color-background: #f7f5f0;    /* Soft off-white page */
+  --color-foreground: #1c1917;    /* Warm near-black for reading text */
+
+  /* Primary Accent */
+  --color-primary: #c4521f;       /* Warm rust — main CTAs/headings */
+
+  /* Secondary Accent */
+  --color-secondary: #eae4d9;     /* Warm parchment tone for accents/secondary buttons */
+
+  /* Muted / Focus Accent */
+  --color-accent: #57534e;        /* Warm slate for highlights and focus states */
+
+  /* Cards & Surfaces */
+  --color-card: #ffffff;          /* Pure white card backgrounds for strong visual separation */
+  --color-border: #d6cebf;        /* Warm parchment border */
+
+  /* Border radius */
+  --radius: 0.75rem;              /* Softer radius for editorial components */
+
+  /* Display / accent fonts, used sparingly (logo, section titles, emphasis) */
+  --font-display: "UnifrakturMaguntia", cursive;
+  --font-accent: "Dancing Script", cursive;
+}
+
+@layer components {
+  /* Glass effect for overlays, modals, dropdowns */
+  .glass {
+    background: color-mix(in srgb, var(--color-card) 95%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  }
+
+  /* Main background - subtle gradient for depth using paper tones */
+  .bg-semi-dark {
+    background: linear-gradient(135deg, #f5f3ef 0%, #ebe7e0 50%, #e0dad0 100%);
+    background-attachment: fixed;
+  }
+
+  /* Reading container - optimal width and spacing */
+  .reading-container {
+    max-width: 42rem; /* 672px - optimal for reading */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Article text styling */
+  .article-text {
+    font-size: 1.125rem;     /* 18px */
+    line-height: 1.75;        /* 28px - comfortable reading */
+    color: var(--color-foreground);
+  }
+
+  /* Card with subtle shadow */
+  .content-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .content-card:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  /* Primary pill CTA button (Hero, etc.) */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-primary text-white text-xs font-bold uppercase tracking-wide rounded-full px-6 py-3.5 transition-all hover:bg-primary/90;
+  }
+
+  /* Outline pill secondary button */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 border border-border text-foreground/70 text-xs font-bold uppercase tracking-wide rounded-full px-6 py-3.5 transition-all hover:border-primary hover:text-primary;
+  }
+
+  /* Shared table header row (FinesSection, LoansTable, MembersTable) */
+  .table-header-row {
+    @apply border-b border-border text-left text-foreground/50 text-sm font-semibold uppercase tracking-wide;
+  }
+
+  /* Footer column heading */
+  .footer-heading {
+    @apply text-primary font-semibold mb-4 uppercase tracking-wide text-sm;
+  }
+
+  /* Compact pill CTA — same style as .btn-primary, smaller for inline/row contexts */
+  .btn-primary-sm {
+    @apply inline-flex items-center gap-1.5 bg-primary text-white text-[11px] font-bold uppercase tracking-wide rounded-full px-4 py-2 transition-all hover:bg-primary/90;
+  }
+
+  /* Compact outline pill — same style as .btn-outline, smaller for table row actions */
+  .btn-outline-sm {
+    @apply inline-flex items-center gap-1.5 border border-border text-foreground/70 text-[11px] font-bold uppercase tracking-wide rounded-full px-4 py-2 transition-all hover:border-primary hover:text-primary;
+  }
+}

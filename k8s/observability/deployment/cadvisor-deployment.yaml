@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cadvisor
+  name: cadvisor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cadvisor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/e-commerce-web-application-default: "true"
+        io.kompose.service: cadvisor
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - image: gcr.io/cadvisor/cadvisor:latest
+          name: ecommerce-cadvisor
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /rootfs
+              name: cadvisor-claim0
+              readOnly: true
+            - mountPath: /var/run
+              name: cadvisor-claim1
+              readOnly: true
+            - mountPath: /sys
+              name: cadvisor-claim2
+              readOnly: true
+            - mountPath: /var/lib/docker
+              name: cadvisor-claim3
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: cadvisor-claim0
+          hostPath:
+            path: /
+        - name: cadvisor-claim1
+          hostPath:
+            path: /var/run
+        - name: cadvisor-claim2
+          hostPath:
+            path: /sys
+        - name: cadvisor-claim3
+          hostPath:
+            path: /var/lib/docker
+        
+status: {}

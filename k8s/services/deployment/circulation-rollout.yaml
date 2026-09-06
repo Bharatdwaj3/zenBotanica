@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+metadata:
+  labels:
+    hon-khana-service: circulation
+  name: circulation
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+      - setWeight: 100
+  replicas: 3
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      hon-khana-service: circulation
+  template:
+    metadata:
+      labels:
+        hon-khana-service: circulation 
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - args:
+            - sh
+            - -c
+            - npx prisma generate && npx prisma migrate deploy && npm start
+          envFrom:
+            - secretRef:
+                name: circulation-secrets 
+          image: circulation
+          name: circulation-ctr
+          ports:
+            - containerPort: 4002
+              protocol: TCP
+          resources: {}
+          readinessProbe:
+            tcpSocket:
+              port: 4002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+status: {}

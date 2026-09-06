@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: members-db
+  name: members-db
+spec:
+  ports:
+    - name: "7435"
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: members-db
+status:
+  loadBalancer: {}
