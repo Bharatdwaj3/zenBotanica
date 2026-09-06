@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getBooks, setBulkFeatured, setBulkWeeklyRead } from '../util/catalogApi';
+import { getBooks, setBulkFeatured, setBulkWeeklyRead } from '../util/groveApi';
 
 export function useBooks({ enabled = true } = {}) {
   const [bookList, setBookList] = useState([]);

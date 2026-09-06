@@ -1,84 +1,84 @@
 name: bonsai
 
 services:
-  catalog-db:
+  grove-db:
     image: postgres:15-alpine
-    container_name: catalog_db_ctr
+    container_name: grove_db_ctr
     restart: unless-stopped
     ports:
       - 7433:5432
     environment:
-      POSTGRES_USER: catalog_user
-      POSTGRES_PASSWORD: catalog_pass
-      POSTGRES_DB: catalog_db
+      POSTGRES_USER: grove_user
+      POSTGRES_PASSWORD: grove_pass
+      POSTGRES_DB: grove_db
     volumes:
-      - catalog_data:/var/lib/postgresql/data
+      - grove_data:/var/lib/postgresql/data
     networks:
       - app_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U catalog_user -d catalog_db"]
+      test: ["CMD-SHELL", "pg_isready -U grove_user -d grove_db"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
 
-  circulation-db:
+  tending-db:
     image: postgres:15-alpine
-    container_name: circulation_db_ctr
+    container_name: tending_db_ctr
     restart: unless-stopped
     ports:
       - 7434:5432
     environment:
-      POSTGRES_USER: circulation_user
-      POSTGRES_PASSWORD: circulation_pass
-      POSTGRES_DB: circulation_db
+      POSTGRES_USER: tending_user
+      POSTGRES_PASSWORD: tending_pass
+      POSTGRES_DB: tending_db
     volumes:
-      - circulation_data:/var/lib/postgresql/data
+      - tending_data:/var/lib/postgresql/data
     networks:
       - app_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U circulation_user -d circulation_db"]
+      test: ["CMD-SHELL", "pg_isready -U tending_user -d tending_db"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
 
-  members-db:
+  gardeners-db:
     image: postgres:15-alpine
-    container_name: members_db_ctr
+    container_name: gardeners_db_ctr
     restart: unless-stopped
     ports:
       - 7435:5432
     environment:
-      POSTGRES_USER: members_user
-      POSTGRES_PASSWORD: members_pass
-      POSTGRES_DB: members_db
+      POSTGRES_USER: gardeners_user
+      POSTGRES_PASSWORD: gardeners_pass
+      POSTGRES_DB: gardeners_db
     volumes:
-      - members_data:/var/lib/postgresql/data
+      - gardeners_data:/var/lib/postgresql/data
     networks:
       - app_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U members_user -d members_db"]
+      test: ["CMD-SHELL", "pg_isready -U gardeners_user -d gardeners_db"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
 
-  catalog:
+  grove:
     build:
-      context: ./catalog
+      context: ./grove
       dockerfile: Dockerfile
-    container_name: catalog_ctr
+    container_name: grove_ctr
     restart: unless-stopped
     env_file:
-      - ./catalog/.env.prod
+      - ./grove/.env.prod
     ports:
       - 4001:4001
     networks:
       - app_network
     command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
     depends_on:
-      catalog-db:
+      grove-db:
         condition: service_healthy
       firebase:
         condition: service_healthy
@@ -112,42 +112,42 @@ services:
     networks:
       - app_network
 
-  circulation:
+  tending:
     build:
-      context: ./circulation
+      context: ./tending
       dockerfile: Dockerfile
-    container_name: circulation_ctr
+    container_name: tending_ctr
     restart: unless-stopped
     env_file:
-      - ./circulation/.env.prod
+      - ./tending/.env.prod
     ports:
       - 4002:4002
     networks:
       - app_network
     command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
     depends_on:
-      circulation-db:
+      tending-db:
         condition: service_healthy
-      catalog:
+      grove:
         condition: service_started
       mailhog:
         condition: service_started
 
-  members:
+  gardeners:
     build:
-      context: ./members
+      context: ./gardeners
       dockerfile: Dockerfile
-    container_name: members_ctr
+    container_name: gardeners_ctr
     restart: unless-stopped
     env_file:
-      - ./members/.env.prod
+      - ./gardeners/.env.prod
     ports:
       - 4003:4003
     networks:
       - app_network
     command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
     depends_on:
-      members-db:
+      gardeners-db:
         condition: service_healthy
 
   frontend:
@@ -161,15 +161,15 @@ services:
     networks:
       - app_network
     depends_on:
-      - catalog
-      - circulation
-      - members
+      - grove
+      - tending
+      - gardeners
 
 networks:
   app_network:
     driver: bridge
 
 volumes:
-  catalog_data:
-  circulation_data:
-  members_data:
+  grove_data:
+  tending_data:
+  gardeners_data:

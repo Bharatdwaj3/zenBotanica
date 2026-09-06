@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, CheckCircle2, IndianRupee } from 'lucide-react';
 
-const FineListItem = ({ fine, paying, onPay }) => {
+const PenaltyListItem = ({ fine, paying, onPay }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -40,4 +40,4 @@ const FineListItem = ({ fine, paying, onPay }) => {
   );
 };
 
-export default FineListItem;
+export default PenaltyListItem;

@@ -61,7 +61,7 @@ const listCart = async (req: AuthRequest, res: Response): Promise<void> => {
   }
 };
 
-// Borrows every book currently in the user's cart, one at a time, via circulation's
+// Borrows every book currently in the user's cart, one at a time, via tending's
 // internal /borrow endpoint (so the same caps apply as a normal borrow). Runs sequentially
 // (not Promise.all) since each borrow can change whether the next one is still allowed
 // (e.g. hitting the active-loan cap partway through the cart).

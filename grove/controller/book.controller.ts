@@ -150,7 +150,7 @@ const getTrending = async (req: Request, res: Response): Promise<void> => {
       headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET },
     });
     if (!loanCountsRes.ok) {
-      res.status(502).json({ message: "Failed to reach circulation service" });
+      res.status(502).json({ message: "Failed to reach tending service" });
       return;
     }
     const loanCounts: { bookId: number; count: number }[] = await loanCountsRes.json();

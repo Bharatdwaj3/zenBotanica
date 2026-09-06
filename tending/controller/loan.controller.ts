@@ -40,7 +40,7 @@ const getBook = async (bookId: number) => {
 };
 
 // Shared borrow logic — used by both the public `borrowBook` route (real user, via cookie/JWT)
-// and the internal `/internal/borrow` route (called by catalog's cart checkout, no user session).
+// and the internal `/internal/borrow` route (called by grove's cart checkout, no user session).
 // Returns a plain { status, body } result instead of writing to `res` directly, so both callers
 // can decide how to respond (one HTTP call vs. one entry in a checkout results list).
 const attemptBorrow = async (userId: number, userRole: string, bookId: number) => {
@@ -84,8 +84,8 @@ const attemptBorrow = async (userId: number, userRole: string, bookId: number) =
     data: { bookId: book.id, userId, dueAt },
   });
 
-  const catalogRes = await adjustBookCopies(book.id, -1);
-  if (!catalogRes.ok) {
+  const groveRes = await adjustBookCopies(book.id, -1);
+  if (!groveRes.ok) {
     await prisma.loan.delete({ where: { id: loan.id } });
     return { status: 502, body: { message: "Could not reserve a copy right now — please try again" } };
   }
@@ -132,8 +132,8 @@ const issueLoanForMember = async (req: AuthRequest, res: ExpressResponse): Promi
       res.status(502).json({ message: "Could not verify member" });
       return;
     }
-    const members = await memberRes.json();
-    const member = Array.isArray(members) ? members[0] : null;
+    const gardeners = await memberRes.json();
+    const member = Array.isArray(gardeners) ? gardeners[0] : null;
     if (!member) {
       res.status(404).json({ message: "Member not found" });
       return;
@@ -175,8 +175,8 @@ const returnBook = async (req: AuthRequest, res: Response): Promise<void> => {
       where: { id: loanId },
       data: { returnedAt, fineAmount },
     });
-    const catalogRes = await adjustBookCopies(loan.bookId, 1);
-    if (!catalogRes.ok) {
+    const groveRes = await adjustBookCopies(loan.bookId, 1);
+    if (!groveRes.ok) {
       console.error(`Loan ${loanId} returned, but Catalog copy count was not incremented. Needs manual fix.`);
     }
 
@@ -200,8 +200,8 @@ const listMyLoans = async (req: AuthRequest, res: Response): Promise<void> => {
   }
 };
 
-// Enriches loans with { role, Fname, Lname } from members, via one bulk call
-// per request instead of one lookup per loan. Fails open — if members is
+// Enriches loans with { role, Fname, Lname } from gardeners, via one bulk call
+// per request instead of one lookup per loan. Fails open — if gardeners is
 // briefly unreachable, loans still return, just without the extra info.
 const attachUserInfo = async (loans: any[]) => {
   const uniqueUserIds = [...new Set(loans.map((loan) => loan.userId))];

@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import { getBook } from '../util/catalogApi';
+import { getSpecimen } from '../util/groveApi';
 
 const PdfViewer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [book, setBook] = useState(null);
+  const [book, setSpecimen] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBook = async () => {
+    const fetchSpecimen = async () => {
       try {
-        const { data } = await getBook(id);
-        setBook(data);
+        const { data } = await getSpecimen(id);
+        setSpecimen(data);
       } catch (err) {
         console.error('Failed to load viewer:', err);
       } finally {
         setLoading(false);
       }
     };
-    fetchBook();
+    fetchSpecimen();
   }, [id]);
 
   if (loading) {

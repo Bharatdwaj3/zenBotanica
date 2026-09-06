@@ -3,8 +3,8 @@ kind: Rollout
 
 metadata:
   labels:
-    bonsai-service: members
-  name: members
+    bonsai-service: gardeners
+  name: gardeners
 spec:
   strategy:
     canary:
@@ -22,11 +22,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      bonsai-service: members
+      bonsai-service: gardeners
   template:
     metadata:
       labels:
-        bonsai-service: members
+        bonsai-service: gardeners
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,9 +37,9 @@ spec:
             - npx prisma generate && npx prisma migrate deploy && npm start
           envFrom:
             - secretRef:
-                name: members-secrets 
-          image: members
-          name: members-ctr
+                name: gardeners-secrets 
+          image: gardeners
+          name: gardeners-ctr
           ports:
             - containerPort: 4003
               protocol: TCP

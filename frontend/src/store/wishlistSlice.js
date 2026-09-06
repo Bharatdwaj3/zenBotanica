@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getWishlist, addToWishlist, removeFromWishlist } from '../util/catalogApi';
+import { getWishlist, addToWishlist, removeFromWishlist } from '../util/groveApi';
 
 export const fetchWishlist = createAsyncThunk(
   'wishlist/fetchWishlist',

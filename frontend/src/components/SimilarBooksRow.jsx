@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Plus } from 'lucide-react';
+import { SpecimenOpen, Plus } from 'lucide-react';
 
-export default function SimilarBooksRow({ title, books, emptyMessage }) {
+export default function SimilarSpecimensRow({ title, books, emptyMessage }) {
   const navigate = useNavigate();
 
   if (!books || books.length === 0) {
@@ -18,7 +18,7 @@ export default function SimilarBooksRow({ title, books, emptyMessage }) {
     );
   }
 
-  const visibleBooks = books.slice(0, 6);
+  const visibleSpecimens = books.slice(0, 6);
 
   return (
     <div className="mt-12">
@@ -33,7 +33,7 @@ export default function SimilarBooksRow({ title, books, emptyMessage }) {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {visibleBooks.map((book, index) => (
+        {visibleSpecimens.map((book, index) => (
           <motion.article
             key={book.id}
             initial={{ opacity: 0, y: 10 }}
@@ -51,7 +51,7 @@ export default function SimilarBooksRow({ title, books, emptyMessage }) {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
-                  <BookOpen size={32} className="text-foreground/20" strokeWidth={1.5} />
+                  <SpecimenOpen size={32} className="text-foreground/20" strokeWidth={1.5} />
                 </div>
               )}
 

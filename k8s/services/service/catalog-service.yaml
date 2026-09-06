@@ -2,14 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    bonsai-service: catalog
-  name: catalog
+    bonsai-service: grove
+  name: grove
 spec:
   ports:
     - name: "4001"
       port: 4001
       targetPort: 4001
   selector:
-    bonsai-service: catalog
+    bonsai-service: grove
 status:
   loadBalancer: {}

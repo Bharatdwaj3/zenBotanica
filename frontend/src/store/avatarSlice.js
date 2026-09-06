@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getProfile } from '../util/membersApi';
+import { getProfile } from '../util/gardenersApi';
 
 export const fetchUser = createAsyncThunk(
   'avatar/fetchUser',

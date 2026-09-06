@@ -2,12 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { BookOpen, Tag, Pencil, Trash2, ShoppingCart, Heart } from 'lucide-react';
-import { deleteBook } from '../util/catalogApi';
-import { addBookToCart, removeBookFromCart } from '../store/cartSlice';
-import { addBookToWishlist, removeBookFromWishlist } from '../store/wishlistSlice';
+import { SpecimenOpen, Tag, Pencil, Trash2, ShoppingCart, Heart } from 'lucide-react';
+import { deleteSpecimen } from '../util/groveApi';
+import { addSpecimenToCart, removeSpecimenFromCart } from '../store/cartSlice';
+import { addSpecimenToWishlist, removeSpecimenFromWishlist } from '../store/wishlistSlice';
 
-const BookCard = ({ book, index = 0, showAdminActions = false, onDeleted }) => {
+const SpecimenCard = ({ book, index = 0, showAdminActions = false, onDeleted }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.avatar);
@@ -22,7 +22,7 @@ const BookCard = ({ book, index = 0, showAdminActions = false, onDeleted }) => {
     e.stopPropagation();
     if (window.confirm('Delete this book permanently?') === false) return;
     try {
-      await deleteBook(book.id);
+      await deleteSpecimen(book.id);
       onDeleted?.(book.id);
     } catch (err) {
       alert('Failed to delete book');
@@ -31,12 +31,12 @@ const BookCard = ({ book, index = 0, showAdminActions = false, onDeleted }) => {
 
   const handleToggleCart = (e) => {
     e.stopPropagation();
-    dispatch(inCart ? removeBookFromCart(book.id) : addBookToCart(book.id));
+    dispatch(inCart ? removeSpecimenFromCart(book.id) : addSpecimenToCart(book.id));
   };
 
   const handleToggleWishlist = (e) => {
     e.stopPropagation();
-    dispatch(inWishlist ? removeBookFromWishlist(book.id) : addBookToWishlist(book.id));
+    dispatch(inWishlist ? removeSpecimenFromWishlist(book.id) : addSpecimenToWishlist(book.id));
   };
 
   return (
@@ -57,7 +57,7 @@ const BookCard = ({ book, index = 0, showAdminActions = false, onDeleted }) => {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
-            <BookOpen size={48} className="text-foreground/20" strokeWidth={1.5} />
+            <SpecimenOpen size={48} className="text-foreground/20" strokeWidth={1.5} />
           </div>
         )}
 
@@ -124,4 +124,4 @@ const BookCard = ({ book, index = 0, showAdminActions = false, onDeleted }) => {
   );
 };
 
-export default BookCard;
+export default SpecimenCard;

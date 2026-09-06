@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Clock, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { SpecimenOpen, Clock, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-const LoanListItem = ({ loan, overdue, returning, onReturn, payingFine, onPayFine, isAdmin }) => {
+const TendingListItem = ({ loan, overdue, returning, onReturn, payingPenalty, onPayPenalty, isAdmin }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -14,7 +14,7 @@ const LoanListItem = ({ loan, overdue, returning, onReturn, payingFine, onPayFin
           <img src={loan.book.coverUrl} className="w-full h-full object-cover" alt={loan.book.title} />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <BookOpen size={20} className="text-foreground/20" />
+            <SpecimenOpen size={20} className="text-foreground/20" />
           </div>
         )}
       </div>
@@ -37,16 +37,16 @@ const LoanListItem = ({ loan, overdue, returning, onReturn, payingFine, onPayFin
         {loan.fineAmount > 0 && (
           <div className="flex items-center gap-3 mt-1">
             <span className="inline-flex items-center gap-1 text-xs text-red-500 font-semibold">
-              Fine: ₹{loan.fineAmount}
+              Penalty: ₹{loan.fineAmount}
             </span>
             {/* Admin only issues fines, never pays them on a user's behalf. */}
             {!isAdmin && (
               <button
-                onClick={() => onPayFine(loan)}
-                disabled={payingFine}
+                onClick={() => onPayPenalty(loan)}
+                disabled={payingPenalty}
                 className="px-2 py-1 bg-red-500 text-white rounded-lg text-xs font-semibold hover:bg-red-500/90 transition-all disabled:opacity-50"
               >
-                {payingFine ? 'Processing...' : 'Pay Fine'}
+                {payingPenalty ? 'Processing...' : 'Pay Penalty'}
               </button>
             )}
           </div>
@@ -66,4 +66,4 @@ const LoanListItem = ({ loan, overdue, returning, onReturn, payingFine, onPayFin
   );
 };
 
-export default LoanListItem;
+export default TendingListItem;

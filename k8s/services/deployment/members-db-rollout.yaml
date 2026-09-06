@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: members-db
+  name: gardeners-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: members-db
+      app: gardeners-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: members-db
+        app: gardeners-db
     spec:
       containers:
         - env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: members-secrets
+                  name: gardeners-secrets
                   key: PgSql_User
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: members-secrets
+                  name: gardeners-secrets
                   key: PgSql_Password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: members-secrets
+                  name: gardeners-secrets
                   key: PgSql_Database
           image: postgres:15-alpine
           livenessProbe:
@@ -37,23 +37,23 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - members_user
+                - gardeners_user
                 - -d
-                - members_db
+                - gardeners_db
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-          name: members-db-ctr
+          name: gardeners-db-ctr
           ports:
             - containerPort: 5432
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: members-data
+              name: gardeners-data
       restartPolicy: Always
       volumes:
-        - name: members-data
+        - name: gardeners-data
           persistentVolumeClaim:
-            claimName: members-data
+            claimName: gardeners-data
 status: {}

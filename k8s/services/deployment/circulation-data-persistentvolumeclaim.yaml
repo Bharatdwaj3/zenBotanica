@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: circulation-data
-  name: circulation-data
+    io.kompose.service: tending-data
+  name: tending-data
 spec:
   accessModes:
     - ReadWriteOnce

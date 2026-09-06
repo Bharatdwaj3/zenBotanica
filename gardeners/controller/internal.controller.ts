@@ -41,7 +41,7 @@ export const getUserByEmail = async (req: Request<{ email: string }>, res: Respo
 
 // Internal-only: bulk lookup for a list of userIds, returning just enough for
 // grouping/display (role + name from whichever profile table applies) —
-// used by circulation to label loans with the borrower's role and name.
+// used by tending to label loans with the borrower's role and name.
 export const getUsersByIds = async (req: Request, res: Response): Promise<void> => {
   try {
     const idsParam = req.query.ids as string | undefined;

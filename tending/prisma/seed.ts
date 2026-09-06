@@ -1,7 +1,7 @@
 import prisma from '../config/prisma-client.ts';
 import { MEMBERS_SERVICE_URL, CATALOG_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 
-// NOTE: this script is not idempotent like members'/catalog's seed scripts —
+// NOTE: this script is not idempotent like gardeners'/grove's seed scripts —
 // loan/fine have no unique field to upsert on. Running it twice creates
 // duplicate rows. Fine for a one-off test seed, just don't re-run blindly.
 
@@ -54,14 +54,14 @@ function daysFromNow(days: number): Date {
 }
 
 async function main() {
-  console.log('Resolving user IDs from members service...');
+  console.log('Resolving user IDs from gardeners service...');
   const adminId = await resolveUserId(ADMIN_EMAIL);
   const userIds: number[] = [];
   for (const email of userEmails) {
     userIds.push(await resolveUserId(email));
   }
 
-  console.log('Resolving book IDs from catalog service...');
+  console.log('Resolving book IDs from grove service...');
   const bookIds: number[] = [];
   for (const isbn of bookIsbns) {
     bookIds.push(await resolveBookId(isbn));

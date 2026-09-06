@@ -1,13 +1,13 @@
 import axios from 'axios';
-import membersApi from './membersApi';
+import gardenersApi from './gardenersApi';
 
-const circulationApi = axios.create({
+const tendingApi = axios.create({
   baseURL: '/api/v1',
   withCredentials: true,
   timeout: 8000,
 });
 
-circulationApi.interceptors.response.use(
+tendingApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -15,8 +15,8 @@ circulationApi.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        await membersApi.post('/auth/refresh');
-        return circulationApi(originalRequest);
+        await gardenersApi.post('/auth/refresh');
+        return tendingApi(originalRequest);
       } catch (refreshError) {
         return Promise.reject(refreshError);
       }
@@ -25,18 +25,18 @@ circulationApi.interceptors.response.use(
   }
 );
 
-export default circulationApi;
+export default tendingApi;
 // Loan routes
-export const borrowBook = (data) => circulationApi.post('/loan', data);
-export const issueLoan = (data) => circulationApi.post('/loan/issue', data);
-export const returnBook = (id) => circulationApi.put(`/loan/${id}/return`);
-export const getMyLoans = () => circulationApi.get('/loan/mine');
-export const renewBook = (id) => circulationApi.put(`/loan/${id}/renew`);
-export const getAllLoans = () => circulationApi.get('/loan');
+export const borrowBook = (data) => tendingApi.post('/loan', data);
+export const issueLoan = (data) => tendingApi.post('/loan/issue', data);
+export const returnBook = (id) => tendingApi.put(`/loan/${id}/return`);
+export const getMyLoans = () => tendingApi.get('/loan/mine');
+export const renewBook = (id) => tendingApi.put(`/loan/${id}/renew`);
+export const getAllLoans = () => tendingApi.get('/loan');
 
 // Fine routes
-export const getMyFines = () => circulationApi.get('/fine/mine');
-export const createPayOrder = (fineId) => circulationApi.post(`/fine/${fineId}/pay-order`);
-export const verifyPayment = (data) => circulationApi.post(`/fine/verify-payment`, data);
-export const createLoanFine = (loanId) => circulationApi.post(`/loan/${loanId}/create-fine`);
-export const waiveLoanFine = (loanId) => circulationApi.patch(`/loan/${loanId}/waive-fine`);
+export const getMyFines = () => tendingApi.get('/fine/mine');
+export const createPayOrder = (fineId) => tendingApi.post(`/fine/${fineId}/pay-order`);
+export const verifyPayment = (data) => tendingApi.post(`/fine/verify-payment`, data);
+export const createLoanFine = (loanId) => tendingApi.post(`/loan/${loanId}/create-fine`);
+export const waiveLoanFine = (loanId) => tendingApi.patch(`/loan/${loanId}/waive-fine`);

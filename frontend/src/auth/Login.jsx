@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { fetchUser } from '../store/avatarSlice';
 import { Mail, Lock, Eye, EyeOff, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { loginUser } from '../util/membersApi';
+import { loginUser } from '../util/gardenersApi';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });

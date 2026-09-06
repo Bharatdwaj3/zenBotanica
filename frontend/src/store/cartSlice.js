@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCart, addToCart, removeFromCart, checkoutCart } from '../util/catalogApi';
+import { getCart, addToCart, removeFromCart, checkoutCart } from '../util/groveApi';
 
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',

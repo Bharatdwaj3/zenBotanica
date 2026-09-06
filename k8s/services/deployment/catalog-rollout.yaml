@@ -4,8 +4,8 @@ kind: Rollout
 
 metadata:
   labels:
-    bonsai-service: catalog
-  name: catalog
+    bonsai-service: grove
+  name: grove
 spec:
   strategy:
     canary:
@@ -23,11 +23,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      bonsai-service: catalog
+      bonsai-service: grove
   template:
     metadata:
       labels:
-        bonsai-service: catalog
+        bonsai-service: grove
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -38,9 +38,9 @@ spec:
             - npx prisma generate && npx prisma migrate deploy && npm start
           envFrom:
             - secretRef:
-                name: catalog-secrets 
-          image: catalog
-          name: catalog-ctr
+                name: grove-secrets 
+          image: grove
+          name: grove-ctr
           ports:
             - containerPort: 4001
           resources: {}

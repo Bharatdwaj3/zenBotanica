@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getMyLoans, getAllLoans, returnBook, renewBook, createLoanFine, createPayOrder, verifyPayment, waiveLoanFine } from '../util/circulationApi';
-import { getBook } from '../util/catalogApi';
+import { getMyLoans, getAllLoans, returnBook, renewBook, createLoanFine, createPayOrder, verifyPayment, waiveLoanFine } from '../util/tendingApi';
+import { getBook } from '../util/groveApi';
 import { loadRazorpayScript } from '../util/razorpay';
 
 export function useLoans(isAdmin) {

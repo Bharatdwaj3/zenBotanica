@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: members-data
-  name: members-data
+    io.kompose.service: gardeners-data
+  name: gardeners-data
 spec:
   accessModes:
     - ReadWriteOnce

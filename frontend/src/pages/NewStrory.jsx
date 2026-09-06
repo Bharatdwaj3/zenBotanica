@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, Loader2, ShieldAlert } from 'lucide-react';
-import { addBook, updateBook, getBook, uploadFile, extractPdf } from '../util/catalogApi';
+import { addSpecimen, updateSpecimen, getSpecimen, uploadFile, extractPdf } from '../util/groveApi';
 
 const GENRES = [
   'FICTION', 'NON_FICTION', 'FANTASY', 'SCIENCE', 'SCIENCE_FICTION',
@@ -41,9 +41,9 @@ export default function NewStory() {
   // Edit mode: load the existing book once and prefill the form.
   useEffect(() => {
     if (!isEditing) return;
-    const loadBook = async () => {
+    const loadSpecimen = async () => {
       try {
-        const { data } = await getBook(editId);
+        const { data } = await getSpecimen(editId);
         setForm({
           title: data.title || '',
           author: data.author || '',
@@ -62,7 +62,7 @@ export default function NewStory() {
         setLoadingExisting(false);
       }
     };
-    loadBook();
+    loadSpecimen();
   }, [editId, isEditing]);
 
   const handleChange = (e) => {
@@ -146,10 +146,10 @@ export default function NewStory() {
       };
 
       if (isEditing) {
-        await updateBook(editId, payload);
+        await updateSpecimen(editId, payload);
         navigate(`/content/${editId}`);
       } else {
-        await addBook(payload);
+        await addSpecimen(payload);
         navigate('/content');
       }
     } catch (err) {
@@ -173,7 +173,7 @@ export default function NewStory() {
         <div className="text-center">
           <ShieldAlert size={48} className="text-foreground/20 mx-auto mb-4" />
           <h1 className="text-xl font-bold mb-2">Admins Only</h1>
-          <p className="text-foreground/50 text-sm">Only admins can add new books to the catalog.</p>
+          <p className="text-foreground/50 text-sm">Only admins can add new books to the grove.</p>
         </div>
       </div>
     );
@@ -194,7 +194,7 @@ export default function NewStory() {
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
-            <h1 className="font-display text-3xl tracking-wide">{isEditing ? 'Edit Book' : 'Add a Book'}</h1>
+            <h1 className="font-display text-3xl tracking-wide">{isEditing ? 'Edit Specimen' : 'Add a Specimen'}</h1>
           </motion.div>
 
           {error && (
@@ -282,7 +282,7 @@ export default function NewStory() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground/70 mb-1">Book PDF (optional)</label>
+              <label className="block text-sm font-medium text-foreground/70 mb-1">Specimen PDF (optional)</label>
               <input
                 type="file"
                 accept="application/pdf"
@@ -363,7 +363,7 @@ export default function NewStory() {
               className="w-full justify-center btn-primary disabled:opacity-50"
             >
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-              {saving ? (isEditing ? 'Saving...' : 'Adding...') : (isEditing ? 'Save Changes' : 'Add Book')}
+              {saving ? (isEditing ? 'Saving...' : 'Adding...') : (isEditing ? 'Save Changes' : 'Add Specimen')}
               {!saving && <Save className="h-4 w-4" />}
             </button>
           </form>

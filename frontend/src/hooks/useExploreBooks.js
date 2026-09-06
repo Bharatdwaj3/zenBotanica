@@ -18,7 +18,7 @@ export function useExploreBooks() {
   }, []);
 
   // Whenever a genre or search filter is active, fetchBooks (in contentSlice)
-  // pulls the FULL catalog instead of just the current sort tab's top 20 —
+  // pulls the FULL grove instead of just the current sort tab's top 20 —
   // fixes "genre/search outside the top-20 window shows no results."
   const isFiltering = selectedGenre !== 'all' || searchQuery.trim() !== '';
 

@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.31.2 (a92241f79)
   creationTimestamp: null
   labels:
-    bonsai-service: circulation
-  name: circulation
+    bonsai-service: tending
+  name: tending
 spec:
   ports:
     - name: "4002"
       port: 4002
       targetPort: 4002
   selector:
-    bonsai-service: circulation
+    bonsai-service: tending
 status:
   loadBalancer: {}

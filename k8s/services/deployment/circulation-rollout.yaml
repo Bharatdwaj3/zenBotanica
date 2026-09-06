@@ -3,8 +3,8 @@ kind: Rollout
 
 metadata:
   labels:
-    bonsai-service: circulation
-  name: circulation
+    bonsai-service: tending
+  name: tending
 spec:
   strategy:
     canary:
@@ -22,11 +22,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      bonsai-service: circulation
+      bonsai-service: tending
   template:
     metadata:
       labels:
-        bonsai-service: circulation 
+        bonsai-service: tending 
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,9 +37,9 @@ spec:
             - npx prisma generate && npx prisma migrate deploy && npm start
           envFrom:
             - secretRef:
-                name: circulation-secrets 
-          image: circulation
-          name: circulation-ctr
+                name: tending-secrets 
+          image: tending
+          name: tending-ctr
           ports:
             - containerPort: 4002
               protocol: TCP

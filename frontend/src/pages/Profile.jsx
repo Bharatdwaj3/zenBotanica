@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Mail, Calendar, BookOpen, GraduationCap, Library } from 'lucide-react';
+import { Mail, Calendar, SpecimenOpen, GraduationCap, Grove } from 'lucide-react';
 import { fetchUser } from '../store/avatarSlice';
-import { useLoans } from '../hooks/useLoans';
+import { useTendings } from '../hooks/useTendings';
 import StatCard from '../components/StatCard';
-import LoansSection from '../features/LoansSection';
-import BooksSection from '../features/BooksSection';
+import TendingsSection from '../features/TendingsSection';
+import SpecimensSection from '../features/SpecimensSection';
 
 const getProfile = (user) => user?.faculty || user?.student || null;
 const getDisplayName = (user) => {
@@ -25,7 +25,7 @@ export default function Profile() {
   }, [user, dispatch]);
 
   const isAdmin = user?.role === 'admin';
-  const loansState = useLoans(isAdmin);
+  const loansState = useTendings(isAdmin);
 
   if (loading || !user) {
     return (
@@ -37,7 +37,7 @@ export default function Profile() {
 
   const profile = getProfile(user);
   const isFaculty = Boolean(user.faculty);
-  const activeLoanCount = loansState.loans.filter((loan) => !loan.returnedAt).length;
+  const activeTendingCount = loansState.loans.filter((loan) => !loan.returnedAt).length;
   const overdueCount = loansState.loans.filter(loansState.isOverdue).length;
 
   return (
@@ -71,7 +71,7 @@ export default function Profile() {
             </div>
             {profile && (
               <div className="flex items-center gap-2">
-                {isFaculty ? <GraduationCap size={16} className="text-foreground/40" /> : <BookOpen size={16} className="text-foreground/40" />}
+                {isFaculty ? <GraduationCap size={16} className="text-foreground/40" /> : <SpecimenOpen size={16} className="text-foreground/40" />}
                 {(isFaculty ? profile.Expertise : profile.Subjects)?.replace(/_/g, ' ')}
               </div>
             )}
@@ -79,7 +79,7 @@ export default function Profile() {
 
           {!isAdmin && !loansState.loading && (
             <div className="grid grid-cols-2 gap-3 border-t border-border pt-4 mt-4">
-              <StatCard label="Active Loans" value={activeLoanCount} />
+              <StatCard label="Active Tendings" value={activeTendingCount} />
               <StatCard label="Overdue" value={overdueCount} danger={overdueCount > 0} />
             </div>
           )}
@@ -94,7 +94,7 @@ export default function Profile() {
                   section === 'loans' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
                 }`}
               >
-                <BookOpen size={16} /> System Loans
+                <SpecimenOpen size={16} /> System Tendings
               </button>
               <button
                 onClick={() => setSection('books')}
@@ -102,17 +102,17 @@ export default function Profile() {
                   section === 'books' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
                 }`}
               >
-                <Library size={16} /> Books
+                <Grove size={16} /> Specimens
               </button>
             </>
           ) : (
-            <h2 className="font-display text-lg tracking-wide">My Library Activity</h2>
+            <h2 className="font-display text-lg tracking-wide">My Grove Activity</h2>
           )}
         </div>
 
-        {section === 'loans' && <LoansSection isAdmin={isAdmin} {...loansState} />}
+        {section === 'loans' && <TendingsSection isAdmin={isAdmin} {...loansState} />}
 
-        {section === 'books' && isAdmin && <BooksSection />}
+        {section === 'books' && isAdmin && <SpecimensSection />}
       </div>
     </div>
   );
