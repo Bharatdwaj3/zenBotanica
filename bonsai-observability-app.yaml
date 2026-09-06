@@ -1,20 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hon-khana
+  name: bonsai-observability
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/Bharatdwaj3/HonKhana
+    repoURL: https://github.com/Bharatdwaj3/Bonsai
     targetRevision: main
-    path: k8s
-    directory:
-      recurse: true
-      exclude: 'observability/**'
+    path: k8s/observability
   destination:
     server: https://kubernetes.default.svc
-    namespace: hon-khana
+    namespace: bonsai
   syncPolicy:
     automated:
       prune: true

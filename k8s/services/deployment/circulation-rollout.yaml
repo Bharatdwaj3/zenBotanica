@@ -3,7 +3,7 @@ kind: Rollout
 
 metadata:
   labels:
-    hon-khana-service: circulation
+    bonsai-service: circulation
   name: circulation
 spec:
   strategy:
@@ -22,11 +22,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      hon-khana-service: circulation
+      bonsai-service: circulation
   template:
     metadata:
       labels:
-        hon-khana-service: circulation 
+        bonsai-service: circulation 
     spec:
       imagePullSecrets:
         - name: ghcr-secret

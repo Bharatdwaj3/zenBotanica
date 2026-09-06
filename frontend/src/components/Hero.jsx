@@ -71,7 +71,7 @@ export const Hero = ({ spotlightBook, floatingBooks = [] }) => {
         </div>
 
         <h1 className="font-display text-6xl lg:text-7xl xl:text-8xl text-foreground mb-6 leading-none tracking-wide select-none">
-          HonKhana
+          Bonsai
         </h1>
 
         <p className="text-base lg:text-lg text-foreground/60 leading-relaxed mb-10 font-light">

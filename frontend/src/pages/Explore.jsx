@@ -29,7 +29,7 @@ export default function Explore() {
         <div className="max-w-[1400px] mx-auto px-6 mb-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="font-display text-4xl md:text-5xl tracking-wide mb-3">Explore Books</h1>
-            <p className="text-foreground/60 text-lg">Discover books from the HonKhana library</p>
+            <p className="text-foreground/60 text-lg">Discover books from the Bonsai library</p>
           </motion.div>
         </div>
 

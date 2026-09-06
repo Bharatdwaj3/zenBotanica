@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   labels:
-    hon-khana-service: firebase
+    bonsai-service: firebase
   name: firebase
 spec:
   strategy:
@@ -13,11 +13,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      hon-khana-service: firebase
+      bonsai-service: firebase
   template:
     metadata:
       labels:
-        hon-khana-service: firebase
+        bonsai-service: firebase
     spec:
       imagePullSecrets:
         - name: ghcr-secret

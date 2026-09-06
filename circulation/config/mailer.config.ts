@@ -33,7 +33,7 @@ export const sendReminderEmail = async ({
     : `Your loan of "${bookTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
 
   await transporter.sendMail({
-    from: '"HonKhana Library" <library@honkhana.local>',
+    from: '"Bonsai Library" <library@bonsai.local>',
     to,
     subject,
     text: body,

@@ -3,7 +3,7 @@ kind: Rollout
 
 metadata:
   labels:
-    hon-khana-service: frontend
+    bonsai-service: frontend
   name: frontend
 spec:
   strategy:
@@ -22,11 +22,11 @@ spec:
   progressDeadlineSeconds: 120
   selector:
     matchLabels:
-      hon-khana-service: frontend
+      bonsai-service: frontend
   template:
     metadata:
       labels:
-        hon-khana-service: frontend
+        bonsai-service: frontend
     spec:
       imagePullSecrets:
         - name: ghcr-secret

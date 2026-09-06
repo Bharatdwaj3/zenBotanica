@@ -1,6 +1,6 @@
-# HonKhana
+# Bonsai
 
-HonKhana is a comprehensive library management system developed using a microservices architecture.
+Bonsai is a comprehensive library management system developed using a microservices architecture.
 
 It provides functionalities for managing books, handling book circulation (loans, fines, renewals), and user management.
 The system is built with Node.js, TypeScript, Express, React, and PostgreSQL, leveraging Docker for containerization.
@@ -42,8 +42,8 @@ The project follows a microservices pattern with distinct directories for each s
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/Bharatdwaj3/HonKhana.git
-    cd HonKhana
+    git clone https://github.com/Bharatdwaj3/Bonsai.git
+    cd Bonsai
     ```
 
 2.  **Set up environment variables:**
