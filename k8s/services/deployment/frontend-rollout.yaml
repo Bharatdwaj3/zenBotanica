@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+metadata:
+  labels:
+    hon-khana-service: frontend
+  name: frontend
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+      - setWeight: 100
+  replicas: 3
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      hon-khana-service: frontend
+  template:
+    metadata:
+      labels:
+        hon-khana-service: frontend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - image: ghcr.io/bharatdwaj3/frontend:v1
+          imagePullPolicy: Always
+          name: frontend-ctr
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+          resources: {}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: frontend-nginx-config

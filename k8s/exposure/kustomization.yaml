@@ -1,0 +1,5 @@
+namespace: hon-khana
+
+resources:
+  - frontend-ingress.yaml
+  - selfsigned-issuer.yaml

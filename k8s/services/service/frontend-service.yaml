@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml --out k8s/services/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    hon-khana-service: frontend
+  name: frontend
+spec:
+  ports:
+    - name: "5114"
+      port: 5114
+      targetPort: 80
+  selector:
+    hon-khana-service: frontend
+status:
+  loadBalancer: {}

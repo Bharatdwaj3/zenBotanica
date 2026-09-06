@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    hon-khana-service: firebase
+  name: firebase
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 100
+  replicas: 1
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      hon-khana-service: firebase
+  template:
+    metadata:
+      labels:
+        hon-khana-service: firebase
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - image: firebase
+          name: firebase-ctr
+          ports:
+            - containerPort: 9099
+              protocol: TCP
+            - containerPort: 9199
+              protocol: TCP
+            - containerPort: 4000
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: firebase-data
+              mountPath: /data
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "firebase emulators:export /data/export --project demo-project --force"]
+          readinessProbe:
+            tcpSocket:
+              port: 9199
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+      volumes:
+        - name: firebase-data
+          persistentVolumeClaim:
+            claimName: firebase-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+status: {}

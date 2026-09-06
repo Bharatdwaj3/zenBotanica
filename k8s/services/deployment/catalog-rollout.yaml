@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+
+metadata:
+  labels:
+    hon-khana-service: catalog
+  name: catalog
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+      - setWeight: 100
+  replicas: 3
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      hon-khana-service: catalog
+  template:
+    metadata:
+      labels:
+        hon-khana-service: catalog
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - args:
+            - sh
+            - -c
+            - npx prisma generate && npx prisma migrate deploy && npm start
+          envFrom:
+            - secretRef:
+                name: catalog-secrets 
+          image: catalog
+          name: catalog-ctr
+          ports:
+            - containerPort: 4001
+          resources: {}
+          readinessProbe:
+            tcpSocket:
+              port: 4001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+status: {}

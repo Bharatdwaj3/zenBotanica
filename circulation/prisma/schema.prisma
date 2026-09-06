@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model loan {
+  id         Int       @id @default(autoincrement())
+  bookId     Int
+  userId     Int
+  borrowedAt DateTime  @default(now())
+  dueAt      DateTime
+  returnedAt DateTime?
+  fineAmount Float     @default(0) 
+  renewalCount    Int       @default(0)
+}
+model fine {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  amount     Float
+  reason     String
+  issuedBy   Int
+  paid       Boolean   @default(false)
+  waived     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  loanId     Int?      @unique
+}
