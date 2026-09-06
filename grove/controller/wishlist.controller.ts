@@ -13,7 +13,7 @@ const addToWishlist = async (req: AuthRequest, res: Response): Promise<void> => 
     }
 
     const wishlistItem = await prisma.wishlist_item.create({
-      data: { userId: userId!, specimenId: Number(specimenId) },
+      data: { userId: userId!, bookId: Number(specimenId) },
     });
     res.status(201).json(wishlistItem);
   } catch (error: any) {
@@ -28,11 +28,11 @@ const addToWishlist = async (req: AuthRequest, res: Response): Promise<void> => 
 
 const removeFromWishlist = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const specimenId = Number(req.params.specimenId);
+    const specimenId = Number(req.params.bookId);
     const userId = req.user?.id;
 
     await prisma.wishlist_item.delete({
-      where: { userId_specimenId: { userId: userId!, specimenId } },
+      where: { userId_bookId: { userId: userId!, bookId: specimenId } },
     });
     res.status(200).json({ message: "Removed from wishlist" });
   } catch (error: any) {
@@ -50,7 +50,7 @@ const listWishlist = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.id;
     const wishlistItems = await prisma.wishlist_item.findMany({
       where: { userId },
-      include: { specimen: true },
+      include: { book: true },
       orderBy: { addedAt: "desc" },
     });
     res.status(200).json(wishlistItems);
