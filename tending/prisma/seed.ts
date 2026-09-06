@@ -81,14 +81,14 @@ async function main() {
 
   console.log('Seeding sessions...');
   for (const l of sessionPlan) {
-    await prisma.session.create({
+    await prisma.loan.create({
       data: {
         userId: userIds[l.userIndex],
         bookId: bookIds[l.bookIndex],
         borrowedAt: daysFromNow(l.dueInDays - 14),
         dueAt: daysFromNow(l.dueInDays),
         returnedAt: l.returned ? daysFromNow(l.dueInDays - 2) : null,
-        penaltyAmount: !l.returned && l.dueInDays < 0 ? Math.abs(l.dueInDays) * 5 : 0,
+        fineAmount: !l.returned && l.dueInDays < 0 ? Math.abs(l.dueInDays) * 5 : 0,
       },
     });
   }
@@ -105,7 +105,7 @@ async function main() {
 
   console.log('Seeding penaltys...');
   for (const f of penaltyPlan) {
-    await prisma.penalty.create({
+    await prisma.fine.create({
       data: {
         userId: userIds[f.userIndex],
         amount: f.amount,

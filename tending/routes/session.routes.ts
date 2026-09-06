@@ -3,28 +3,28 @@ import { authUser } from "../middleware/auth.middleware.ts";
 import checkPermission from "../middleware/permission.middleware.ts";
 import { 
   borrowBook, 
-  issueSessionForMember,
+  issueCareSessionForMember,
   returnBook, 
-  listMySessions, 
-  listAllSessions, 
-  listOverdueSessions,
+  listMyCareSessions, 
+  listAllCareSessions, 
+  listOverdueCareSessions,
   renewBook,
-  createSessionPenalty,
-  waiveSessionPenalty,
+  createCareSessionPenalty,
+  waiveCareSessionPenalty,
 } from "../controller/session.controller.ts";
 import { runCareReminderCheck } from "../jobs/care-reminder.job.ts";
 
 const router = Router();
 
 router.post("/", authUser, checkPermission("borrowBook"), borrowBook);
-router.post("/issue", authUser, checkPermission("issueSession"), issueSessionForMember);
+router.post("/issue", authUser, checkPermission("issueSession"), issueCareSessionForMember);
 router.put("/:id/return", authUser, checkPermission("returnBook"), returnBook);
-router.get("/mine", authUser, checkPermission("viewSession"), listMySessions);
+router.get("/mine", authUser, checkPermission("viewSession"), listMyCareSessions);
 router.put("/:id/renew", authUser, checkPermission("returnBook"), renewBook);
-router.post("/:id/create-penalty", authUser, checkPermission("payPenalty"), createSessionPenalty);
-router.patch("/:id/waive-penalty", authUser, checkPermission("issuePenalty"), waiveSessionPenalty);
-router.get("/overdue", authUser, checkPermission("listSession"), listOverdueSessions);
-router.get("/", authUser, checkPermission("listSession"), listAllSessions);
+router.post("/:id/create-penalty", authUser, checkPermission("payPenalty"), createCareSessionPenalty);
+router.patch("/:id/waive-penalty", authUser, checkPermission("issuePenalty"), waiveCareSessionPenalty);
+router.get("/overdue", authUser, checkPermission("listSession"), listOverdueCareSessions);
+router.get("/", authUser, checkPermission("listSession"), listAllCareSessions);
 
 // TEMPORARY: Manual trigger for testing the care-reminder system
 router.get("/test-care-reminders", authUser, async (req, res) => {

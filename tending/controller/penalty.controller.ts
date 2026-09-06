@@ -38,7 +38,7 @@ const issuePenalty = async (req: AuthRequest, res: Response): Promise<void> => {
       return;
     }
 
-    const penalty = await prisma.penalty.create({
+    const penalty = await prisma.fine.create({
       data: { userId, amount, reason, issuedBy: issuedBy! },
     });
 
@@ -53,7 +53,7 @@ const issuePenalty = async (req: AuthRequest, res: Response): Promise<void> => {
 // automatic late fees on sessions are shown separately via /session/mine).
 const listMyPenaltys = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const penaltys = await prisma.penalty.findMany({
+    const penaltys = await prisma.fine.findMany({
       where: { userId: req.user?.id },
       orderBy: { createdAt: "desc" },
     });
@@ -71,7 +71,7 @@ const createPayOrder = async (req: AuthRequest, res: Response): Promise<void> =>
     const penaltyId = Number(req.params.id);
     const userId = req.user?.id;
 
-    const penalty = await prisma.penalty.findUnique({ where: { id: penaltyId } });
+    const penalty = await prisma.fine.findUnique({ where: { id: penaltyId } });
     if (!penalty) {
       res.status(404).json({ message: "Penalty not found" });
       return;
@@ -114,7 +114,7 @@ const verifyPayment = async (req: AuthRequest, res: Response): Promise<void> => 
       return;
     }
 
-    const penalty = await prisma.penalty.findUnique({ where: { id: Number(penaltyId) } });
+    const penalty = await prisma.fine.findUnique({ where: { id: Number(penaltyId) } });
     if (!penalty || penalty.userId !== userId) {
       res.status(404).json({ message: "Penalty not found" });
       return;
@@ -130,15 +130,15 @@ const verifyPayment = async (req: AuthRequest, res: Response): Promise<void> => 
       return;
     }
 
-    const updatedPenalty = await prisma.penalty.update({
+    const updatedPenalty = await prisma.fine.update({
       where: { id: penalty.id },
       data: { paid: true },
     });
 
-    if (updatedPenalty.sessionId) {
-      await prisma.session.update({
-        where: { id: updatedPenalty.sessionId },
-        data: { penaltyAmount: 0 },
+    if (updatedPenalty.loanId) {
+      await prisma.loan.update({
+        where: { id: updatedPenalty.loanId },
+        data: { fineAmount: 0 },
       });
     }
 
