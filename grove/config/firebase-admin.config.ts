@@ -3,7 +3,7 @@ import type { Auth } from 'firebase-admin/auth';
 
 import {
   Fbase_project_id,
-  Fbase_public_key,
+  Fbase_private_key,
   Fbase_private_key_id, 
   Fbase_client_email,
   Fbase_client_id,

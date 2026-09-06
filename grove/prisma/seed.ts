@@ -83,7 +83,7 @@ async function resolveUserId(email) {
 
 async function main() {
   for (const b of specimens) {
-    await prisma.specimen.upsert({
+    await prisma.book.upsert({
       where: { isbn: b.isbn },
       update: {},
       create: {
@@ -91,7 +91,7 @@ async function main() {
         author: b.author,
         publisher: b.publisher,
         isbn: b.isbn,
-        genre: b.genre,
+        genre: b.genre as any,
         totalCopies: 5,
         availableCopies: 5,
         coverUrl: `https://covers.openlibrary.org/b/isbn/${b.isbn}-M.jpg`,
@@ -107,15 +107,15 @@ async function main() {
     userIds.push(await resolveUserId(email));
   }
 
-  const seededSpecimens = await prisma.specimen.findMany({ take: 8, orderBy: { id: "asc" } });
+  const seededSpecimens = await prisma.book.findMany({ take: 8, orderBy: { id: "asc" } });
 
   console.log("Seeding cart items...");
   for (let i = 0; i < userIds.length; i++) {
     const specimen = seededSpecimens[i % seededSpecimens.length];
     await prisma.cart_item.upsert({
-      where: { userId_specimenId: { userId: userIds[i], specimenId: specimen.id } },
+      where: { userId_bookId: { userId: userIds[i], bookId: specimen.id } },
       update: {},
-      create: { userId: userIds[i], specimenId: specimen.id },
+      create: { userId: userIds[i], bookId: specimen.id },
     });
   }
   console.log(`Seeded ${userIds.length} cart items.`);
@@ -124,9 +124,9 @@ async function main() {
   for (let i = 0; i < userIds.length; i++) {
     const specimen = seededSpecimens[(i + 3) % seededSpecimens.length];
     await prisma.wishlist_item.upsert({
-      where: { userId_specimenId: { userId: userIds[i], specimenId: specimen.id } },
+      where: { userId_bookId: { userId: userIds[i], bookId: specimen.id } },
       update: {},
-      create: { userId: userIds[i], specimenId: specimen.id },
+      create: { userId: userIds[i], bookId: specimen.id },
     });
   }
   console.log(`Seeded ${userIds.length} wishlist items.`);

@@ -1,9 +1,6 @@
 import express from 'express';
 import type { Request, Response, NextFunction } from 'express';
 import { INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
-type Request = express.Request;
-type Response = express.Response;
-type NextFunction = express.NextFunction;
 
 import { auth } from '../config/firebase-admin.config.ts';
 

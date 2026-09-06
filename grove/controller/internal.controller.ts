@@ -5,7 +5,7 @@ import type { Request, Response } from 'express';
 // script) to resolve a real specimenId from a known ISBN.
 export const getSpecimenByIsbn = async (req: Request<{ isbn: string }>, res: Response): Promise<void> => {
   try {
-    const specimen = await prisma.specimen.findUnique({
+    const specimen = await prisma.book.findUnique({
       where: { isbn: req.params.isbn },
       select: { id: true, title: true, isbn: true },
     });

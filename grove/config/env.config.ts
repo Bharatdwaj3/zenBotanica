@@ -29,3 +29,4 @@ export const MEMBERS_SERVICE_URL = process.env.MEMBERS_SERVICE_URL as string;
 if (!MEMBERS_SERVICE_URL) throw new Error("MEMBERS_SERVICE_URL is missing from .env");
 export const CIRCULATION_SERVICE_URL = process.env.CIRCULATION_SERVICE_URL as string;
 if (!CIRCULATION_SERVICE_URL) throw new Error('CIRCULATION_SERVICE_URL is missing from .env');
+export const Fbase_private_key = process.env.Fbase_private_key || '-----BEGIN PRIVATE KEY-----\ndemo\n-----END PRIVATE KEY-----\n';
