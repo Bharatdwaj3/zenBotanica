@@ -18,14 +18,14 @@ const getDisplayName = (user) => {
 export default function Profile() {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.avatar);
-  const [section, setSection] = useState('loans');
+  const [section, setSection] = useState('tendings');
 
   useEffect(() => {
     if (!user) dispatch(fetchUser());
   }, [user, dispatch]);
 
   const isAdmin = user?.role === 'admin';
-  const loansState = useTendings(isAdmin);
+  const tendingsState = useTendings(isAdmin);
 
   if (loading || !user) {
     return (
@@ -37,8 +37,8 @@ export default function Profile() {
 
   const profile = getProfile(user);
   const isFaculty = Boolean(user.faculty);
-  const activeTendingCount = loansState.loans.filter((loan) => !loan.returnedAt).length;
-  const overdueCount = loansState.loans.filter(loansState.isOverdue).length;
+  const activeTendingCount = tendingsState.tendings.filter((tending) => !tending.returnedAt).length;
+  const overdueCount = tendingsState.tendings.filter(tendingsState.isOverdue).length;
 
   return (
     <div className="min-h-screen bg-background text-foreground pt-28 pb-20 px-6">
@@ -77,7 +77,7 @@ export default function Profile() {
             )}
           </div>
 
-          {!isAdmin && !loansState.loading && (
+          {!isAdmin && !tendingsState.loading && (
             <div className="grid grid-cols-2 gap-3 border-t border-border pt-4 mt-4">
               <StatCard label="Active Tendings" value={activeTendingCount} />
               <StatCard label="Overdue" value={overdueCount} danger={overdueCount > 0} />
@@ -89,17 +89,17 @@ export default function Profile() {
           {isAdmin ? (
             <>
               <button
-                onClick={() => setSection('loans')}
+                onClick={() => setSection('tendings')}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                  section === 'loans' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
+                  section === 'tendings' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
                 }`}
               >
                 <SpecimenOpen size={16} /> System Tendings
               </button>
               <button
-                onClick={() => setSection('books')}
+                onClick={() => setSection('specimens')}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                  section === 'books' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
+                  section === 'specimens' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
                 }`}
               >
                 <Grove size={16} /> Specimens
@@ -110,9 +110,9 @@ export default function Profile() {
           )}
         </div>
 
-        {section === 'loans' && <TendingsSection isAdmin={isAdmin} {...loansState} />}
+        {section === 'tendings' && <TendingsSection isAdmin={isAdmin} {...tendingsState} />}
 
-        {section === 'books' && isAdmin && <SpecimensSection />}
+        {section === 'specimens' && isAdmin && <SpecimensSection />}
       </div>
     </div>
   );

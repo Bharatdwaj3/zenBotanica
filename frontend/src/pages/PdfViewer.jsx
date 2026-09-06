@@ -6,7 +6,7 @@ import { getSpecimen } from '../util/groveApi';
 const PdfViewer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [book, setSpecimen] = useState(null);
+  const [specimen, setSpecimen] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,10 +31,10 @@ const PdfViewer = () => {
     );
   }
 
-  if (!book || !book.pdfUrl) {
+  if (!specimen || !specimen.pdfUrl) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center bg-zinc-900 text-white">
-        <p className="mb-4 text-zinc-400">PDF not available for this book.</p>
+        <p className="mb-4 text-zinc-400">PDF not available for this specimen.</p>
         <button onClick={() => navigate(-1)} className="text-primary hover:underline">Go Back</button>
       </div>
     );
@@ -46,10 +46,10 @@ const PdfViewer = () => {
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
           <ArrowLeft size={20} /> Exit Reader
         </button>
-        <h2 className="text-white font-bold truncate max-w-md">{book.title}</h2>
+        <h2 className="text-white font-bold truncate max-w-md">{specimen.title}</h2>
         <div className="w-24" /> {/* Spacer */}
       </div>
-      <iframe src={`${book.pdfUrl}#toolbar=0&navpanes=0`} className="flex-1 w-full border-none" title={book.title} />
+      <iframe src={`${specimen.pdfUrl}#toolbar=0&navpanes=0`} className="flex-1 w-full border-none" title={specimen.title} />
     </div>
   );
 };

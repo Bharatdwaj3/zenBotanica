@@ -96,7 +96,7 @@ const Navbar = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleSearchSubmit}
-                placeholder="Search books..."
+                placeholder="Search specimens..."
                 className="bg-transparent text-sm text-foreground placeholder:text-foreground/40 focus:outline-none w-48"
               />
             </div>
@@ -243,7 +243,7 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearchSubmit}
-                  placeholder="Search books..."
+                  placeholder="Search specimens..."
                   className="bg-transparent text-sm text-foreground placeholder:text-foreground/40 focus:outline-none flex-grow"
                   autoFocus
                 />

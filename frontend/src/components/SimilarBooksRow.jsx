@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { SpecimenOpen, Plus } from 'lucide-react';
 
-export default function SimilarSpecimensRow({ title, books, emptyMessage }) {
+export default function SimilarSpecimensRow({ title, specimens, emptyMessage }) {
   const navigate = useNavigate();
 
-  if (!books || books.length === 0) {
+  if (!specimens || specimens.length === 0) {
     if (!emptyMessage) return null;
     return (
       <div className="mt-12">
@@ -18,7 +18,7 @@ export default function SimilarSpecimensRow({ title, books, emptyMessage }) {
     );
   }
 
-  const visibleSpecimens = books.slice(0, 6);
+  const visibleSpecimens = specimens.slice(0, 6);
 
   return (
     <div className="mt-12">
@@ -33,21 +33,21 @@ export default function SimilarSpecimensRow({ title, books, emptyMessage }) {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {visibleSpecimens.map((book, index) => (
+        {visibleSpecimens.map((specimen, index) => (
           <motion.article
-            key={book.id}
+            key={specimen.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
             className="content-card group cursor-pointer"
-            onClick={() => navigate(`/content/${book.id}`)}
+            onClick={() => navigate(`/content/${specimen.id}`)}
           >
             <div className="relative aspect-[2/3] bg-foreground/5 overflow-hidden rounded-t-xl">
-              {book.coverUrl ? (
+              {specimen.coverUrl ? (
                 <img
-                  src={book.coverUrl}
+                  src={specimen.coverUrl}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  alt={book.title}
+                  alt={specimen.title}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
@@ -58,7 +58,7 @@ export default function SimilarSpecimensRow({ title, books, emptyMessage }) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/content/${book.id}`);
+                  navigate(`/content/${specimen.id}`);
                 }}
                 className="btn-primary-sm absolute bottom-2 left-2 right-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
@@ -68,9 +68,9 @@ export default function SimilarSpecimensRow({ title, books, emptyMessage }) {
             </div>
             <div className="p-3">
               <h3 className="text-sm font-bold leading-snug text-foreground line-clamp-2 group-hover:text-primary transition-colors">
-                {book.title}
+                {specimen.title}
               </h3>
-              <p className="text-xs text-foreground/60 mt-1">{book.author}</p>
+              <p className="text-xs text-foreground/60 mt-1">{specimen.author}</p>
             </div>
           </motion.article>
         ))}

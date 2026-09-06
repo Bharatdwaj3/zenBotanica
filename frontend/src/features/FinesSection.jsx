@@ -1,11 +1,11 @@
 import React from 'react';
-import { useFines } from '../hooks/useFines';
+import { usePenaltys } from '../hooks/usePenaltys';
 
-const FinesTable = ({ fines, payingId, onPay }) => {
-  if (fines.length === 0) {
+const PenaltysTable = ({ penaltys, payingId, onPay }) => {
+  if (penaltys.length === 0) {
     return (
       <div className="bg-card rounded-2xl border border-border p-8 text-center text-foreground/50 text-sm">
-        No fines.
+        No penaltys.
       </div>
     );
   }
@@ -23,33 +23,33 @@ const FinesTable = ({ fines, payingId, onPay }) => {
           </tr>
         </thead>
         <tbody>
-          {fines.map((fine) => (
-            <tr key={fine.id} className="border-b border-border last:border-0 hover:bg-foreground/5">
-              <td className="p-4 font-semibold">{fine.reason}</td>
+          {penaltys.map((penalty) => (
+            <tr key={penalty.id} className="border-b border-border last:border-0 hover:bg-foreground/5">
+              <td className="p-4 font-semibold">{penalty.reason}</td>
               <td className="p-4 text-foreground/60">
-                {new Date(fine.createdAt).toLocaleDateString()}
+                {new Date(penalty.createdAt).toLocaleDateString()}
               </td>
               <td className="p-4">
-                {fine.paid ? (
+                {penalty.paid ? (
                   <span className="text-green-600">Paid</span>
                 ) : (
                   <span className="text-red-500">Unpaid</span>
                 )}
               </td>
               <td className="p-4">
-                <span className={fine.paid ? 'text-foreground/60' : 'text-red-500 font-semibold'}>
-                  ₹{fine.amount}
+                <span className={penalty.paid ? 'text-foreground/60' : 'text-red-500 font-semibold'}>
+                  ₹{penalty.amount}
                 </span>
               </td>
               <td className="p-4">
-                {!fine.paid && (
+                {!penalty.paid && (
                   <div className="flex justify-end">
                     <button
-                      onClick={() => onPay(fine)}
-                      disabled={payingId === fine.id}
+                      onClick={() => onPay(penalty)}
+                      disabled={payingId === penalty.id}
                       className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-primary text-white hover:bg-primary/90 transition-all disabled:opacity-50"
                     >
-                      {payingId === fine.id ? 'Processing...' : 'Pay'}
+                      {payingId === penalty.id ? 'Processing...' : 'Pay'}
                     </button>
                   </div>
                 )}
@@ -62,8 +62,8 @@ const FinesTable = ({ fines, payingId, onPay }) => {
   );
 };
 
-const FinesSection = () => {
-  const { fines, loading, error, payingId, payError, handlePay } = useFines();
+const PenaltysSection = () => {
+  const { penaltys, loading, error, payingId, payError, handlePay } = usePenaltys();
 
   if (loading) {
     return (
@@ -75,12 +75,12 @@ const FinesSection = () => {
 
   return (
     <div>
-      <h2 className="font-display text-lg tracking-wide mb-3">Fines & Fee Ledger</h2>
+      <h2 className="font-display text-lg tracking-wide mb-3">Penaltys & Fee Ledger</h2>
       {error && <p className="text-sm text-primary mb-6">{error}</p>}
       {payError && <p className="text-sm text-red-500 mb-6">{payError}</p>}
-      <FinesTable fines={fines} payingId={payingId} onPay={handlePay} />
+      <PenaltysTable penaltys={penaltys} payingId={payingId} onPay={handlePay} />
     </div>
   );
 };
 
-export default FinesSection;
+export default PenaltysSection;

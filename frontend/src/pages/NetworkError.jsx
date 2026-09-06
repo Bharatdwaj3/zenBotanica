@@ -19,7 +19,7 @@ export default function NetworkError({ onRetry }) {
       title="Can't reach the server."
       message="Check your internet connection, or the server might be temporarily down. Try again in a moment."
       actionLabel={onRetry ? 'Try Again' : 'Back to Home'}
-      actionTo={onRetry ? undefined : '/'}
+      actionTo={onRetry ? undepenaltyd : '/'}
     />
   );
 }

@@ -27,9 +27,9 @@ export default function Home() {
       </section>
 
       <div className="mx-auto max-w-7xl px-6 lg:px-12 pb-24 space-y-4">
-        <SimilarSpecimensRow title="Trending This Week" books={trending} emptyMessage="No trending books yet — check back once a few loans come in." />
-        <SimilarSpecimensRow title="Featured" books={featured} />
-        <SimilarSpecimensRow title="New Arrivals" books={newArrivals} />
+        <SimilarSpecimensRow title="Trending This Week" specimens={trending} emptyMessage="No trending specimens yet — check back once a few tendings come in." />
+        <SimilarSpecimensRow title="Featured" specimens={featured} />
+        <SimilarSpecimensRow title="New Arrivals" specimens={newArrivals} />
       </div>
 
       <Footer />

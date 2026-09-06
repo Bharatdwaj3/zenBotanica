@@ -9,7 +9,7 @@ const STACK_CONFIG = [
   { rotate: 10, translateY: 28, z: 10, widthClass: 'w-28 sm:w-32', heightClass: 'h-80 sm:h-96', marginClass: '-ml-8' },
 ];
 
-const SpineCover = ({ book, config }) => (
+const SpineCover = ({ specimen, config }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: config.translateY }}
@@ -18,11 +18,11 @@ const SpineCover = ({ book, config }) => (
     className={`relative ${config.widthClass} ${config.heightClass} ${config.marginClass} shrink-0 group`}
   >
     <Link
-      to={`/content/${book.id}`}
+      to={`/content/${specimen.id}`}
       className="block w-full h-full rounded-lg overflow-hidden border border-border shadow-2xl hover:scale-105 transition-transform duration-300 relative z-10"
     >
-      {book.coverUrl ? (
-        <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+      {specimen.coverUrl ? (
+        <img src={specimen.coverUrl} alt={specimen.title} className="w-full h-full object-cover" />
       ) : (
         <div className="w-full h-full bg-card flex items-center justify-center">
           <SpecimenOpen size={32} className="text-foreground/10" />
@@ -35,15 +35,15 @@ const SpineCover = ({ book, config }) => (
   </motion.div>
 );
 
-const FloatingTitleCard = ({ book, position, delay }) => (
+const FloatingTitleCard = ({ specimen, position, delay }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.6, delay }}
     className={`hidden xl:block absolute z-40 bg-card border border-border rounded-xl shadow-xl px-4 py-2.5 max-w-[190px] ${position}`}
   >
-    <p className="text-sm font-bold text-foreground truncate">{book.title}</p>
-    <p className="text-xs text-neutral-500 font-medium truncate">{book.author}</p>
+    <p className="text-sm font-bold text-foreground truncate">{specimen.title}</p>
+    <p className="text-xs text-neutral-500 font-medium truncate">{specimen.author}</p>
   </motion.div>
 );
 
@@ -67,7 +67,7 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
       >
         <div className="inline-flex items-center gap-2 w-fit mb-8 px-4 py-1.5 rounded-full border border-border bg-background/60 text-xs font-semibold text-foreground/60">
           <SpecimenOpen size={13} strokeWidth={2.5} className="text-primary" />
-          Your campus library, online and on the shelf
+          Your campus grove, online and on the shelf
         </div>
 
         <h1 className="font-display text-6xl lg:text-7xl xl:text-8xl text-foreground mb-6 leading-none tracking-wide select-none">
@@ -75,7 +75,7 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
         </h1>
 
         <p className="text-base lg:text-lg text-foreground/60 leading-relaxed mb-10 font-light">
-          Your digital and walk-in library, in one place. Borrow physical books,
+          Your digital and walk-in grove, in one place. Borrow physical specimens,
           read digital copies instantly, and
           <span className="font-accent text-xl text-primary font-bold ml-1">never lose track of a due date again</span>.
         </p>
@@ -112,17 +112,17 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
         </blockquote>
 
         <blockquote className="absolute bottom-12 right-16 max-w-xs text-foreground/15 font-serif italic text-sm text-right pointer-events-none select-none">
-          “There is no friend as loyal as a book.”
+          “There is no friend as loyal as a specimen.”
         </blockquote>
 
         {spotlightSpecimen && (
           <div className="relative flex items-end z-10">
-            {stackSpecimens.map((book, i) =>
-              book ? <SpineCover key={book.id} book={book} config={STACK_CONFIG[i]} /> : null
+            {stackSpecimens.map((specimen, i) =>
+              specimen ? <SpineCover key={specimen.id} specimen={specimen} config={STACK_CONFIG[i]} /> : null
             )}
 
-            {left && <FloatingTitleCard book={left} position="top-6 -left-24" delay={0.9} />}
-            {right && <FloatingTitleCard book={right} position="top-16 -right-24" delay={1.05} />}
+            {left && <FloatingTitleCard specimen={left} position="top-6 -left-24" delay={0.9} />}
+            {right && <FloatingTitleCard specimen={right} position="top-16 -right-24" delay={1.05} />}
           </div>
         )}
       </div>
