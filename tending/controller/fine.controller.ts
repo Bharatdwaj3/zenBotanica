@@ -14,7 +14,7 @@ const FINE_PRESETS: Record<string, number> = {
 };
 const LATE_FINE_PER_DAY = 50;
 
-const issueFine = async (req: AuthRequest, res: Response): Promise<void> => {
+const issuePenalty = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { userId, reason, days } = req.body;
     const issuedBy = req.user?.id;
@@ -27,7 +27,7 @@ const issueFine = async (req: AuthRequest, res: Response): Promise<void> => {
     let amount: number;
     if (reason === "Late") {
       if (!days || days <= 0) {
-        res.status(400).json({ message: "days is required and must be greater than 0 for a Late fine" });
+        res.status(400).json({ message: "days is required and must be greater than 0 for a Late penalty" });
         return;
       }
       amount = LATE_FINE_PER_DAY * days;
@@ -38,61 +38,61 @@ const issueFine = async (req: AuthRequest, res: Response): Promise<void> => {
       return;
     }
 
-    const fine = await prisma.fine.create({
+    const penalty = await prisma.penalty.create({
       data: { userId, amount, reason, issuedBy: issuedBy! },
     });
 
-    res.status(201).json(fine);
+    res.status(201).json(penalty);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to issue fine";
+    const message = error instanceof Error ? error.message : "Failed to issue penalty";
     res.status(500).json({ message });
   }
 };
 
-// Lists the current user's own admin-issued fines (the `fine` table only —
+// Lists the current user's own admin-issued penaltys (the `penalty` table only —
 // automatic late fees on loans are shown separately via /loan/mine).
-const listMyFines = async (req: AuthRequest, res: Response): Promise<void> => {
+const listMyPenaltys = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const fines = await prisma.fine.findMany({
+    const penaltys = await prisma.penalty.findMany({
       where: { userId: req.user?.id },
       orderBy: { createdAt: "desc" },
     });
-    res.status(200).json(fines);
+    res.status(200).json(penaltys);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to fetch fines";
+    const message = error instanceof Error ? error.message : "Failed to fetch penaltys";
     res.status(500).json({ message });
   }
 };
 
-// Creates a Razorpay order for one specific fine. Amount comes from the fine record itself
+// Creates a Razorpay order for one specific penalty. Amount comes from the penalty record itself
 // (never trusted from the request body), so a user can't pay less than what's actually owed.
 const createPayOrder = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const fineId = Number(req.params.id);
+    const penaltyId = Number(req.params.id);
     const userId = req.user?.id;
 
-    const fine = await prisma.fine.findUnique({ where: { id: fineId } });
-    if (!fine) {
-      res.status(404).json({ message: "Fine not found" });
+    const penalty = await prisma.penalty.findUnique({ where: { id: penaltyId } });
+    if (!penalty) {
+      res.status(404).json({ message: "Penalty not found" });
       return;
     }
-    if (fine.userId !== userId) {
-      res.status(403).json({ message: "You can only pay your own fines" });
+    if (penalty.userId !== userId) {
+      res.status(403).json({ message: "You can only pay your own penaltys" });
       return;
     }
-    if (fine.paid) {
-      res.status(409).json({ message: "This fine has already been paid" });
+    if (penalty.paid) {
+      res.status(409).json({ message: "This penalty has already been paid" });
       return;
     }
-    if (fine.waived) {
-      res.status(409).json({ message: "This fine has been waived and cannot be paid" });
+    if (penalty.waived) {
+      res.status(409).json({ message: "This penalty has been waived and cannot be paid" });
       return;
     }
 
     const order = await razorpay.orders.create({
-      amount: fine.amount * 100, // Razorpay expects the amount in paise, not rupees
+      amount: penalty.amount * 100, // Razorpay expects the amount in paise, not rupees
       currency: "INR",
-      receipt: `fine_${fine.id}`,
+      receipt: `penalty_${penalty.id}`,
     });
 
     res.status(200).json({ order, keyId: RAZORPAY_KEY_ID });
@@ -103,20 +103,20 @@ const createPayOrder = async (req: AuthRequest, res: Response): Promise<void> =>
 };
 
 // Verifies Razorpay's payment signature (proves the payment genuinely came from Razorpay,
-// not a spoofed request claiming success) before marking the fine as paid.
+// not a spoofed request claiming success) before marking the penalty as paid.
 const verifyPayment = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { fineId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { penaltyId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const userId = req.user?.id;
 
-    if (!fineId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      res.status(400).json({ message: "fineId, razorpay_order_id, razorpay_payment_id, and razorpay_signature are all required" });
+    if (!penaltyId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      res.status(400).json({ message: "penaltyId, razorpay_order_id, razorpay_payment_id, and razorpay_signature are all required" });
       return;
     }
 
-    const fine = await prisma.fine.findUnique({ where: { id: Number(fineId) } });
-    if (!fine || fine.userId !== userId) {
-      res.status(404).json({ message: "Fine not found" });
+    const penalty = await prisma.penalty.findUnique({ where: { id: Number(penaltyId) } });
+    if (!penalty || penalty.userId !== userId) {
+      res.status(404).json({ message: "Penalty not found" });
       return;
     }
 
@@ -130,23 +130,23 @@ const verifyPayment = async (req: AuthRequest, res: Response): Promise<void> => 
       return;
     }
 
-    const updatedFine = await prisma.fine.update({
-      where: { id: fine.id },
+    const updatedPenalty = await prisma.penalty.update({
+      where: { id: penalty.id },
       data: { paid: true },
     });
 
-    if (updatedFine.loanId) {
+    if (updatedPenalty.loanId) {
       await prisma.loan.update({
-        where: { id: updatedFine.loanId },
-        data: { fineAmount: 0 },
+        where: { id: updatedPenalty.loanId },
+        data: { penaltyAmount: 0 },
       });
     }
 
-    res.status(200).json(updatedFine);
+    res.status(200).json(updatedPenalty);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Payment verification failed";
     res.status(500).json({ message });
   }
 };
 
-export { issueFine, listMyFines, createPayOrder, verifyPayment };
+export { issuePenalty, listMyPenaltys, createPayOrder, verifyPayment };
