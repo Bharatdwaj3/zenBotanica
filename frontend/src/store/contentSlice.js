@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getNewArrivals, getTrending, getFeatured, getBooks } from '../util/groveApi';
+import { getNewArrivals, getTrending, getFeatured, getSpecimens } from '../util/groveApi';
 
-export const fetchBooks = createAsyncThunk(
-  'content/fetchBooks',
+export const fetchSpecimens = createAsyncThunk(
+  'content/fetchSpecimens',
   async (_, { getState, rejectWithValue }) => {
     try {
       const { sortBy, selectedGenre, searchQuery } = getState().content;
       const isFiltering = selectedGenre !== 'all' || (searchQuery || '').trim() !== '';
       const res = isFiltering
-        ? await getBooks()
+        ? await getSpecimens()
         : sortBy === 'trending' ? await getTrending(20)
         : sortBy === 'featured' ? await getFeatured()
         : await getNewArrivals(20);
@@ -25,7 +25,7 @@ const initialState = {
   selectedGenre: 'all',
   searchQuery: '',
   sortBy: 'recent',
-  books: [],
+  specimens: [],
   loading: false,
   error: '',
 };
@@ -46,15 +46,15 @@ const contentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBooks.pending, (state) => {
+      .addCase(fetchSpecimens.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(fetchBooks.fulfilled, (state, action) => {
+      .addCase(fetchSpecimens.fulfilled, (state, action) => {
         state.loading = false;
-        state.books = Array.isArray(action.payload) ? action.payload : [];
+        state.specimens = Array.isArray(action.payload) ? action.payload : [];
       })
-      .addCase(fetchBooks.rejected, (state, action) => {
+      .addCase(fetchSpecimens.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

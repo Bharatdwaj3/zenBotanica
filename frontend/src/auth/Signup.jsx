@@ -12,7 +12,7 @@ export default function Signup() {
   const [form, setForm] = useState({
     email: '',
     password: '',
-    role: 'student',
+    role: 'apprentice',
   });
 
   const handleChange = (e) => {
@@ -100,8 +100,8 @@ export default function Signup() {
               onChange={handleChange}
               className="w-full px-4 py-2.5 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-primary transition-colors"
             >
-              <option value="student">Student</option>
-              <option value="faculty">Faculty</option>
+              <option value="apprentice">Apprentice</option>
+              <option value="masters">Masters</option>
             </select>
           </div>
 

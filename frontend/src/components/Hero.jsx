@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { SpecimenOpen, Users } from 'lucide-react';
+import { Leaf, Users } from 'lucide-react';
 
 const STACK_CONFIG = [
   { rotate: -10, translateY: 28, z: 10, widthClass: 'w-28 sm:w-32', heightClass: 'h-80 sm:h-96', marginClass: '' },
@@ -25,7 +25,7 @@ const SpineCover = ({ specimen, config }) => (
         <img src={specimen.coverUrl} alt={specimen.title} className="w-full h-full object-cover" />
       ) : (
         <div className="w-full h-full bg-card flex items-center justify-center">
-          <SpecimenOpen size={32} className="text-foreground/10" />
+          <Leaf size={32} className="text-foreground/10" />
         </div>
       )}
     </Link>
@@ -66,7 +66,7 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
         className="w-full lg:w-[35%] lg:min-w-[380px] flex flex-col justify-center px-8 lg:px-16 xl:px-24 z-20 bg-card/50 backdrop-blur-md border-r border-border"
       >
         <div className="inline-flex items-center gap-2 w-fit mb-8 px-4 py-1.5 rounded-full border border-border bg-background/60 text-xs font-semibold text-foreground/60">
-          <SpecimenOpen size={13} strokeWidth={2.5} className="text-primary" />
+          <Leaf size={13} strokeWidth={2.5} className="text-primary" />
           Your campus grove, online and on the shelf
         </div>
 
@@ -92,14 +92,14 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
             to="/profile"
             className="btn-outline"
           >
-            <SpecimenOpen size={14} strokeWidth={2.5} />
+            <Leaf size={14} strokeWidth={2.5} />
             View My Tendings
           </Link>
         </div>
 
         <div className="flex items-center gap-2.5 text-xs font-medium text-foreground/40">
           <Users size={15} strokeWidth={2} />
-          Trusted by students & faculty on campus
+          Trusted by apprentices & masters on campus
         </div>
       </motion.div>
 

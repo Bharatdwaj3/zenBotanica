@@ -12,7 +12,7 @@ const STEPS = [
   {
     number: '03',
     title: 'Auto Reminders',
-    description: 'Get notified before the due date, so late penaltys never sneak up on you.',
+    description: 'Get notified before the due date, so late penalties never sneak up on you.',
   },
 ];
 

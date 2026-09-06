@@ -14,7 +14,7 @@ const GardenerSearchFilter = ({ searchQuery, onSearchChange, roleFilter, onRoleF
       />
     </div>
     <div className="flex gap-2">
-      {['all', 'faculty', 'student'].map((role) => (
+      {['all', 'masters', 'apprentice'].map((role) => (
         <button
           key={role}
           onClick={() => onRoleFilterChange(role)}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SpecimenOpen, Clock, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Leaf, Clock, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 const TendingListItem = ({ tending, overdue, returning, onReturn, payingPenalty, onPayPenalty, isAdmin }) => {
   return (
@@ -14,7 +14,7 @@ const TendingListItem = ({ tending, overdue, returning, onReturn, payingPenalty,
           <img src={tending.specimen.coverUrl} className="w-full h-full object-cover" alt={tending.specimen.title} />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <SpecimenOpen size={20} className="text-foreground/20" />
+            <Leaf size={20} className="text-foreground/20" />
           </div>
         )}
       </div>
@@ -39,7 +39,7 @@ const TendingListItem = ({ tending, overdue, returning, onReturn, payingPenalty,
             <span className="inline-flex items-center gap-1 text-xs text-red-500 font-semibold">
               Penalty: ₹{tending.penaltyAmount}
             </span>
-            {/* Admin only issues penaltys, never pays them on a user's behalf. */}
+            {/* Admin only issues penalties, never pays them on a user's behalf. */}
             {!isAdmin && (
               <button
                 onClick={() => onPayPenalty(tending)}

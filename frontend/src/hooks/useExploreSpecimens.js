@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { fetchBooks, setGenre, setSortBy, setSearchQuery } from '../store/contentSlice';
+import { fetchSpecimens, setGenre, setSortBy, setSearchQuery } from '../store/contentSlice';
 
-export function useExploreBooks() {
+export function useExploreSpecimens() {
   const dispatch = useDispatch();
-  const { books, loading, error, selectedGenre, sortBy, searchQuery } = useSelector((state) => state.content);
+  const { specimens, loading, error, selectedGenre, sortBy, searchQuery } = useSelector((state) => state.content);
   const [searchParams] = useSearchParams();
 
   // Picks up ?q= from the navbar search handoff once, on mount, into Redux —
@@ -17,24 +17,24 @@ export function useExploreBooks() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Whenever a genre or search filter is active, fetchBooks (in contentSlice)
+  // Whenever a genre or search filter is active, fetchSpecimens (in contentSlice)
   // pulls the FULL grove instead of just the current sort tab's top 20 —
   // fixes "genre/search outside the top-20 window shows no results."
   const isFiltering = selectedGenre !== 'all' || searchQuery.trim() !== '';
 
   useEffect(() => {
-    dispatch(fetchBooks());
+    dispatch(fetchSpecimens());
   }, [dispatch, sortBy, isFiltering]);
 
-  const filteredBooks = books.filter((book) => {
-    const matchesGenre = selectedGenre === 'all' || book.genre?.includes(selectedGenre);
+  const filteredSpecimens = specimens.filter((specimen) => {
+    const matchesGenre = selectedGenre === 'all' || specimen.genre?.includes(selectedGenre);
     const q = searchQuery.toLowerCase();
-    const matchesSearch = !q || book.title?.toLowerCase().includes(q) || book.author?.toLowerCase().includes(q);
+    const matchesSearch = !q || specimen.title?.toLowerCase().includes(q) || specimen.author?.toLowerCase().includes(q);
     return matchesGenre && matchesSearch;
   });
 
   return {
-    filteredBooks,
+    filteredSpecimens,
     loading,
     error,
     selectedGenre,

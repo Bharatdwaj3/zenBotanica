@@ -13,11 +13,11 @@ export const fetchWishlist = createAsyncThunk(
   }
 );
 
-export const addBookToWishlist = createAsyncThunk(
-  'wishlist/addBookToWishlist',
-  async (bookId, { rejectWithValue }) => {
+export const addSpecimenToWishlist = createAsyncThunk(
+  'wishlist/addSpecimenToWishlist',
+  async (specimenId, { rejectWithValue }) => {
     try {
-      await addToWishlist(bookId);
+      await addToWishlist(specimenId);
       const res = await getWishlist();
       return res.data;
     } catch (err) {
@@ -26,11 +26,11 @@ export const addBookToWishlist = createAsyncThunk(
   }
 );
 
-export const removeBookFromWishlist = createAsyncThunk(
-  'wishlist/removeBookFromWishlist',
-  async (bookId, { rejectWithValue }) => {
+export const removeSpecimenFromWishlist = createAsyncThunk(
+  'wishlist/removeSpecimenFromWishlist',
+  async (specimenId, { rejectWithValue }) => {
     try {
-      await removeFromWishlist(bookId);
+      await removeFromWishlist(specimenId);
       const res = await getWishlist();
       return res.data;
     } catch (err) {
@@ -58,10 +58,10 @@ const wishlistSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(addBookToWishlist.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
-      .addCase(addBookToWishlist.rejected, (state, action) => { state.error = action.payload; })
-      .addCase(removeBookFromWishlist.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
-      .addCase(removeBookFromWishlist.rejected, (state, action) => { state.error = action.payload; });
+      .addCase(addSpecimenToWishlist.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
+      .addCase(addSpecimenToWishlist.rejected, (state, action) => { state.error = action.payload; })
+      .addCase(removeSpecimenFromWishlist.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
+      .addCase(removeSpecimenFromWishlist.rejected, (state, action) => { state.error = action.payload; });
   },
 });
 

@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { getBooks, setBulkFeatured, setBulkWeeklyRead } from '../util/groveApi';
+import { getSpecimens, setBulkFeatured, setBulkWeeklyRead } from '../util/groveApi';
 
-export function useBooks({ enabled = true } = {}) {
-  const [bookList, setBookList] = useState([]);
+export function useSpecimens({ enabled = true } = {}) {
+  const [specimenList, setSpecimenList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [selectedBookIds, setSelectedBookIds] = useState(new Set());
+  const [selectedSpecimenIds, setSelectedSpecimenIds] = useState(new Set());
   const [bulkSaving, setBulkSaving] = useState(false);
 
-  const fetchBooks = async () => {
+  const fetchSpecimens = async () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await getBooks();
-      setBookList(data);
+      const { data } = await getSpecimens();
+      setSpecimenList(data);
     } catch (err) {
       setError(err.response ? 'Something went wrong on our end.' : 'Cannot reach the server - check your network.');
     } finally {
@@ -23,11 +23,11 @@ export function useBooks({ enabled = true } = {}) {
 
   useEffect(() => {
     if (!enabled) return;
-    fetchBooks();
+    fetchSpecimens();
   }, [enabled]);
 
-  const toggleBookSelection = (id) => {
-    setSelectedBookIds((prev) => {
+  const toggleSpecimenSelection = (id) => {
+    setSelectedSpecimenIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -36,13 +36,13 @@ export function useBooks({ enabled = true } = {}) {
   };
 
   const handleBulkFeatured = async (featured) => {
-    if (selectedBookIds.size === 0) return;
+    if (selectedSpecimenIds.size === 0) return;
     setBulkSaving(true);
     setError('');
     try {
-      await setBulkFeatured({ ids: Array.from(selectedBookIds), featured });
-      await fetchBooks();
-      setSelectedBookIds(new Set());
+      await setBulkFeatured({ ids: Array.from(selectedSpecimenIds), featured });
+      await fetchSpecimens();
+      setSelectedSpecimenIds(new Set());
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update featured status');
     } finally {
@@ -51,13 +51,13 @@ export function useBooks({ enabled = true } = {}) {
   };
 
   const handleBulkWeeklyRead = async (weeklyRead) => {
-    if (selectedBookIds.size === 0) return;
+    if (selectedSpecimenIds.size === 0) return;
     setBulkSaving(true);
     setError('');
     try {
-      await setBulkWeeklyRead({ ids: Array.from(selectedBookIds), weeklyRead });
-      await fetchBooks();
-      setSelectedBookIds(new Set());
+      await setBulkWeeklyRead({ ids: Array.from(selectedSpecimenIds), weeklyRead });
+      await fetchSpecimens();
+      setSelectedSpecimenIds(new Set());
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update weekly read status');
     } finally {
@@ -65,37 +65,37 @@ export function useBooks({ enabled = true } = {}) {
     }
   };
 
-  const toggleFeatured = async (book) => {
+  const toggleFeatured = async (specimen) => {
     setError('');
     try {
-      await setBulkFeatured({ ids: [book.id], featured: !book.featured });
-      await fetchBooks();
+      await setBulkFeatured({ ids: [specimen.id], featured: !specimen.featured });
+      await fetchSpecimens();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update featured status');
     }
   };
 
-  const toggleWeeklyRead = async (book) => {
+  const toggleWeeklyRead = async (specimen) => {
     setError('');
     try {
-      await setBulkWeeklyRead({ ids: [book.id], weeklyRead: !book.weeklyRead });
-      await fetchBooks();
+      await setBulkWeeklyRead({ ids: [specimen.id], weeklyRead: !specimen.weeklyRead });
+      await fetchSpecimens();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update weekly read status');
     }
   };
 
   return {
-    bookList,
+    specimenList,
     loading,
     error,
-    selectedBookIds,
+    selectedSpecimenIds,
     bulkSaving,
-    toggleBookSelection,
+    toggleSpecimenSelection,
     handleBulkFeatured,
     handleBulkWeeklyRead,
     toggleFeatured,
     toggleWeeklyRead,
-    refetch: fetchBooks,
+    refetch: fetchSpecimens,
   };
 }

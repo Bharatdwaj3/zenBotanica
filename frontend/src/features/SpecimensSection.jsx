@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { SpecimenOpen, Star, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Leaf, Star, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSpecimens } from '../hooks/useSpecimens';
 import SpecimenListItem from '../components/SpecimenListItem';
 
@@ -163,7 +163,7 @@ const SpecimensSection = () => {
 
       {visibleSpecimens.length === 0 ? (
         <div className="bg-card rounded-2xl border border-border p-12 text-center text-foreground/60">
-          <SpecimenOpen size={32} className="mx-auto mb-3 text-foreground/20" />
+          <Leaf size={32} className="mx-auto mb-3 text-foreground/20" />
           No specimens found.
         </div>
       ) : (

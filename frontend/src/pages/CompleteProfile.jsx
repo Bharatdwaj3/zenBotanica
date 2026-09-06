@@ -11,7 +11,7 @@ export default function CompleteProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isFaculty = user?.role === 'faculty';
+  const isMasters = user?.role === 'masters';
 
   const [form, setForm] = useState({
     email: user?.email || '',
@@ -41,8 +41,8 @@ export default function CompleteProfile() {
         Lname: form.Lname,
         age: form.age,
         gender: form.gender,
-        Expertise: isFaculty ? form.Expertise : undepenaltyd,
-        Subjects: !isFaculty ? form.Subjects : undepenaltyd,
+        Expertise: isMasters ? form.Expertise : undepenaltyd,
+        Subjects: !isMasters ? form.Subjects : undepenaltyd,
       });
 
       await dispatch(fetchUser());
@@ -123,11 +123,11 @@ export default function CompleteProfile() {
 
           <div>
             <label className="block text-sm font-medium text-foreground/70 mb-1">
-              {isFaculty ? 'Area of Expertise' : 'Subjects'}
+              {isMasters ? 'Area of Expertise' : 'Subjects'}
             </label>
             <select
-              name={isFaculty ? 'Expertise' : 'Subjects'}
-              value={isFaculty ? form.Expertise : form.Subjects}
+              name={isMasters ? 'Expertise' : 'Subjects'}
+              value={isMasters ? form.Expertise : form.Subjects}
               onChange={handleChange}
               className="w-full px-4 py-2.5 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-primary transition-colors"
             >
