@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ArrowLeft, SpecimenOpen, Building2, Hash, Tag, Copy, FileText, Specimenmark } from 'lucide-react';
+import { ArrowLeft, Leaf, Building2, Hash, Tag, Copy, FileText, Bookmark } from 'lucide-react';
 import { getSpecimen, getSimilarSpecimens } from '../util/groveApi';
 import { borrowSpecimen as borrowSpecimenRequest } from '../util/tendingApi';
-import { toggleSpecimenmark } from '../store/specimenmarkSlice';
+import { toggleBookmark } from '../store/specimenmarkSlice';
 import SimilarSpecimensRow from '../components/SimilarSpecimensRow';
 
 const ContentDetails = () => {
@@ -22,7 +22,7 @@ const ContentDetails = () => {
   const [similarByAuthor, setSimilarByAuthor] = useState([]);
   const [similarByGenre, setSimilarByGenre] = useState([]);
 
-  const isSpecimenmarked = specimen ? specimenmarkedSpecimens.some((b) => b.id === specimen.id) : false;
+  const isBookmarked = specimen ? specimenmarkedSpecimens.some((b) => b.id === specimen.id) : false;
 
   useEffect(() => {
     const fetchSpecimen = async () => {
@@ -60,8 +60,8 @@ const ContentDetails = () => {
     }
   };
 
-  const handleToggleSpecimenmark = () => {
-    dispatch(toggleSpecimenmark({ id: specimen.id, title: specimen.title, author: specimen.author, coverUrl: specimen.coverUrl }));
+  const handleToggleBookmark = () => {
+    dispatch(toggleBookmark({ id: specimen.id, title: specimen.title, author: specimen.author, coverUrl: specimen.coverUrl }));
   };
 
   if (loading) {
@@ -99,7 +99,7 @@ const ContentDetails = () => {
                 <img src={specimen.coverUrl} alt={specimen.title} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <SpecimenOpen size={64} className="text-foreground/10" />
+                  <Leaf size={64} className="text-foreground/10" />
                 </div>
               )}
             </div>
@@ -108,8 +108,8 @@ const ContentDetails = () => {
           <div className="md:col-span-8 flex flex-col">
             <div className="flex items-start justify-between gap-4 mb-2">
               <h1 className="text-4xl font-black tracking-tight">{specimen.title}</h1>
-              <button onClick={handleToggleSpecimenmark} aria-label={isSpecimenmarked ? 'Remove specimenmark' : 'Add specimenmark'} className="shrink-0 p-2 rounded-xl border border-border hover:bg-foreground/5 transition-all">
-                <Specimenmark size={22} className={isSpecimenmarked ? 'fill-primary text-primary' : 'text-foreground/60'} />
+              <button onClick={handleToggleBookmark} aria-label={isBookmarked ? 'Remove specimenmark' : 'Add specimenmark'} className="shrink-0 p-2 rounded-xl border border-border hover:bg-foreground/5 transition-all">
+                <Bookmark size={22} className={isBookmarked ? 'fill-primary text-primary' : 'text-foreground/60'} />
               </button>
             </div>
             <p className="text-xl text-foreground/60 mb-6 font-medium">{specimen.author}</p>

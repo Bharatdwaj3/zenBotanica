@@ -15,7 +15,7 @@ const GardenersTable = ({ rows, onSelect }) => (
           <th className="p-4">Role</th>
           <th className="p-4">Active Tendings</th>
           <th className="p-4">Overdue</th>
-          <th className="p-4">Outstanding Penaltys</th>
+          <th className="p-4">Outstanding Penalties</th>
           <th className="p-4"></th>
         </tr>
       </thead>
@@ -27,8 +27,8 @@ const GardenersTable = ({ rows, onSelect }) => (
             <td className="p-4"><CountCell count={row.activeTendings} /></td>
             <td className="p-4"><CountCell count={row.overdue} tone="danger" /></td>
             <td className="p-4">
-              {row.outstandingPenaltys > 0 ? (
-                <span className="text-red-500 font-semibold">₹{row.outstandingPenaltys}</span>
+              {row.outstandingPenalties > 0 ? (
+                <span className="text-red-500 font-semibold">₹{row.outstandingPenalties}</span>
               ) : (
                 <span className="text-foreground/40">—</span>
               )}

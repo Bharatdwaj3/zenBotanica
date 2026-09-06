@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { SpecimenOpen, Tag, Pencil, Trash2, ShoppingCart, Heart } from 'lucide-react';
+import { Leaf, Tag, Pencil, Trash2, ShoppingCart, Heart } from 'lucide-react';
 import { deleteSpecimen } from '../util/groveApi';
 import { addSpecimenToCart, removeSpecimenFromCart } from '../store/cartSlice';
 import { addSpecimenToWishlist, removeSpecimenFromWishlist } from '../store/wishlistSlice';
@@ -57,7 +57,7 @@ const SpecimenCard = ({ specimen, index = 0, showAdminActions = false, onDeleted
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
-            <SpecimenOpen size={48} className="text-foreground/20" strokeWidth={1.5} />
+            <Leaf size={48} className="text-foreground/20" strokeWidth={1.5} />
           </div>
         )}
 

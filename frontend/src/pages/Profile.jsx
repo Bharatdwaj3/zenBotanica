@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Mail, Calendar, SpecimenOpen, GraduationCap, Grove } from 'lucide-react';
+import { Mail, Calendar, Leaf, GraduationCap, Tree } from 'lucide-react';
 import { fetchUser } from '../store/avatarSlice';
 import { useTendings } from '../hooks/useTendings';
 import StatCard from '../components/StatCard';
 import TendingsSection from '../features/TendingsSection';
 import SpecimensSection from '../features/SpecimensSection';
 
-const getProfile = (user) => user?.faculty || user?.student || null;
+const getProfile = (user) => user?.masters || user?.apprentice || null;
 const getDisplayName = (user) => {
   const profile = getProfile(user);
   if (profile) return `${profile.Fname} ${profile.Lname}`;
@@ -36,7 +36,7 @@ export default function Profile() {
   }
 
   const profile = getProfile(user);
-  const isFaculty = Boolean(user.faculty);
+  const isMasters = Boolean(user.masters);
   const activeTendingCount = tendingsState.tendings.filter((tending) => !tending.returnedAt).length;
   const overdueCount = tendingsState.tendings.filter(tendingsState.isOverdue).length;
 
@@ -71,8 +71,8 @@ export default function Profile() {
             </div>
             {profile && (
               <div className="flex items-center gap-2">
-                {isFaculty ? <GraduationCap size={16} className="text-foreground/40" /> : <SpecimenOpen size={16} className="text-foreground/40" />}
-                {(isFaculty ? profile.Expertise : profile.Subjects)?.replace(/_/g, ' ')}
+                {isMasters ? <GraduationCap size={16} className="text-foreground/40" /> : <Leaf size={16} className="text-foreground/40" />}
+                {(isMasters ? profile.Expertise : profile.Subjects)?.replace(/_/g, ' ')}
               </div>
             )}
           </div>
@@ -94,7 +94,7 @@ export default function Profile() {
                   section === 'tendings' ? 'bg-primary text-white border border-primary' : 'bg-card border border-border text-foreground/60 hover:border-primary'
                 }`}
               >
-                <SpecimenOpen size={16} /> System Tendings
+                <Leaf size={16} /> System Tendings
               </button>
               <button
                 onClick={() => setSection('specimens')}

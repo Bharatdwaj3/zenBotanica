@@ -7,7 +7,7 @@ import { fetchUser, clearUser } from '../store/avatarSlice';
 import { fetchCart } from '../store/cartSlice';
 import { logoutUser } from '../util/gardenersApi';
 
-const getProfile = (user) => user?.faculty || user?.student || null;
+const getProfile = (user) => user?.masters || user?.apprentice || null;
 
 const getDisplayName = (user) => {
   const profile = getProfile(user);

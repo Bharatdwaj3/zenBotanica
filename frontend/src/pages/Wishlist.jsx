@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Heart, SpecimenOpen, X } from 'lucide-react';
+import { Heart, Leaf, X } from 'lucide-react';
 import { fetchWishlist, removeSpecimenFromWishlist } from '../store/wishlistSlice';
 
 const Wishlist = () => {
@@ -49,7 +49,7 @@ const Wishlist = () => {
                     <img src={item.specimen.coverUrl} className="w-full h-full object-cover" alt={item.specimen.title} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <SpecimenOpen size={20} className="text-foreground/20" />
+                      <Leaf size={20} className="text-foreground/20" />
                     </div>
                   )}
                 </div>

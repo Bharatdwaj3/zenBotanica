@@ -1,5 +1,5 @@
 // Loads the Razorpay checkout script once, the first time it's actually needed —
-// shared by useFines.js and useLoans.js so this logic only lives in one place.
+// shared by usePenalties.js and useTendings.js so this logic only lives in one place.
 export const loadRazorpayScript = () => {
   return new Promise((resolve) => {
     if (window.Razorpay) {

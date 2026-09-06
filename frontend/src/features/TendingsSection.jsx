@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SpecimenOpen } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import { useGardenerDirectory } from '../hooks/useGardenerDirectory';
 import { buildGardenerRows } from '../util/buildGardenerRows';
 import TendingListItem from '../components/TendingListItem';
@@ -8,7 +8,7 @@ import TendingsTable from './TendingsTable';
 import GardenersTable from './GardenersTable';
 import GardenerDrawer from './GardenerDrawer';
 import GardenerSearchFilter from './GardenerSearchFilter';
-import PenaltysSection from './PenaltysSection';
+import PenaltiesSection from './PenaltiesSection';
 import { issueTending } from '../util/tendingApi';
 import { useSpecimens } from '../hooks/useSpecimens';
 
@@ -24,7 +24,7 @@ const TendingsSection = ({
   renewError,
   handleRenew,
   isOverdue,
-  totalPenaltysOwed,
+  totalPenaltiesOwed,
   handlePayPenalty,
   payingPenaltyForTendingId,
   payPenaltyError,
@@ -32,7 +32,7 @@ const TendingsSection = ({
   waivingPenaltyForTendingId,
   waivePenaltyError,
 }) => {
-  const { facultyList, studentList, directoryLoading } = useGardenerDirectory(isAdmin);
+  const { masterList, apprenticeList, directoryLoading } = useGardenerDirectory(isAdmin);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [selectedGardener, setSelectedGardener] = useState(null);
@@ -88,13 +88,13 @@ const TendingsSection = ({
           renewingId={renewingId}
         />
         <div className="mt-8">
-          <PenaltysSection />
+          <PenaltiesSection />
         </div>
       </div>
     );
   }
 
-  const allRows = buildGardenerRows(facultyList, studentList, tendings, isOverdue);
+  const allRows = buildGardenerRows(masterList, apprenticeList, tendings, isOverdue);
   const directoryUserIds = new Set(allRows.map((row) => row.userId).filter(Boolean));
   const unresolvedTendings = tendings.filter((tending) => !directoryUserIds.has(tending.userId));
 
@@ -107,7 +107,7 @@ const TendingsSection = ({
 
   const activeTendingCount = tendings.filter((tending) => !tending.returnedAt).length;
   const overdueCount = tendings.filter(isOverdue).length;
-  const totalGardeners = facultyList.length + studentList.length;
+  const totalGardeners = masterList.length + apprenticeList.length;
 
   return (
     <div>
@@ -143,7 +143,7 @@ const TendingsSection = ({
           onClick={() => setShowOverdueOnly((prev) => !prev)}
           active={showOverdueOnly}
         />
-        <StatCard label="Unpaid Penaltys" value={`₹${totalPenaltysOwed}`} danger={totalPenaltysOwed > 0} />
+        <StatCard label="Unpaid Penalties" value={`₹${totalPenaltiesOwed}`} danger={totalPenaltiesOwed > 0} />
         <StatCard label="Total Gardeners" value={totalGardeners} />
       </div>
 
@@ -156,7 +156,7 @@ const TendingsSection = ({
 
       {visibleRows.length === 0 ? (
         <div className="bg-card rounded-2xl border border-border p-12 text-center text-foreground/60">
-          <SpecimenOpen size={32} className="mx-auto mb-3 text-foreground/20" />
+          <Leaf size={32} className="mx-auto mb-3 text-foreground/20" />
           No gardeners match this search.
         </div>
       ) : (
@@ -231,7 +231,7 @@ const TendingsSection = ({
                   className="w-full px-3 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                 >
                   <option value="">Select a gardener…</option>
-                  {[...facultyList, ...studentList].map((m) => (
+                  {[...masterList, ...apprenticeList].map((m) => (
                     <option key={m.id || m.userId} value={m.id || m.userId}>
                       {m.name || m.displayName || m.email} ({m.role || "gardener"})
                     </option>

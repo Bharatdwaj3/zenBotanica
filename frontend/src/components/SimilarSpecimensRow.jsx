@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { SpecimenOpen, Plus } from 'lucide-react';
+import { Leaf, Plus } from 'lucide-react';
 
 export default function SimilarSpecimensRow({ title, specimens, emptyMessage }) {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ export default function SimilarSpecimensRow({ title, specimens, emptyMessage }) 
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
-                  <SpecimenOpen size={32} className="text-foreground/20" strokeWidth={1.5} />
+                  <Leaf size={32} className="text-foreground/20" strokeWidth={1.5} />
                 </div>
               )}
 

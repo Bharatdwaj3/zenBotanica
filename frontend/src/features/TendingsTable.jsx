@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SpecimenOpen } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 
 const MAX_RENEWALS = 2;
 
@@ -83,7 +83,7 @@ const TendingsTable = ({
                         {tending.specimen?.coverUrl ? (
                           <img src={tending.specimen.coverUrl} className="w-full h-full object-cover" alt={tending.specimen.title} />
                         ) : (
-                          <SpecimenOpen size={16} className="text-foreground/20" />
+                          <Leaf size={16} className="text-foreground/20" />
                         )}
                       </div>
                     </td>

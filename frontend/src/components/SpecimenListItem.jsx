@@ -1,5 +1,5 @@
 import React from 'react';
-import { SpecimenOpen, Star, Repeat } from 'lucide-react';
+import { Leaf, Star, Repeat } from 'lucide-react';
 
 const ToggleSwitch = ({ checked, onChange, label, activeColor }) => (
   <button
@@ -55,7 +55,7 @@ const SpecimenListItem = ({ specimen, selected, onToggle, onToggleFeatured, onTo
           <img src={specimen.coverUrl} className="w-full h-full object-cover" alt={specimen.title} />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-accent/10">
-            <SpecimenOpen size={40} className="text-foreground/20" strokeWidth={1.5} />
+            <Leaf size={40} className="text-foreground/20" strokeWidth={1.5} />
           </div>
         )}
       </div>

@@ -13,11 +13,11 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
-export const addBookToCart = createAsyncThunk(
-  'cart/addBookToCart',
-  async (bookId, { rejectWithValue }) => {
+export const addSpecimenToCart = createAsyncThunk(
+  'cart/addSpecimenToCart',
+  async (specimenId, { rejectWithValue }) => {
     try {
-      await addToCart(bookId);
+      await addToCart(specimenId);
       const res = await getCart();
       return res.data;
     } catch (err) {
@@ -26,11 +26,11 @@ export const addBookToCart = createAsyncThunk(
   }
 );
 
-export const removeBookFromCart = createAsyncThunk(
-  'cart/removeBookFromCart',
-  async (bookId, { rejectWithValue }) => {
+export const removeSpecimenFromCart = createAsyncThunk(
+  'cart/removeSpecimenFromCart',
+  async (specimenId, { rejectWithValue }) => {
     try {
-      await removeFromCart(bookId);
+      await removeFromCart(specimenId);
       const res = await getCart();
       return res.data;
     } catch (err) {
@@ -76,10 +76,10 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(addBookToCart.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
-      .addCase(addBookToCart.rejected, (state, action) => { state.error = action.payload; })
-      .addCase(removeBookFromCart.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
-      .addCase(removeBookFromCart.rejected, (state, action) => { state.error = action.payload; })
+      .addCase(addSpecimenToCart.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
+      .addCase(addSpecimenToCart.rejected, (state, action) => { state.error = action.payload; })
+      .addCase(removeSpecimenFromCart.fulfilled, (state, action) => { state.items = Array.isArray(action.payload) ? action.payload : []; })
+      .addCase(removeSpecimenFromCart.rejected, (state, action) => { state.error = action.payload; })
       .addCase(checkout.pending, (state) => { state.checkingOut = true; })
       .addCase(checkout.fulfilled, (state, action) => {
         state.checkingOut = false;

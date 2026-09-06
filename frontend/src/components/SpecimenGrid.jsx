@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SpecimenOpen } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import SpecimenCard from './SpecimenCard';
 
 const SpecimenGrid = ({ specimens, loading, showAdminActions = false, onSpecimenDeleted }) => {
@@ -23,7 +23,7 @@ const SpecimenGrid = ({ specimens, loading, showAdminActions = false, onSpecimen
   if (specimens.length === 0) {
     return (
       <div className="bg-card border border-border rounded-2xl p-12 text-center text-foreground/60">
-        <SpecimenOpen size={32} className="mx-auto mb-3 text-foreground/20" />
+        <Leaf size={32} className="mx-auto mb-3 text-foreground/20" />
         No specimens found.
       </div>
     );

@@ -40,16 +40,16 @@ export const completeProfile = (data) => gardenersApi.post('/auth/profile', data
 export const updateUserRole = (data) => gardenersApi.put('/auth/role', data);
 export const deleteUser = (id) => gardenersApi.delete(`/auth/user/${id}`);
 
-// Faculty routes
-export const getFacultyList = () => gardenersApi.get('/faculty');
-export const addFaculty = (data) => gardenersApi.post('/faculty', data);
-export const getFacultyById = (id) => gardenersApi.get(`/faculty/${id}`);
-export const updateFacultyProfile = (id, data) => gardenersApi.put(`/faculty/profile/${id}`, data);
-export const deleteFaculty = (id) => gardenersApi.delete(`/faculty/${id}`);
+// Masters routes
+export const getMastersList = () => gardenersApi.get('/masters');
+export const addMasters = (data) => gardenersApi.post('/masters', data);
+export const getMastersById = (id) => gardenersApi.get(`/masters/${id}`);
+export const updateMastersProfile = (id, data) => gardenersApi.put(`/masters/profile/${id}`, data);
+export const deleteMasters = (id) => gardenersApi.delete(`/masters/${id}`);
 
-// Student routes
-export const getStudentList = () => gardenersApi.get('/student');
-export const getStudentProfile = (id) => gardenersApi.get(`/student/profile/${id}`);
-export const addStudent = (data) => gardenersApi.post('/student', data);
-export const updateStudentProfile = (id, data) => gardenersApi.put(`/student/profile/${id}`, data);
-export const deleteStudent = (id) => gardenersApi.delete(`/student/profile/${id}`);
+// Apprentice routes
+export const getApprenticeList = () => gardenersApi.get('/apprentice');
+export const getApprenticeProfile = (id) => gardenersApi.get(`/apprentice/profile/${id}`);
+export const addApprentice = (data) => gardenersApi.post('/apprentice', data);
+export const updateApprenticeProfile = (id, data) => gardenersApi.put(`/apprentice/profile/${id}`, data);
+export const deleteApprentice = (id) => gardenersApi.delete(`/apprentice/profile/${id}`);
