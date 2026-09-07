@@ -33,7 +33,7 @@ export default function SimilarSpecimensRow({ title, specimens, emptyMessage }) 
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {visibleSpecimens.map((specimen, index) => (
+        {Array.isArray(visibleSpecimens) && visibleSpecimens.map((specimen, index) => (
           <motion.article
             key={specimen.id}
             initial={{ opacity: 0, y: 10 }}

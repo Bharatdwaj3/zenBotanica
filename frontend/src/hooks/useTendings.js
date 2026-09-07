@@ -90,7 +90,7 @@ export function useTendings(isAdmin) {
         amount: data.order.amount,
         currency: data.order.currency,
         order_id: data.order.id,
-        name: 'Bonsai Penalty Payment',
+        name: 'Mionchoillte Penalty Payment',
         description: `Late penalty for ${tending.specimen?.title ?? 'tending'}`,
         handler: async (response) => {
           try {

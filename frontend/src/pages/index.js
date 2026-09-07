@@ -1,6 +1,6 @@
 import Home from './Home';
 import Explore from './Explore';
-import NewStory from './NewStrory';
+import NewStory from './NewStory';
 import PdfViewer from './PdfViewer';
 import ComingSoon from './ComingSoon';
 export {

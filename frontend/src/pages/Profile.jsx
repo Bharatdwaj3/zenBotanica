@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Mail, Calendar, Leaf, GraduationCap, Tree } from 'lucide-react';
+import { Mail, Calendar, Leaf, GraduationCap } from 'lucide-react';
 import { fetchUser } from '../store/avatarSlice';
 import { useTendings } from '../hooks/useTendings';
 import StatCard from '../components/StatCard';

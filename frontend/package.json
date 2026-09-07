@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "mionchoillte-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,8 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fontsource/dancing-script": "^5.3.0",
-    "@fontsource/unifrakturmaguntia": "^5.3.0",
+    "@fontsource/eb-garamond": "^5.3.0",
+    "@fontsource/public-sans": "^5.3.0",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
     "@reduxjs/toolkit": "^2.11.2",

@@ -80,7 +80,7 @@ const Navbar = () => {
             to="/"
             className="font-display text-3xl tracking-wide text-foreground hover:text-primary transition-colors"
           >
-            Bonsai
+            Mionchoillte
           </Link>
           <Link
             to="/explore"

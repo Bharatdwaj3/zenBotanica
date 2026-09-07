@@ -1,34 +1,35 @@
 @import "tailwindcss";
-@import "@fontsource/unifrakturmaguntia";
-@import "@fontsource/dancing-script/600.css";
-@import "@fontsource/dancing-script/700.css";
+@import "@fontsource/eb-garamond";
+@import "@fontsource/eb-garamond/700.css";
+@import "@fontsource/eb-garamond/400-italic.css";
+@import "@fontsource/public-sans";
 
 @theme {
-  /* Literary & Editorial Theme — Manuscript palette */
+  /* Venetian Garden Theme — lagoon, verdigris, aged stone */
 
   /* Backgrounds & Text */
-  --color-background: #f7f5f0;    /* Soft off-white page */
-  --color-foreground: #1c1917;    /* Warm near-black for reading text */
+  --color-background: #0d1a17;   /* Shaded garden at dusk, lagoon-teal cast */
+  --color-foreground: #e7e3d8;   /* Istrian stone */
 
   /* Primary Accent */
-  --color-primary: #c4521f;       /* Warm rust — main CTAs/headings */
+  --color-primary: #4f8a6f;      /* Verdigris — oxidized bronze/copper statuary */
 
   /* Secondary Accent */
-  --color-secondary: #eae4d9;     /* Warm parchment tone for accents/secondary buttons */
+  --color-secondary: #3c5f6e;    /* Canal / lagoon blue-grey */
 
   /* Muted / Focus Accent */
-  --color-accent: #57534e;        /* Warm slate for highlights and focus states */
+  --color-accent: #8f9a86;       /* Weathered stone, cypress-adjacent */
 
   /* Cards & Surfaces */
-  --color-card: #ffffff;          /* Pure white card backgrounds for strong visual separation */
-  --color-border: #d6cebf;        /* Warm parchment border */
+  --color-card: #15211d;         /* Aged patina panel */
+  --color-border: #2a3833;       /* Mossy hairline */
 
   /* Border radius */
-  --radius: 0.75rem;              /* Softer radius for editorial components */
+  --radius: 0.75rem;
 
-  /* Display / accent fonts, used sparingly (logo, section titles, emphasis) */
-  --font-display: "UnifrakturMaguntia", cursive;
-  --font-accent: "Dancing Script", cursive;
+  /* Display / accent fonts */
+  --font-display: "EB Garamond", serif;
+  --font-accent: "EB Garamond", serif;
 }
 
 @layer components {
