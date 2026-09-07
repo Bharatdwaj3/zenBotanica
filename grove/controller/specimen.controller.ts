@@ -1,5 +1,5 @@
 import prisma from "../config/prisma-client.ts";
-import { CIRCULATION_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
+import { TENDING_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 import type { Response, Request } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware.ts";
 
@@ -146,7 +146,7 @@ const getTrending = async (req: Request, res: Response): Promise<void> => {
   try {
     const limit = Number(req.query.limit) || 10;
     const days = Number(req.query.days) || 7;
-    const loanCountsRes = await fetch(`${CIRCULATION_SERVICE_URL}/api/v1/internal/loan-counts?days=${days}`, {
+    const loanCountsRes = await fetch(`${TENDING_SERVICE_URL}/api/v1/internal/loan-counts?days=${days}`, {
       headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET },
     });
     if (!loanCountsRes.ok) {

@@ -75,7 +75,7 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
         </h1>
 
         <p className="text-base lg:text-lg text-foreground/60 leading-relaxed mb-10 font-light">
-          Your digital and walk-in grove, in one place. Borrow physical specimens,
+          Your digital and walk-in grove, in one place. Tend physical specimens,
           read digital copies instantly, and
           <span className="font-accent text-xl text-primary font-bold ml-1">never lose track of a due date again</span>.
         </p>

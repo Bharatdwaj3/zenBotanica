@@ -1,6 +1,6 @@
 import prisma from "../config/prisma-client.ts";
 import type { AuthRequest } from "../middleware/auth.middleware.ts";
-import { CATALOG_SERVICE_URL, MEMBERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
+import { GROVE_SERVICE_URL, GARDENERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
 import type { Request, Response } from "express";
 import type { Response as ExpressResponse } from "express";
 
@@ -23,7 +23,7 @@ const withOverdueInfo = (careSession: any) => {
 };
 
 const adjustBookCopies = async (bookId: number, delta: number): Promise<Response> => {
-  return fetch(`${CATALOG_SERVICE_URL}/api/v1/book/${bookId}/copies`, {
+  return fetch(`${GROVE_SERVICE_URL}/api/v1/book/${bookId}/copies`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +34,7 @@ const adjustBookCopies = async (bookId: number, delta: number): Promise<Response
 };
 
 const getBook = async (bookId: number) => {
-  const res = await fetch(`${CATALOG_SERVICE_URL}/api/v1/book/${bookId}`);
+  const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/book/${bookId}`);
   if (!res.ok) return null;
   return res.json();
 };
@@ -125,7 +125,7 @@ const issueCareSessionForMember = async (req: AuthRequest, res: ExpressResponse)
       return;
     }
 
-    const memberRes = await fetch(`${MEMBERS_SERVICE_URL}/internal/users/by-ids?ids=${Number(userId)}`, {
+    const memberRes = await fetch(`${GARDENERS_SERVICE_URL}/internal/users/by-ids?ids=${Number(userId)}`, {
       headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET },
     });
     if (!memberRes.ok) {
@@ -208,7 +208,7 @@ const attachUserInfo = async (careSessions: any[]) => {
   if (uniqueUserIds.length === 0) return careSessions;
   try {
     const response = await fetch(
-      `${MEMBERS_SERVICE_URL}/api/v1/internal/users/by-ids?ids=${uniqueUserIds.join(",")}`,
+      `${GARDENERS_SERVICE_URL}/api/v1/internal/users/by-ids?ids=${uniqueUserIds.join(",")}`,
       { headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET } }
     );
     if (!response.ok) return careSessions;

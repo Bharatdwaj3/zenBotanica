@@ -202,7 +202,7 @@ const TendingsSection = ({
                       type="text"
                       value={specimenQuery}
                       onChange={(e) => setSpecimenQuery(e.target.value)}
-                      placeholder="Search title or author…"
+                      placeholder="Search name or cultivator…"
                       className="w-full px-3 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                     />
                     {specimenResults.length > 0 && (

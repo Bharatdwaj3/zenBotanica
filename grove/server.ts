@@ -21,5 +21,5 @@ app.use('/api/v1/wishlist', wishlistRoutes);
 app.use('/api/v1/internal', internalRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Catalog service running on port ${PORT}`);
+  console.log(`Grove service running on port ${PORT}`);
 });

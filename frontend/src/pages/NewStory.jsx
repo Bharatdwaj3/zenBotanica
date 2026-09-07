@@ -116,7 +116,7 @@ export default function NewStory() {
     e.preventDefault();
     setError('');
     if (!form.title.trim() || !form.author.trim() || !form.isbn.trim()) {
-      setError('Title, author, and ISBN are required');
+      setError('Title, cultivator, and ISBN are required');
       return;
     }
     setSaving(true);
@@ -216,7 +216,7 @@ export default function NewStory() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-foreground/70 mb-1">Author</label>
+                <label className="block text-sm font-medium text-foreground/70 mb-1">Cultivator</label>
                 <input
                   name="author"
                   value={form.author}
@@ -225,7 +225,7 @@ export default function NewStory() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground/70 mb-1">Publisher</label>
+                <label className="block text-sm font-medium text-foreground/70 mb-1">Nursery</label>
                 <input
                   name="publisher"
                   value={form.publisher}
@@ -295,7 +295,7 @@ export default function NewStory() {
               {extracting && (
                 <p className="text-xs text-foreground/50 mt-1.5 flex items-center gap-1.5">
                   <Loader2 className="h-3 w-3 animate-spin" />
-                  Reading title, author, and cover from PDF...
+                  Reading title, cultivator, and cover from PDF...
                 </p>
               )}
             </div>

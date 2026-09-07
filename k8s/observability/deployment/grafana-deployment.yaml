@@ -22,7 +22,7 @@ spec:
         kompose.version: 1.31.2 (a92241f79)
       creationTimestamp: null
       labels:
-        io.kompose.network/e-commerce-web-application-default: "true"
+        io.kompose.network/bonsai-web-application-default: "true"
         io.kompose.service: grafana
     spec:
       containers:
@@ -32,7 +32,7 @@ spec:
             - name: GF_USERS_ALLOW_SIGN_UP
               value: "false"
           image: grafana/grafana:latest
-          name: ecommerce-grafana
+          name: bonsai-grafana
           ports:
             - containerPort: 3000
               hostPort: 3101

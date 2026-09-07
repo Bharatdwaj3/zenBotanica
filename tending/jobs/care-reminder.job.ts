@@ -1,13 +1,13 @@
 import cron from 'node-cron';
 import prisma from '../config/prisma-client.ts';
 import { sendReminderEmail } from '../config/notification.config.ts';
-import { CATALOG_SERVICE_URL, MEMBERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
+import { GROVE_SERVICE_URL, GARDENERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 
 const DUE_SOON_WINDOW_DAYS = 2;
 
 const getBookTitle = async (bookId: number): Promise<string> => {
   try {
-    const res = await fetch(`${CATALOG_SERVICE_URL}/api/v1/book/${bookId}`);
+    const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/book/${bookId}`);
     if (!res.ok) return `Book #${bookId}`;
     const book = await res.json();
     return book.title || `Book #${bookId}`;
@@ -18,7 +18,7 @@ const getBookTitle = async (bookId: number): Promise<string> => {
 
 const getUserEmail = async (userId: number): Promise<string | null> => {
   try {
-    const res = await fetch(`${MEMBERS_SERVICE_URL}/api/v1/internal/user/${userId}`, {
+    const res = await fetch(`${GARDENERS_SERVICE_URL}/api/v1/internal/user/${userId}`, {
       headers: { 'x-internal-secret': INTERNAL_SERVICE_SECRET },
     });
     if (!res.ok) return null;

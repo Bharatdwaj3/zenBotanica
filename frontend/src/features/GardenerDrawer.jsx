@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 
-const STATUS_LABELS = { penalty: 'Penalty', borrow: 'Borrow', returned: 'Returned' };
+const STATUS_LABELS = { penalty: 'Penalty', tend: 'Tend', returned: 'Returned' };
 const STATUS_BADGE_STYLES = {
   penalty: 'bg-red-500/10 text-red-500 border-red-500/20',
-  borrow: 'bg-foreground/5 text-foreground/70 border-border',
+  tend: 'bg-foreground/5 text-foreground/70 border-border',
   returned: 'bg-green-500/10 text-green-600 border-green-500/20',
 };
 
 const splitTendingsByStatus = (tendings) => ({
   penalty: tendings.filter((tending) => (tending.penaltyAmount || 0) > 0),
-  borrow: tendings.filter((tending) => !tending.returnedAt),
+  tend: tendings.filter((tending) => !tending.returnedAt),
   returned: tendings.filter((tending) => tending.returnedAt),
 });
 

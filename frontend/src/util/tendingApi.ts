@@ -27,7 +27,7 @@ tendingApi.interceptors.response.use(
 
 export default tendingApi;
 // Tending routes
-export const borrowSpecimen = (data) => tendingApi.post('/tending', data);
+export const tendSpecimen = (data) => tendingApi.post('/tending', data);
 export const issueTending = (data) => tendingApi.post('/tending/issue', data);
 export const returnSpecimen = (id) => tendingApi.put(`/tending/${id}/return`);
 export const getMyTendings = () => tendingApi.get('/tending/mine');

@@ -14,7 +14,7 @@ app.use('/api/v1/session', sessionRoutes);
 app.use('/api/v1/internal', internalRoutes);
 app.use('/api/v1/penalty', penaltyRoutes);
 app.listen(PORT, () => {
-  console.log(`Circulation service running on port ${PORT}`);
+  console.log(`Tending service running on port ${PORT}`);
   
   // Start the daily overdue/due-soon care-reminder check
   startCareReminderCron();

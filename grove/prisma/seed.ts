@@ -1,5 +1,5 @@
 import prisma from "../config/prisma-client.ts";
-import { MEMBERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
+import { GARDENERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
 
 const specimens = [
   { title: "To Kill a Mockingbird", author: "Harper Lee", publisher: "Harper Perennial", isbn: "9780061120084", genre: ["FICTION"] },
@@ -73,7 +73,7 @@ const userEmails = [
 ];
 
 async function resolveUserId(email) {
-  const res = await fetch(`${MEMBERS_SERVICE_URL}/api/v1/internal/user/by-email/${email}`, {
+  const res = await fetch(`${GARDENERS_SERVICE_URL}/api/v1/internal/user/by-email/${email}`, {
     headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET },
   });
   if (!res.ok) throw new Error(`Could not resolve user for ${email} (status ${res.status})`);

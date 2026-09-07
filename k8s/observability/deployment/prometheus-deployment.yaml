@@ -22,7 +22,7 @@ spec:
         kompose.version: 1.31.2 (a92241f79)
       creationTimestamp: null
       labels:
-        io.kompose.network/e-commerce-web-application-default: "true"
+        io.kompose.network/bonsai-web-application-default: "true"
         io.kompose.service: prometheus
     spec:
       containers:
@@ -30,7 +30,7 @@ spec:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.retention.time=7d
           image: prom/prometheus:latest
-          name: ecommerce-prometheus
+          name: bonsai-prometheus
           ports:
             - containerPort: 9090
               hostPort: 9090

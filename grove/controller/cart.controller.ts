@@ -1,5 +1,5 @@
 import prisma from "../config/prisma-client.ts";
-import { CIRCULATION_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
+import { TENDING_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
 import type { Response } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware.ts";
 
@@ -80,7 +80,7 @@ const checkout = async (req: AuthRequest, res: Response): Promise<void> => {
 
     const results = [];
     for (const item of cartItems) {
-      const borrowRes = await fetch(`${CIRCULATION_SERVICE_URL}/api/v1/internal/borrow`, {
+      const borrowRes = await fetch(`${TENDING_SERVICE_URL}/api/v1/internal/borrow`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

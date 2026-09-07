@@ -18,7 +18,7 @@ const Footer = () => {
             </Link>
             <p className="mt-4 text-foreground/50 text-sm max-w-xs">
               Your digital and walk-in grove.<br />
-              Borrow, read, and renew — all in one place.
+              Tend, read, and renew — all in one place.
             </p>
           </div>
 
@@ -28,7 +28,7 @@ const Footer = () => {
             </h4>
             <ul className="space-y-3 text-foreground/50 text-sm">
               <li><Link to="/explore" className="hover:text-primary transition-colors">Explore Specimens</Link></li>
-              <li><Link to="/my-tendings" className="hover:text-primary transition-colors">My Tendings</Link></li>
+              <li><Link to="/profile" className="hover:text-primary transition-colors">My Tendings</Link></li>
             </ul>
           </div>
 
