@@ -3,7 +3,7 @@ name: bonsai
 services:
   grove-db:
     image: postgres:15-alpine
-    container_name: grove_db_ctr
+    container_name: grove_db_ctr-btny
     restart: unless-stopped
     ports:
       - 7433:5432
@@ -24,7 +24,7 @@ services:
 
   tending-db:
     image: postgres:15-alpine
-    container_name: tending_db_ctr
+    container_name: tending_db_ctr-btny
     restart: unless-stopped
     ports:
       - 7434:5432
@@ -45,7 +45,7 @@ services:
 
   gardeners-db:
     image: postgres:15-alpine
-    container_name: gardeners_db_ctr
+    container_name: gardeners_db_ctr-btny
     restart: unless-stopped
     ports:
       - 7435:5432
@@ -68,7 +68,7 @@ services:
     build:
       context: ./grove
       dockerfile: Dockerfile
-    container_name: grove_ctr
+    container_name: grove_ctr-btny
     restart: unless-stopped
     env_file:
       - ./grove/.env.prod
@@ -87,7 +87,7 @@ services:
     build:
       context: ./firebase
       dockerfile: Dockerfile
-    container_name: firebase_ctr
+    container_name: firebase_ctr-btny
     restart: unless-stopped
     ports:
       - 9099:9099
@@ -96,7 +96,7 @@ services:
     networks:
       - app_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9199 || exit 1"]
+      test: ["CMD-SHELL", "curl -s http://localhost:9199 > /dev/null"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -104,7 +104,7 @@ services:
 
   mailhog:
     image: mailhog/mailhog:latest
-    container_name: mailhog_ctr
+    container_name: mailhog_ctr-btny
     restart: unless-stopped
     ports:
       - 8025:8025
@@ -116,7 +116,7 @@ services:
     build:
       context: ./tending
       dockerfile: Dockerfile
-    container_name: tending_ctr
+    container_name: tending_ctr-btny
     restart: unless-stopped
     env_file:
       - ./tending/.env.prod
@@ -137,7 +137,7 @@ services:
     build:
       context: ./gardeners
       dockerfile: Dockerfile
-    container_name: gardeners_ctr
+    container_name: gardeners_ctr-btny
     restart: unless-stopped
     env_file:
       - ./gardeners/.env.prod
@@ -154,7 +154,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_ctr
+    container_name: frontend_ctr-btny
     restart: unless-stopped
     ports:
       - 5114:80
