@@ -113,7 +113,7 @@ export default function Signup() {
                   <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-[#e7e3d8]/30 group-focus-within:text-[#4f8a6f] transition-colors" size={16} />
                   <input
                     type="password"
-                    name="password"
+                    name="password" autoComplete="new-password"
                     placeholder="••••••••"
                     onChange={handleChange}
                     minLength={6}

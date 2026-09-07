@@ -105,7 +105,7 @@ export default function Login() {
                   <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-[#e7e3d8]/30 group-focus-within:text-[#4f8a6f] transition-colors" size={16} />
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    name="password"
+                    name="password" autoComplete="current-password"
                     placeholder="••••••••"
                     onChange={handleChange}
                     className="w-full bg-transparent border-b border-[#1a2e28] pl-8 py-3 text-[#e7e3d8] focus:outline-none focus:border-[#4f8a6f] transition-colors text-sm placeholder:text-[#e7e3d8]/30"
