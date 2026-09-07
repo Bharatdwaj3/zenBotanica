@@ -1,8 +1,8 @@
 import Home from './Home';
 import Explore from './Explore';
-import NewStory from './NewStory';
+import NewSpecimen from './NewSpecimen';
 import PdfViewer from './PdfViewer';
 import ComingSoon from './ComingSoon';
 export {
-    Home, Explore, NewStory, PdfViewer, ComingSoon
+    Home, Explore, NewSpecimen, PdfViewer, ComingSoon
 };

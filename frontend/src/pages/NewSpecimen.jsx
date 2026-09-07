@@ -6,12 +6,12 @@ import { ArrowLeft, Save, Loader2, ShieldAlert } from 'lucide-react';
 import { addSpecimen, updateSpecimen, getSpecimen, uploadFile, extractPdf } from '../util/groveApi';
 
 const GENRES = [
-  'FICTION', 'NON_FICTION', 'FANTASY', 'SCIENCE', 'SCIENCE_FICTION',
-  'MYSTERY', 'ROMANCE', 'HORROR', 'HISTORY', 'BIOGRAPHY',
+  'FLORA', 'FAUNA', 'FUNGUS', 'MINERAL', 'ARTIFACT',
+  'HERB', 'SEED', 'UNKNOWN'
   'POETRY', 'DRAMA', 'SELF_HELP', 'TECHNOLOGY', 'PHILOSOPHY', 'CHILDREN',
 ];
 
-export default function NewStory() {
+export default function NewSpecimen() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get('edit');
