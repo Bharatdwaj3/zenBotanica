@@ -1,7 +1,7 @@
 const STEPS = [
   {
     number: '01',
-    title: 'Scan & Borrow',
+    title: 'Scan & Tend',
     description: 'Pick up physical copies on campus or instantly unlock e-specimens.',
   },
   {
@@ -23,7 +23,7 @@ export const ValueProp = () => (
       &ldquo;One grove card, every format.&rdquo;
     </h3>
     <p className="max-w-2xl mx-auto text-lg text-foreground/60 mb-16">
-      Borrow physical specimens from the shelf, or read digital copies straight in your browser.
+      Tend physical specimens from the grove, or read digital copies straight in your browser.
       We&apos;ll even remind you before something&apos;s due.
     </p>
 

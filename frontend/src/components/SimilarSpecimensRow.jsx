@@ -63,7 +63,7 @@ export default function SimilarSpecimensRow({ title, specimens, emptyMessage }) 
                 className="btn-primary-sm absolute bottom-2 left-2 right-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Plus size={12} strokeWidth={2.5} />
-                Borrow
+                Tend
               </button>
             </div>
             <div className="p-3">

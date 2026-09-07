@@ -45,7 +45,7 @@ export function usePenalties() {
         amount: data.order.amount,
         currency: data.order.currency,
         order_id: data.order.id,
-        name: 'Library Penalty Payment',
+        name: 'Bonsai Penalty Payment',
         description: `${penalty.reason} penalty`,
         handler: async (response) => {
           try {

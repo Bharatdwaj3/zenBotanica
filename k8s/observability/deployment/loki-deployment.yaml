@@ -22,14 +22,14 @@ spec:
         kompose.version: 1.31.2 (a92241f79)
       creationTimestamp: null
       labels:
-        io.kompose.network/e-commerce-web-application-default: "true"
+        io.kompose.network/bonsai-web-application-default: "true"
         io.kompose.service: loki
     spec:
       containers:
         - args:
             - -config.file=/etc/loki/local-config.yml
           image: grafana/loki:latest
-          name: ecommerce-loki
+          name: bonsai-loki
           ports:
             - containerPort: 3100
               hostPort: 3010

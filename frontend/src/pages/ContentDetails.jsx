@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ArrowLeft, Leaf, Building2, Hash, Tag, Copy, FileText, Bookmark } from 'lucide-react';
 import { getSpecimen, getSimilarSpecimens } from '../util/groveApi';
-import { borrowSpecimen as borrowSpecimenRequest } from '../util/tendingApi';
+import { tendSpecimen as tendSpecimenRequest } from '../util/tendingApi';
 import { toggleBookmark } from '../store/specimenmarkSlice';
 import SimilarSpecimensRow from '../components/SimilarSpecimensRow';
 
@@ -16,8 +16,8 @@ const ContentDetails = () => {
   const isAdmin = user?.role === 'admin';
   const [specimen, setSpecimen] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [borrowing, setBorrowing] = useState(false);
-  const [borrowMessage, setBorrowMessage] = useState('');
+  const [tending, setTending] = useState(false);
+  const [tendMessage, setTendMessage] = useState('');
   const [error, setError] = useState('');
   const [similarByAuthor, setSimilarByAuthor] = useState([]);
   const [similarByGenre, setSimilarByGenre] = useState([]);
@@ -45,18 +45,18 @@ const ContentDetails = () => {
     fetchSpecimen();
   }, [id]);
 
-  const handleBorrow = async () => {
-    setBorrowing(true);
-    setBorrowMessage('');
+  const handleTend = async () => {
+    setTending(true);
+    setTendMessage('');
     try {
-      await borrowSpecimenRequest({ specimenId: Number(id) });
-      setBorrowMessage('Specimen borrowed successfully!');
+      await tendSpecimenRequest({ specimenId: Number(id) });
+      setTendMessage('Specimen tended successfully!');
       const { data } = await getSpecimen(id);
       setSpecimen(data);
     } catch (err) {
-      setBorrowMessage(err.response?.data?.message || 'Failed to borrow specimen');
+      setTendMessage(err.response?.data?.message || 'Failed to tend specimen');
     } finally {
-      setBorrowing(false);
+      setTending(false);
     }
   };
 
@@ -139,8 +139,8 @@ const ContentDetails = () => {
                   Edit Specimen
                 </button>
               ) : (
-                <button onClick={handleBorrow} disabled={borrowing || specimen.availableCopies === 0} className="btn-primary disabled:opacity-50">
-                  {borrowing ? 'Borrowing...' : 'Borrow Specimen'}
+                <button onClick={handleTend} disabled={tending || specimen.availableCopies === 0} className="btn-primary disabled:opacity-50">
+                  {tending ? 'Tending...' : 'Tend Specimen'}
                 </button>
               )}
 
@@ -150,10 +150,10 @@ const ContentDetails = () => {
                 </button>
               )}
             </div>
-            {borrowMessage && <p className={`mt-4 text-sm font-medium ${borrowMessage.includes('success') ? 'text-green-500' : 'text-red-500'}`}>{borrowMessage}</p>}
+            {tendMessage && <p className={`mt-4 text-sm font-medium ${tendMessage.includes('success') ? 'text-green-500' : 'text-red-500'}`}>{tendMessage}</p>}
           </div>
         </div>
-        <SimilarSpecimensRow title="More by this author" specimens={similarByAuthor} />
+        <SimilarSpecimensRow title="More from this cultivator" specimens={similarByAuthor} />
         <SimilarSpecimensRow title="More in this genre" specimens={similarByGenre} />
       </div>
     </div>

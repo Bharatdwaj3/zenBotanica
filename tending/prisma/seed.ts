@@ -1,5 +1,5 @@
 import prisma from '../config/prisma-client.ts';
-import { MEMBERS_SERVICE_URL, CATALOG_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
+import { GARDENERS_SERVICE_URL, GROVE_SERVICE_URL, INTERNAL_SERVICE_SECRET } from '../config/env.config.ts';
 
 // NOTE: this script is not idempotent like gardeners'/grove's seed scripts —
 // session/penalty have no unique field to upsert on. Running it twice creates
@@ -30,7 +30,7 @@ const bookIsbns = [
 ];
 
 async function resolveUserId(email: string): Promise<number> {
-  const res = await fetch(`${MEMBERS_SERVICE_URL}/api/v1/internal/user/by-email/${email}`, {
+  const res = await fetch(`${GARDENERS_SERVICE_URL}/api/v1/internal/user/by-email/${email}`, {
     headers: { 'x-internal-secret': INTERNAL_SERVICE_SECRET },
   });
   if (!res.ok) throw new Error(`Could not resolve user for ${email} (status ${res.status})`);
@@ -39,7 +39,7 @@ async function resolveUserId(email: string): Promise<number> {
 }
 
 async function resolveBookId(isbn: string): Promise<number> {
-  const res = await fetch(`${CATALOG_SERVICE_URL}/api/v1/internal/book/by-isbn/${isbn}`, {
+  const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/internal/book/by-isbn/${isbn}`, {
     headers: { 'x-internal-secret': INTERNAL_SERVICE_SECRET },
   });
   if (!res.ok) throw new Error(`Could not resolve book for ISBN ${isbn} (status ${res.status})`);

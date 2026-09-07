@@ -17,7 +17,7 @@ const TendingsTable = ({
   renewingId,
   onWaivePenalty,
   waivingPenaltyForTendingId,
-  checkedOutLabel = 'Borrowed',
+  checkedOutLabel = 'Tended',
   emptyNoun = 'tendings',
 }) => {
   const [tab, setTab] = useState('active');

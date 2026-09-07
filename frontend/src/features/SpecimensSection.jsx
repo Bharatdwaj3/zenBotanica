@@ -79,7 +79,7 @@ const SpecimensSection = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => resetToFirstPage(setSearchQuery)(e.target.value)}
-            placeholder="Search by title or author..."
+            placeholder="Search by name or cultivator..."
             className="bg-transparent text-sm text-foreground placeholder:text-foreground/40 focus:outline-none flex-grow"
           />
         </div>

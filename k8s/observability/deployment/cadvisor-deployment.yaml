@@ -22,13 +22,13 @@ spec:
         kompose.version: 1.31.2 (a92241f79)
       creationTimestamp: null
       labels:
-        io.kompose.network/e-commerce-web-application-default: "true"
+        io.kompose.network/bonsai-web-application-default: "true"
         io.kompose.service: cadvisor
     spec:
       automountServiceAccountToken: false
       containers:
         - image: gcr.io/cadvisor/cadvisor:latest
-          name: ecommerce-cadvisor
+          name: bonsai-cadvisor
           ports:
             - containerPort: 8080
               hostPort: 8080

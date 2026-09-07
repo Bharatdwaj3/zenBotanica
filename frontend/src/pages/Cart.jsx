@@ -92,7 +92,7 @@ const Cart = () => {
               disabled={checkingOut}
               className="w-full btn-primary disabled:opacity-50"
             >
-              {checkingOut ? 'Checking out...' : 'Checkout — Borrow All'}
+              {checkingOut ? 'Checking out...' : 'Checkout — Tend All'}
             </button>
           </>
         )}

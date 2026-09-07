@@ -22,14 +22,14 @@ spec:
         kompose.version: 1.31.2 (a92241f79)
       creationTimestamp: null
       labels:
-        io.kompose.network/e-commerce-web-application-default: "true"
+        io.kompose.network/bonsai-web-application-default: "true"
         io.kompose.service: promtail
     spec:
       containers:
         - args:
             - -config.file=/etc/promtail/config.yml
           image: grafana/promtail:latest
-          name: ecommerce-promtail
+          name: bonsai-promtail
           ports:
             - containerPort: 8180
               hostPort: 8180
