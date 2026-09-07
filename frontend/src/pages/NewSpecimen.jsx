@@ -8,7 +8,6 @@ import { addSpecimen, updateSpecimen, getSpecimen, uploadFile, extractPdf } from
 const GENRES = [
   'FLORA', 'FAUNA', 'FUNGUS', 'MINERAL', 'ARTIFACT',
   'HERB', 'SEED', 'UNKNOWN'
-  'POETRY', 'DRAMA', 'SELF_HELP', 'TECHNOLOGY', 'PHILOSOPHY', 'CHILDREN',
 ];
 
 export default function NewSpecimen() {

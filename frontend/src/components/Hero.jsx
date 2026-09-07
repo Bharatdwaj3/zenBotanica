@@ -118,7 +118,7 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
         {spotlightSpecimen && (
           <div className="relative flex items-end z-10">
             {stackSpecimens.map((specimen, i) =>
-              specimen ? <SpineCover key={specimen.id} specimen={specimen} config={STACK_CONFIG[i]} /> : null
+              specimen ? <SpineCover key={specimen?.id || i} specimen={specimen} config={STACK_CONFIG[i]} /> : null
             )}
 
             {left && <FloatingTitleCard specimen={left} position="top-6 -left-24" delay={0.9} />}
