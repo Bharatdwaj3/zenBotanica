@@ -13,7 +13,7 @@ const Footer = () => {
           <div className="md:col-span-1">
             <Link to="/" className="inline-block">
               <h3 className="font-display text-3xl tracking-wide text-foreground hover:text-primary transition-colors">
-                Bonsai
+                Mionchoillte
               </h3>
             </Link>
             <p className="mt-4 text-foreground/50 text-sm max-w-xs">
@@ -74,8 +74,8 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="text-sm text-foreground/50">
-            <p>Bonsai HQ, 42 Willow Campus Drive, Springfield</p>
-            <p className="mt-1">© {currentYear} Bonsai. All rights reserved.</p>
+            <p>Mionchoillte HQ, 42 Willow Campus Drive, Springfield</p>
+            <p className="mt-1">© {currentYear} Mionchoillte. All rights reserved.</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ const Footer = () => {
 
       <div className="select-none pointer-events-none -mt-4 md:-mt-8">
         <p className="text-center font-black uppercase tracking-tighter text-foreground/5 leading-none text-[18vw] md:text-[14vw] whitespace-nowrap">
-          Bonsai
+          Mionchoillte
         </p>
       </div>
     </footer>

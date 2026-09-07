@@ -71,13 +71,13 @@ export const Hero = ({ spotlightSpecimen, floatingSpecimens = [] }) => {
         </div>
 
         <h1 className="font-display text-6xl lg:text-7xl xl:text-8xl text-foreground mb-6 leading-none tracking-wide select-none">
-          Bonsai
+          Mionchoillte
         </h1>
 
         <p className="text-base lg:text-lg text-foreground/60 leading-relaxed mb-10 font-light">
           Your digital and walk-in grove, in one place. Tend physical specimens,
           read digital copies instantly, and
-          <span className="font-accent text-xl text-primary font-bold ml-1">never lose track of a due date again</span>.
+          <span className="font-accent italic text-xl text-primary font-bold ml-1">never lose track of a due date again</span>.
         </p>
 
         <div className="flex flex-wrap items-center gap-4 mb-10">

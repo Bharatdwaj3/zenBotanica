@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchUser } from '../store/avatarSlice';
-import { Mail, Lock, Eye, EyeOff, ChevronRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Sprout } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { loginUser } from '../util/gardenersApi';
 
@@ -26,108 +26,117 @@ export default function Login() {
     try {
       await loginUser(formData);
       const userData = await dispatch(fetchUser()).unwrap();
-      navigate(userData.accountType === 'reader' ? '/reader' : userData.accountType === 'creator' ? '/creator' : '/');
+      // Route based on the updated bonsai theme roles
+      const route = userData.accountType === 'student' ? '/student' : userData.accountType === 'faculty' ? '/faculty' : '/';
+      navigate(route);
     } catch (err) {
-      setError('Invalid credentials');
+      setError('Invalid credentials. Please try again.');
       setLoading(false);
     }
   };
 
   return (
-   
-    <div className="min-h-screen w-full flex items-center justify-center bg-background p-4 md:p-6 pt-24 overflow-y-auto">
-      
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        
-        className="flex flex-col md:flex-row w-full max-w-4xl min-h-[500px] md:h-[min(600px,70vh)] rounded-3xl overflow-hidden shadow-2xl border border-border bg-card"
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#0d1a17] p-4 md:p-6 overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col md:flex-row w-full max-w-5xl min-h-[550px] rounded-3xl overflow-hidden shadow-2xl border border-[#1a2e28] bg-[#12201b]"
       >
-        
-        
-        <div className="relative w-full md:w-[38%] bg-primary flex flex-col justify-center px-8 md:px-10 py-10 text-foreground shrink-0">
-          <div className="absolute top-6 left-8 flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-foreground" />
-            <span className="text-[9px] font-black uppercase tracking-[0.3em]">Augen</span>
+        {/* Left Panel - Branding */}
+        <div className="relative w-full md:w-[40%] bg-[#4f8a6f] flex flex-col justify-center px-8 md:px-12 py-10 text-[#e7e3d8] shrink-0">
+          <div className="absolute top-8 left-8 flex items-center gap-2">
+            <Sprout className="text-[#e7e3d8]" size={20} />
+            <span className="text-xs font-bold uppercase tracking-[0.2em]">Mionchoillte</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-3 leading-none uppercase">Log<br/>In</h1>
-          <div className="w-10 h-1 bg-foreground mb-6" />
-          
-          <p className="text-[13px] font-light opacity-80 leading-relaxed max-w-[200px]">
-            Welcome back. Continue your unfiltered journey.
+          <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-4 leading-none">
+            Welcome<br />Back
+          </h1>
+          <div className="w-12 h-1 bg-[#e7e3d8] mb-6 rounded-full" />
+
+          <p className="text-sm font-light opacity-90 leading-relaxed max-w-[220px]">
+            Return to your garden. Continue cultivating your knowledge and tending to your collection.
           </p>
 
-          
-          <div className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary border-[5px] border-card rounded-full items-center justify-center z-10 shadow-lg">
-            <ChevronRight className="text-foreground" size={18} />
+          <div className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#4f8a6f] border-[6px] border-[#12201b] rounded-full items-center justify-center z-10 shadow-xl">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#e7e3d8]"><path d="m9 18 6-6-6-6"/></svg>
           </div>
         </div>
 
-      
-        <div className="w-full md:w-[62%] p-8 md:p-12 flex flex-col relative overflow-hidden bg-card">
-          
-          
-          <div className="flex md:absolute md:top-8 md:right-8 mb-8 md:mb-0 self-end bg-background/50 rounded-full p-1 border border-border/50">
-            <Link to="/signup" className="px-4 py-1 rounded-full text-[8px] font-bold tracking-widest text-foreground/40 hover:text-foreground">SIGN UP</Link>
-            <button className="px-4 py-1 rounded-full text-[8px] font-bold tracking-widest bg-primary text-foreground">LOGIN</button>
+        {/* Right Panel - Form */}
+        <div className="w-full md:w-[60%] p-8 md:p-12 flex flex-col relative bg-[#12201b]">
+          <div className="flex md:absolute md:top-8 md:right-8 mb-8 md:mb-0 self-end bg-[#0d1a17]/50 rounded-full p-1 border border-[#1a2e28]">
+            <Link to="/signup" className="px-5 py-1.5 rounded-full text-[10px] font-bold tracking-widest text-[#e7e3d8]/50 hover:text-[#e7e3d8] transition-colors">SIGN UP</Link>
+            <button className="px-5 py-1.5 rounded-full text-[10px] font-bold tracking-widest bg-[#4f8a6f] text-[#e7e3d8] shadow-md">LOGIN</button>  
           </div>
 
           <div className="flex-grow flex flex-col justify-center">
             <form onSubmit={handleSubmit} className="space-y-6 max-w-sm w-full mx-auto md:mx-0">
-              {error && <p className="text-primary text-[9px] font-bold uppercase tracking-widest">{error}</p>}
-              {successMessage && <p className="text-secondary text-[9px] font-bold uppercase tracking-widest">{successMessage}</p>}
-              
-              <div className="space-y-1">
-                <label className="text-[9px] font-bold text-primary tracking-widest uppercase">Email Address</label>
+              {error && (
+                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-medium">
+                  {error}
+                </div>
+              )}
+              {successMessage && (
+                <div className="p-3 bg-[#4f8a6f]/10 border border-[#4f8a6f]/20 rounded-xl text-[#4f8a6f] text-xs font-medium">
+                  {successMessage}
+                </div>
+              )}    
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-[#4f8a6f] tracking-widest uppercase">Email Address</label>
                 <div className="relative group">
-                  <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-foreground/20 group-focus-within:text-primary transition-colors" size={14} />
-                  <input 
-                    name="email" 
-                    type="email" 
-                    placeholder="hello@augen.com" 
-                    onChange={handleChange} 
-                    className="w-full bg-transparent border-b border-border pl-6 py-2 text-foreground focus:outline-none focus:border-primary transition-colors text-xs" 
-                    required 
+                  <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-[#e7e3d8]/30 group-focus-within:text-[#4f8a6f] transition-colors" size={16} />
+                  <input
+                    name="email"
+                    type="email"
+                    placeholder="gardener@zenbotanica.com"
+                    onChange={handleChange}
+                    className="w-full bg-transparent border-b border-[#1a2e28] pl-8 py-3 text-[#e7e3d8] focus:outline-none focus:border-[#4f8a6f] transition-colors text-sm placeholder:text-[#e7e3d8]/30"
+                    required
                   />
                 </div>
               </div>
 
-              <div className="space-y-1 relative">
-                <label className="text-[9px] font-bold text-primary tracking-widest uppercase">Password</label>
+              <div className="space-y-2 relative">
+                <label className="text-[10px] font-bold text-[#4f8a6f] tracking-widest uppercase">Password</label>
                 <div className="relative group">
-                  <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-foreground/20 group-focus-within:text-primary transition-colors" size={14} />
-                  <input 
-                    type={showPassword ? 'text' : 'password'} 
-                    name="password" 
-                    placeholder="••••••••" 
-                    onChange={handleChange} 
-                    className="w-full bg-transparent border-b border-border pl-6 py-2 text-foreground focus:outline-none focus:border-primary transition-colors text-xs" 
-                    required 
+                  <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-[#e7e3d8]/30 group-focus-within:text-[#4f8a6f] transition-colors" size={16} />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    placeholder="••••••••"
+                    onChange={handleChange}
+                    className="w-full bg-transparent border-b border-[#1a2e28] pl-8 py-3 text-[#e7e3d8] focus:outline-none focus:border-[#4f8a6f] transition-colors text-sm placeholder:text-[#e7e3d8]/30"
+                    required
                   />
-                  <button 
-                    type="button" 
-                    onClick={() => setShowPassword(!showPassword)} 
-                    className="absolute right-0 top-1/2 -translate-y-1/2 text-foreground/20 hover:text-primary transition-colors"
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-[#e7e3d8]/30 hover:text-[#4f8a6f] transition-colors"      
                   >
-                    {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
-              <div className="pt-4">
-                <button 
-                  type="submit" 
-                  disabled={loading} 
-                  className="w-full md:w-max btn-primary"
+              <div className="pt-6">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3.5 bg-[#4f8a6f] hover:bg-[#3c7a5e] text-[#e7e3d8] font-bold text-sm tracking-widest uppercase rounded-xl transition-all duration-300 shadow-lg shadow-[#4f8a6f]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Authenticating...' : 'Sign In'}
+                  {loading ? 'Authenticating...' : 'Enter the Garden'}
                 </button>
               </div>
             </form>
 
-            <p className="mt-8 text-[9px] text-foreground/30 tracking-widest uppercase">
-              No account? <Link to="/signup" className="text-foreground border-b border-foreground/20 hover:text-primary transition-colors ml-2">Join the vision</Link>
+            <p className="mt-8 text-[10px] text-[#e7e3d8]/40 tracking-widest uppercase text-center md:text-left">
+              New to the garden?{' '}
+              <Link to="/signup" className="text-[#e7e3d8] border-b border-[#e7e3d8]/30 hover:text-[#4f8a6f] hover:border-[#4f8a6f] transition-colors ml-1">
+                Plant your first seed
+              </Link>
             </p>
           </div>
         </div>

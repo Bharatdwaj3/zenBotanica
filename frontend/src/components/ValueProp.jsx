@@ -19,7 +19,7 @@ const STEPS = [
 export const ValueProp = () => (
   <section className="py-24 text-center container mx-auto px-6">
     <h2 className="font-display text-5xl tracking-wide mb-4">How It Works</h2>
-    <h3 className="font-accent text-primary text-2xl font-semibold mb-6">
+    <h3 className="font-accent italic text-primary text-2xl font-semibold mb-6">
       &ldquo;One grove card, every format.&rdquo;
     </h3>
     <p className="max-w-2xl mx-auto text-lg text-foreground/60 mb-16">
