@@ -1,5 +1,5 @@
 
-import {Home, Explore, NewStory, PdfViewer, ComingSoon} from "./pages/index";
+import {Home, Explore, NewSpecimen, PdfViewer, ComingSoon} from "./pages/index";
 import Profile from "./pages/Profile";
 import CompleteProfile from "./pages/CompleteProfile";
 import NotFound from "./pages/NotFound";
@@ -34,7 +34,7 @@ function App() {
               <Route path="/cart" element={<ProtectedRoute path="/cart"><Cart/></ProtectedRoute>}/>
               <Route path="/wishlist" element={<ProtectedRoute path="/wishlist"><Wishlist/></ProtectedRoute>}/>
 
-              <Route path="/staff/new" element={<ProtectedRoute path="/staff/new"><NewStory /></ProtectedRoute>} />
+              <Route path="/staff/new" element={<ProtectedRoute path="/staff/new"><NewSpecimen /></ProtectedRoute>} />
               <Route path="/read/:id" element={<ProtectedRoute path="/read/:id"><PdfViewer /></ProtectedRoute>} />
               <Route path="/coming-soon" element={<ComingSoon />} />
               <Route path="/unauthorized" element={<Unauthorized />} />

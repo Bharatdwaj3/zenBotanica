@@ -2,74 +2,35 @@ import prisma from "../config/prisma-client.ts";
 import { GARDENERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } from "../config/env.config.ts";
 
 const specimens = [
-  { title: "To Kill a Mockingbird", author: "Harper Lee", publisher: "Harper Perennial", isbn: "9780061120084", genre: ["FICTION"] },
-  { title: "Pride and Prejudice", author: "Jane Austen", publisher: "Penguin Classics", isbn: "9780141439518", genre: ["FICTION"] },
-  { title: "The Great Gatsby", author: "F. Scott Fitzgerald", publisher: "Scribner", isbn: "9780743273565", genre: ["FICTION"] },
-  { title: "One Hundred Years of Solitude", author: "Gabriel García Márquez", publisher: "Harper Perennial", isbn: "9780060883287", genre: ["FICTION"] },
-
-  { title: "Sapiens", author: "Yuval Noah Harari", publisher: "Harper", isbn: "9780062316097", genre: ["NON_FICTION"] },
-  { title: "Educated", author: "Tara Westover", publisher: "Random House", isbn: "9780399590504", genre: ["NON_FICTION"] },
-  { title: "The Immortal Life of Henrietta Lacks", author: "Rebecca Skloot", publisher: "Crown", isbn: "9781400052189", genre: ["NON_FICTION"] },
-  { title: "Into the Wild", author: "Jon Krakauer", publisher: "Anchor", isbn: "9780385486804", genre: ["NON_FICTION"] },
-
-  { title: "The Hobbit", author: "J.R.R. Tolkien", publisher: "Houghton Mifflin", isbn: "9780547928227", genre: ["FANTASY"] },
-  { title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", publisher: "Scholastic", isbn: "9780590353427", genre: ["FANTASY"] },
-  { title: "A Game of Thrones", author: "George R.R. Martin", publisher: "Bantam", isbn: "9780553573404", genre: ["FANTASY"] },
-  { title: "The Name of the Wind", author: "Patrick Rothfuss", publisher: "DAW Specimens", isbn: "9780756404741", genre: ["FANTASY"] },
-
-  { title: "A Brief History of Time", author: "Stephen Hawking", publisher: "Bantam", isbn: "9780553380163", genre: ["SCIENCE"] },
-  { title: "Cosmos", author: "Carl Sagan", publisher: "Ballantine Specimens", isbn: "9780345539434", genre: ["SCIENCE"] },
-  { title: "The Selfish Gene", author: "Richard Dawkins", publisher: "Oxford University Press", isbn: "9780198788607", genre: ["SCIENCE"] },
-  { title: "The Origin of Species", author: "Charles Darwin", publisher: "Penguin Classics", isbn: "9780451529060", genre: ["SCIENCE"] },
-
-  { title: "Dune", author: "Frank Herbert", publisher: "Ace Specimens", isbn: "9780441172719", genre: ["SCIENCE_FICTION"] },
-  { title: "1984", author: "George Orwell", publisher: "Signet Classics", isbn: "9780451524935", genre: ["SCIENCE_FICTION"] },
-  { title: "Brave New World", author: "Aldous Huxley", publisher: "Harper Perennial", isbn: "9780060850524", genre: ["SCIENCE_FICTION"] },
-  { title: "Ender's Game", author: "Orson Scott Card", publisher: "Tor Specimens", isbn: "9780812550702", genre: ["SCIENCE_FICTION"] },
-
-  { title: "The Girl with the Dragon Tattoo", author: "Stieg Larsson", publisher: "Vintage Crime", isbn: "9780307949486", genre: ["MYSTERY"] },
-  { title: "Gone Girl", author: "Gillian Flynn", publisher: "Broadway Specimens", isbn: "9780307588371", genre: ["MYSTERY"] },
-  { title: "And Then There Were None", author: "Agatha Christie", publisher: "William Morrow", isbn: "9780062073488", genre: ["MYSTERY"] },
-  { title: "The Big Sleep", author: "Raymond Chandler", publisher: "Vintage Crime", isbn: "9780394758282", genre: ["MYSTERY"] },
-
-  { title: "Me Before You", author: "Jojo Moyes", publisher: "Penguin Specimens", isbn: "9780143124542", genre: ["ROMANCE"] },
-  { title: "The Notespecimen", author: "Nicholas Sparks", publisher: "Grand Central Publishing", isbn: "9780446605236", genre: ["ROMANCE"] },
-  { title: "Outlander", author: "Diana Gabaldon", publisher: "Dell", isbn: "9780440212560", genre: ["ROMANCE"] },
-  { title: "The Fault in Our Stars", author: "John Green", publisher: "Dutton Specimens", isbn: "9780525478812", genre: ["ROMANCE"] },
-
-  { title: "Dracula", author: "Bram Stoker", publisher: "Penguin Classics", isbn: "9780141439846", genre: ["HORROR"] },
-  { title: "The Shining", author: "Stephen King", publisher: "Anchor", isbn: "9780307743657", genre: ["HORROR"] },
-  { title: "Frankenstein", author: "Mary Shelley", publisher: "Penguin Classics", isbn: "9780141439471", genre: ["HORROR"] },
-  { title: "It", author: "Stephen King", publisher: "Scribner", isbn: "9781501142970", genre: ["HORROR"] },
-
-  { title: "Guns, Germs, and Steel", author: "Jared Diamond", publisher: "W. W. Norton", isbn: "9780393317558", genre: ["HISTORY"] },
-  { title: "A People's History of the United States", author: "Howard Zinn", publisher: "Harper Perennial", isbn: "9780062397348", genre: ["HISTORY"] },
-  { title: "The Diary of a Young Girl", author: "Anne Frank", publisher: "Bantam", isbn: "9780553296983", genre: ["HISTORY"] },
-  { title: "1776", author: "David McCullough", publisher: "Simon & Schuster", isbn: "9780743226721", genre: ["HISTORY"] },
-
-  { title: "Steve Jobs", author: "Walter Isaacson", publisher: "Simon & Schuster", isbn: "9781451648539", genre: ["BIOGRAPHY"] },
-  { title: "Long Walk to Freedom", author: "Nelson Mandela", publisher: "Back Bay Specimens", isbn: "9780316548182", genre: ["BIOGRAPHY"] },
-  { title: "The Autobiography of Malcolm X", author: "Malcolm X", publisher: "Ballantine Specimens", isbn: "9780345350688", genre: ["BIOGRAPHY"] },
-  { title: "Benjamin Franklin: An American Life", author: "Walter Isaacson", publisher: "Simon & Schuster", isbn: "9780743258074", genre: ["BIOGRAPHY"] },
-
-  { title: "Leaves of Grass", author: "Walt Whitman", publisher: "Penguin Classics", isbn: "9780140421996", genre: ["POETRY"] },
-  { title: "The Complete Poems of Emily Dickinson", author: "Emily Dickinson", publisher: "Back Bay Specimens", isbn: "9780316184137", genre: ["POETRY"] },
-  { title: "Milk and Honey", author: "Rupi Kaur", publisher: "Andrews McMeel", isbn: "9781449474256", genre: ["POETRY"] },
-  { title: "The Waste Land and Other Poems", author: "T.S. Eliot", publisher: "Mariner Specimens", isbn: "9780156948777", genre: ["POETRY"] },
-
-  { title: "Hamlet", author: "William Shakespeare", publisher: "Simon & Schuster", isbn: "9780743477123", genre: ["DRAMA"] },
-  { title: "A Streetcar Named Desire", author: "Tennessee Williams", publisher: "New Directions", isbn: "9780811216029", genre: ["DRAMA"] },
+  { title: "Monstera Deliciosa", author: "Nature", publisher: "Tropical Nursery", isbn: "9780000000001", genre: ["FLORA"] },
+  { title: "Ficus Lyrata", author: "Nature", publisher: "Indoor Nursery", isbn: "9780000000002", genre: ["FLORA"] },
+  { title: "Bonsai Juniper", author: "Master Gardener", publisher: "Zen Nursery", isbn: "9780000000003", genre: ["FLORA"] },
+  { title: "Red-Eared Slider", author: "Nature", publisher: "Aquatic Habitat", isbn: "9780000000004", genre: ["FAUNA"] },
+  { title: "Poecilotheria Metallica", author: "Nature", publisher: "Exotic Habitat", isbn: "9780000000005", genre: ["FAUNA"] },
+  { title: "Axolotl", author: "Nature", publisher: "Aquatic Habitat", isbn: "9780000000006", genre: ["FAUNA"] },
+  { title: "Amanita Muscaria", author: "Nature", publisher: "Forest Floor", isbn: "9780000000007", genre: ["FUNGUS"] },
+  { title: "Lion's Mane", author: "Nature", publisher: "Woodland Nursery", isbn: "9780000000008", genre: ["FUNGUS"] },
+  { title: "Amethyst Geode", author: "Earth", publisher: "Mineral Deposits", isbn: "9780000000009", genre: ["MINERAL"] },
+  { title: "Obsidian", author: "Earth", publisher: "Volcanic Glass", isbn: "9780000000010", genre: ["MINERAL"] },
+  { title: "Antique Brass Compass", author: "Artisan", publisher: "Vintage Artifacts", isbn: "9780000000011", genre: ["ARTIFACT"] },
+  { title: "Victorian Terrarium", author: "Artisan", publisher: "Glassworks", isbn: "9780000000012", genre: ["ARTIFACT"] },
+  { title: "Holy Basil (Tulsi)", author: "Nature", publisher: "Herbal Garden", isbn: "9780000000013", genre: ["HERB"] },
+  { title: "Lavender", author: "Nature", publisher: "Herbal Garden", isbn: "9780000000014", genre: ["HERB"] },
+  { title: "Heirloom Tomato Seeds", author: "Nature", publisher: "Seed Vault", isbn: "9780000000015", genre: ["SEED"] },
+  { title: "Lotus Seeds", author: "Nature", publisher: "Seed Vault", isbn: "9780000000016", genre: ["SEED"] },
+  { title: "Mysterious Glowing Spore", author: "Unknown", publisher: "Deep Cave", isbn: "9780000000017", genre: ["UNKNOWN"] },
+  { title: "Unidentified Fossil", author: "Unknown", publisher: "Excavation Site", isbn: "9780000000018", genre: ["UNKNOWN"] },
 ];
 
 const userEmails = [
-  "ravi.sharma@library.local",
-  "meera.iyer@library.local",
-  "arjun.verma@library.local",
-  "priya.nair@library.local",
-  "aditya.rao@library.local",
-  "sneha.kulkarni@library.local",
-  "karan.mehta@library.local",
-  "divya.menon@library.local",
+  "elara.woods@mionchoillte.local",
+  "silas.green@mionchoillte.local",
+  "aria.leaf@mionchoillte.local",
+  "orion.root@mionchoillte.local",
+  "luna.bloom@mionchoillte.local",
+  "atlas.stone@mionchoillte.local",
+  "nova.seed@mionchoillte.local",
+  "rowan.branch@mionchoillte.local",
 ];
 
 async function resolveUserId(email) {

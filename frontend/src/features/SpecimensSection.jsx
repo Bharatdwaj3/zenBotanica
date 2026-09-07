@@ -7,8 +7,8 @@ const STATUS_FILTERS = ['All', 'Featured', 'Weekly Reads', 'Out of Stock'];
 const PAGE_SIZE = 12;
 
 const GENRE_LABELS = {
-  SCIENCE_FICTION: 'Sci-Fi',
-  NON_FICTION: 'Non-Fiction',
+  FLORA: 'Flora',
+  FAUNA: 'Fauna',
   SELF_HELP: 'Self-Help',
 };
 const formatGenre = (genre) => GENRE_LABELS[genre] || genre.charAt(0) + genre.slice(1).toLowerCase();
