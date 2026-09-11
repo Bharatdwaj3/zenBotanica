@@ -12,8 +12,8 @@ done
 
 echo "=== 3. Operators: CloudNativePG, Argo Rollouts, Argo CD (server-side, avoids the annotation-size error) ==="
 kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.25/releases/cnpg-1.25.0.yaml
-kubectl apply --server-side -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
-kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply --server-side -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/download/v1.7.2/install.yaml
+kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/manifests/v2.11.0/install.yaml
 
 echo "=== 4. Waiting for operator pods to be ready ==="
 kubectl wait --for=condition=Ready pods --all -n cnpg-system --timeout=120s || true
