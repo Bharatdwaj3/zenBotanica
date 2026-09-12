@@ -28,22 +28,22 @@ resources:
 images:
   - name: grove
     newName: ghcr.io/bharatdwaj3/grove
-    newTag: 4b4fc0e
+    newTag: faff575
   - name: tending
     newName: ghcr.io/bharatdwaj3/tending
-    newTag: 4b4fc0e
+    newTag: faff575
   - name: gardeners
     newName: ghcr.io/bharatdwaj3/gardeners
-    newTag: 4b4fc0e
+    newTag: faff575
   - name: firebase
     newName: ghcr.io/bharatdwaj3/firebase
     newTag: v3
   - name: ghcr.io/bharatdwaj3/frontend
     newName: ghcr.io/bharatdwaj3/frontend
-    newTag: 4b4fc0e
+    newTag: faff575
   - name: marketplace
     newName: ghcr.io/bharatdwaj3/marketplace
-    newTag: 4b4fc0e
+    newTag: faff575
   - name: visitor-services
     newName: ghcr.io/bharatdwaj3/visitor-services
-    newTag: 4b4fc0e
+    newTag: faff575
