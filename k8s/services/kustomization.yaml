@@ -7,27 +7,21 @@ resources:
   - deployment/frontend-rollout.yaml
   - deployment/firebase-rollout.yaml
   - deployment/mailhog-rollout.yaml
-  - deployment/grove-db-rollout.yaml
-  - deployment/tending-db-rollout.yaml
-  - deployment/gardeners-db-rollout.yaml
+  - deployment/marketplace-rollout.yaml
+  - deployment/visitor-services-rollout.yaml
 
-  - deployment/grove-data-persistentvolumeclaim.yaml
-  - deployment/tending-data-persistentvolumeclaim.yaml
-  - deployment/gardeners-data-persistentvolumeclaim.yaml
-  - deployment/firebase-data-persistentvolumeclaim.yaml
 
   - service/grove-service.yaml
   - service/tending-service.yaml
   - service/gardeners-service.yaml
+  - service/marketplace-service.yaml
+  - service/visitor-services-service.yaml
 
-  - service/grove-db-service.yaml
-  - service/tending-db-service.yaml
-  - service/gardeners-db-service.yaml
 
   - service/frontend-service.yaml
   - service/firebase-service.yaml
   - service/mailhog-service.yaml
-  
+
 
   - service/frontend-nginx-config.yaml
 
@@ -46,4 +40,10 @@ images:
     newTag: v3
   - name: ghcr.io/bharatdwaj3/frontend
     newName: ghcr.io/bharatdwaj3/frontend
+    newTag: 4b4fc0e
+  - name: marketplace
+    newName: ghcr.io/bharatdwaj3/marketplace
+    newTag: 4b4fc0e
+  - name: visitor-services
+    newName: ghcr.io/bharatdwaj3/visitor-services
     newTag: 4b4fc0e
