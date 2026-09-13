@@ -28,22 +28,22 @@ resources:
 images:
   - name: grove
     newName: ghcr.io/bharatdwaj3/botany-grove
-    newTag: faff575
+    newTag: 3476880
   - name: tending
     newName: ghcr.io/bharatdwaj3/botany-tending
-    newTag: faff575
+    newTag: 3476880
   - name: gardeners
     newName: ghcr.io/bharatdwaj3/botany-gardeners
-    newTag: faff575
+    newTag: 3476880
   - name: firebase
     newName: ghcr.io/bharatdwaj3/firebase
     newTag: v3
   - name: ghcr.io/bharatdwaj3/frontend
     newName: ghcr.io/bharatdwaj3/botany-frontend
-    newTag: faff575
+    newTag: 3476880
   - name: marketplace
     newName: ghcr.io/bharatdwaj3/botany-marketplace
-    newTag: faff575
+    newTag: 3476880
   - name: visitor-services
     newName: ghcr.io/bharatdwaj3/botany-visitor-services
-    newTag: faff575
+    newTag: 3476880
