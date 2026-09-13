@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        service: [grove, tending, gardeners, frontend]
+        service: [grove, tending, gardeners, frontend, marketplace, visitor-services]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -43,7 +43,7 @@ jobs:
 
     strategy:
       matrix:
-        service: [grove, tending, gardeners, frontend]
+        service: [grove, tending, gardeners, frontend, marketplace, visitor-services]
 
     steps:
       - uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           push: true
-          tags: ghcr.io/${{ env.OWNER_LC }}/${{ env.SERVICE_LC }}:${{ env.SHORT_SHA }}
+          tags: ghcr.io/${{ env.OWNER_LC }}/botany-${{ env.SERVICE_LC }}:${{ env.SHORT_SHA }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
   update-manifest:
@@ -88,6 +88,8 @@ jobs:
             -e "/^  - name: tending$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
             -e "/^  - name: gardeners$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
             -e "/^  - name: ghcr.io\/bharatdwaj3\/frontend$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
+            -e "/^  - name: marketplace$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
+            -e "/^  - name: visitor-services$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
             k8s/services/kustomization.yaml
 
       - name: Commit and push updated manifest
