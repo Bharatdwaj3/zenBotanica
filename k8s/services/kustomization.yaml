@@ -2,26 +2,39 @@ namespace: bonsai
 
 resources:
   - deployment/grove-rollout.yaml
+  - deployment/grove-db-rollout.yaml
+  - deployment/grove-data-persistentvolumeclaim.yaml
   - deployment/tending-rollout.yaml
+  - deployment/tending-db-rollout.yaml
+  - deployment/tending-data-persistentvolumeclaim.yaml
   - deployment/gardeners-rollout.yaml
+  - deployment/gardeners-db-rollout.yaml
+  - deployment/gardeners-data-persistentvolumeclaim.yaml
   - deployment/frontend-rollout.yaml
   - deployment/firebase-rollout.yaml
+  - deployment/firebase-data-persistentvolumeclaim.yaml
   - deployment/mailhog-rollout.yaml
   - deployment/marketplace-rollout.yaml
+  - deployment/marketplace-db-rollout.yaml
+  - deployment/marketplace-data-persistentvolumeclaim.yaml
   - deployment/visitor-services-rollout.yaml
-
+  - deployment/visitor-services-db-rollout.yaml
+  - deployment/visitor-services-data-persistentvolumeclaim.yaml
 
   - service/grove-service.yaml
+  - service/grove-db-service.yaml
   - service/tending-service.yaml
+  - service/tending-db-service.yaml
   - service/gardeners-service.yaml
+  - service/gardeners-db-service.yaml
   - service/marketplace-service.yaml
+  - service/marketplace-db-service.yaml
   - service/visitor-services-service.yaml
-
+  - service/visitor-services-db-service.yaml
 
   - service/frontend-service.yaml
   - service/firebase-service.yaml
   - service/mailhog-service.yaml
-
 
   - service/frontend-nginx-config.yaml
 
