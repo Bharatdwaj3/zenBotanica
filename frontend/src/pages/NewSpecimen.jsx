@@ -22,9 +22,9 @@ export default function NewSpecimen() {
   const [error, setError] = useState('');
   const [form, setForm] = useState({
     title: '',
-    author: '',
-    publisher: '',
-    isbn: '',
+    cultivator: '',
+    nursery: '',
+    accessionNumber: '',
     genre: [],
     totalCopies: 1,
     availableCopies: 1,
@@ -45,9 +45,9 @@ export default function NewSpecimen() {
         const { data } = await getSpecimen(editId);
         setForm({
           title: data.title || '',
-          author: data.author || '',
-          publisher: data.publisher || '',
-          isbn: data.isbn || '',
+          cultivator: data.cultivator || '',
+          nursery: data.nursery || '',
+          accessionNumber: data.accessionNumber || '',
           genre: data.genre || [],
           totalCopies: data.totalCopies ?? 1,
           availableCopies: data.availableCopies ?? 1,
@@ -90,7 +90,7 @@ export default function NewSpecimen() {
       setForm((prev) => ({
         ...prev,
         title: prev.title || data.title || '',
-        author: prev.author || data.author || '',
+        cultivator: prev.cultivator || data.cultivator || '',
       }));
       if (data.suggestedCoverUrl) {
         setSuggestedCoverUrl(data.suggestedCoverUrl);
@@ -114,8 +114,8 @@ export default function NewSpecimen() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!form.title.trim() || !form.author.trim() || !form.isbn.trim()) {
-      setError('Title, cultivator, and ISBN are required');
+    if (!form.title.trim() || !form.cultivator.trim() || !form.accessionNumber.trim()) {
+      setError('Title, cultivator, and accession number are required');
       return;
     }
     setSaving(true);
@@ -166,7 +166,7 @@ export default function NewSpecimen() {
     );
   }
 
-  if (user && user.role !== 'admin') {
+  if (user && user.role !== 'curator') {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-6">
         <div className="text-center">
@@ -217,8 +217,8 @@ export default function NewSpecimen() {
               <div>
                 <label className="block text-sm font-medium text-foreground/70 mb-1">Cultivator</label>
                 <input
-                  name="author"
-                  value={form.author}
+                  name="cultivator"
+                  value={form.cultivator}
                   onChange={handleChange}
                   className="w-full px-4 py-2.5 bg-card border border-border rounded-xl focus:outline-none focus:border-primary transition-colors"
                 />
@@ -226,8 +226,8 @@ export default function NewSpecimen() {
               <div>
                 <label className="block text-sm font-medium text-foreground/70 mb-1">Nursery</label>
                 <input
-                  name="publisher"
-                  value={form.publisher}
+                  name="nursery"
+                  value={form.nursery}
                   onChange={handleChange}
                   className="w-full px-4 py-2.5 bg-card border border-border rounded-xl focus:outline-none focus:border-primary transition-colors"
                 />
@@ -236,10 +236,10 @@ export default function NewSpecimen() {
 
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-foreground/70 mb-1">ISBN</label>
+                <label className="block text-sm font-medium text-foreground/70 mb-1">Accession Number</label>
                 <input
-                  name="isbn"
-                  value={form.isbn}
+                  name="accessionNumber"
+                  value={form.accessionNumber}
                   onChange={handleChange}
                   className="w-full px-4 py-2.5 bg-card border border-border rounded-xl focus:outline-none focus:border-primary transition-colors"
                 />

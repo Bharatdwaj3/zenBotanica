@@ -1,0 +1,25 @@
+import 'dotenv/config';
+
+export const PORT = process.env.PORT || 4004;
+export const JWT_ACC_SECRECT = process.env.JWT_ACC_SECRECT as string;
+export const JWT_ACC_EXPIRES_IN = process.env.JWT_ACC_EXPIRES_IN || '15m';
+export const JWT_REF_SECRECT = process.env.JWT_REF_SECRECT as string;
+export const JWT_REF_EXPIRES_IN = process.env.JWT_REF_EXPIRES_IN || '7d';
+export const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@library.local';
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+export const PgSql_User = process.env.PgSql_User as string;
+export const PgSql_Password = process.env.PgSql_Password as string;
+export const PgSql_Database = process.env.PgSql_Database as string;
+export const PgSql_Host = process.env.PgSql_Host || 'visitor-db';
+export const PgSql_Port = process.env.PgSql_Port || '5432';
+const EPword = encodeURIComponent(PgSql_Password);
+export const DEFAULT_USER_PASSWORD = process.env.DEFAULT_USER_PASSWORD || 'Password123!';
+export const DATABASE_URL = `postgresql://${PgSql_User}:${EPword}@${PgSql_Host}:${PgSql_Port}/${PgSql_Database}?schema=public`;
+if (!JWT_ACC_SECRECT) throw new Error('JWT_ACC_SECRECT is missing from .env');
+if (!JWT_REF_SECRECT) throw new Error('JWT_REF_SECRECT is missing from .env');
+if (!DATABASE_URL) throw new Error('DATABASE_URL is missing from .env');
+export const GARDENERS_SERVICE_URL = process.env.GARDENERS_SERVICE_URL as string;
+if (!GARDENERS_SERVICE_URL) throw new Error('GARDENERS_SERVICE_URL is missing from .env');
+export const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET as string;
+if (!INTERNAL_SERVICE_SECRET) throw new Error('INTERNAL_SERVICE_SECRET is missing from .env');

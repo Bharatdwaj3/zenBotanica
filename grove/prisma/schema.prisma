@@ -24,12 +24,12 @@ enum Genre {
   UNKNOWN
 }
 
-model book {
+model specimen {
   id              Int       @id @default(autoincrement())
   title           String
-  author          String
-  publisher       String
-  isbn            String    @unique
+  cultivator          String
+  nursery       String
+  accessionNumber            String    @unique
   genre           Genre[]
   totalCopies     Int       @default(1)
   availableCopies Int       @default(1)
@@ -48,19 +48,19 @@ model book {
 model cart_item {
   id        Int      @id @default(autoincrement())
   userId    Int
-  bookId    Int
-  book      book     @relation(fields: [bookId], references: [id])
+  specimenId    Int
+  specimen      specimen     @relation(fields: [specimenId], references: [id])
   addedAt   DateTime @default(now())
 
-  @@unique([userId, bookId])
+  @@unique([userId, specimenId])
 }
 
 model wishlist_item {
   id        Int      @id @default(autoincrement())
   userId    Int
-  bookId    Int
-  book      book     @relation(fields: [bookId], references: [id])
+  specimenId    Int
+  specimen      specimen     @relation(fields: [specimenId], references: [id])
   addedAt   DateTime @default(now())
 
-  @@unique([userId, bookId])
+  @@unique([userId, specimenId])
 }

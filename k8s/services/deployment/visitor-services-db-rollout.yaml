@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visitor-services-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: visitor-services-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app-name: visitor-services-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: visitor-services-secrets
+                  key: PgSql_User
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: visitor-services-secrets
+                  key: PgSql_Password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: visitor-services-secrets
+                  key: PgSql_Database
+          image: postgres:15-alpine
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - visitor_user
+                - -d
+                - visitor_db
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: visitor-services-db-ctr
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: visitor-services-data
+      restartPolicy: Always
+      volumes:
+        - name: visitor-services-data
+          persistentVolumeClaim:
+            claimName: visitor-services-data
+status: {}

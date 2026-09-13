@@ -14,7 +14,7 @@ const addToCart = async (req: AuthRequest, res: Response): Promise<void> => {
     }
 
     const cartItem = await prisma.cart_item.create({
-      data: { userId: userId!, bookId: Number(specimenId) },
+      data: { userId: userId!, specimenId: Number(specimenId) },
     });
     res.status(201).json(cartItem);
   } catch (error: any) {
@@ -29,11 +29,11 @@ const addToCart = async (req: AuthRequest, res: Response): Promise<void> => {
 
 const removeFromCart = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const specimenId = Number(req.params.bookId);
+    const specimenId = Number(req.params.specimenId);
     const userId = req.user?.id;
 
     await prisma.cart_item.delete({
-      where: { userId_bookId: { userId: userId!, bookId: specimenId } },
+      where: { userId_specimenId: { userId: userId!, specimenId: specimenId } },
     });
     res.status(200).json({ message: "Removed from cart" });
   } catch (error: any) {
@@ -51,7 +51,7 @@ const listCart = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.id;
     const cartItems = await prisma.cart_item.findMany({
       where: { userId },
-      include: { book: true },
+      include: { specimen: true },
       orderBy: { addedAt: "desc" },
     });
     res.status(200).json(cartItems);
@@ -86,10 +86,10 @@ const checkout = async (req: AuthRequest, res: Response): Promise<void> => {
           "Content-Type": "application/json",
           "x-internal-secret": INTERNAL_SERVICE_SECRET,
         },
-        body: JSON.stringify({ userId, role: userRole, bookId: item.bookId }),
+        body: JSON.stringify({ userId, role: userRole, specimenId: item.specimenId }),
       });
       const body = await borrowRes.json();
-      results.push({ bookId: item.bookId, success: borrowRes.ok, message: borrowRes.ok ? "Borrowed" : body.message });
+      results.push({ specimenId: item.specimenId, success: borrowRes.ok, message: borrowRes.ok ? "Borrowed" : body.message });
 
       if (borrowRes.ok) {
         await prisma.cart_item.delete({ where: { id: item.id } });

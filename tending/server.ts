@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import sessionRoutes from './routes/session.routes.ts';
 import internalRoutes from './routes/internal.routes.ts';
 import penaltyRoutes from './routes/penalty.routes.ts';
+import careRoutes from './routes/care.routes.ts';
 import { PORT, FRONTEND_ORIGIN } from './config/env.config.ts';
 import { startCareReminderCron } from './jobs/care-reminder.job.ts';
 const app = express();
@@ -13,6 +14,7 @@ app.use(cookieParser());
 app.use('/api/v1/session', sessionRoutes);
 app.use('/api/v1/internal', internalRoutes);
 app.use('/api/v1/penalty', penaltyRoutes);
+app.use('/api/v1/care', careRoutes);
 app.listen(PORT, () => {
   console.log(`Tending service running on port ${PORT}`);
   

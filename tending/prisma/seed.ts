@@ -5,28 +5,28 @@ import { GARDENERS_SERVICE_URL, GROVE_SERVICE_URL, INTERNAL_SERVICE_SECRET } fro
 // session/penalty have no unique field to upsert on. Running it twice creates
 // duplicate rows. Penalty for a one-off test seed, just don't re-run blindly.
 
-const ADMIN_EMAIL = 'admin@library.local';
+const ADMIN_EMAIL = 'curator@mionchoillte.local';
 
 const userEmails = [
-  'ravi.sharma@library.local',
-  'meera.iyer@library.local',
-  'arjun.verma@library.local',
-  'priya.nair@library.local',
-  'aditya.rao@library.local',
-  'sneha.kulkarni@library.local',
-  'karan.mehta@library.local',
-  'divya.menon@library.local',
+  'elara.woods@mionchoillte.local',
+  'silas.green@mionchoillte.local',
+  'aria.leaf@mionchoillte.local',
+  'orion.root@mionchoillte.local',
+  'luna.bloom@mionchoillte.local',
+  'atlas.stone@mionchoillte.local',
+  'nova.seed@mionchoillte.local',
+  'rowan.branch@mionchoillte.local',
 ];
 
-const bookIsbns = [
-  '9780061120084', // To Kill a Mockingbird
-  '9780141439518', // Pride and Prejudice
-  '9780743273565', // The Great Gatsby
-  '9780062316097', // Sapiens
-  '9780547928227', // The Hobbit
-  '9780553380163', // A Brief History of Time
-  '9780441172719', // Dune
-  '9780307949486', // The Girl with the Dragon Tattoo
+const accessionNumbers = [
+  '9780000000001', // Monstera Deliciosa
+  '9780000000002', // Ficus Lyrata
+  '9780000000004', // Red-Eared Slider
+  '9780000000007', // Amanita Muscaria
+  '9780000000009', // Amethyst Geode
+  '9780000000011', // Antique Brass Compass
+  '9780000000013', // Holy Basil (Tulsi)
+  '9780000000015', // Heirloom Tomato Seeds
 ];
 
 async function resolveUserId(email: string): Promise<number> {
@@ -38,11 +38,11 @@ async function resolveUserId(email: string): Promise<number> {
   return data.id;
 }
 
-async function resolveBookId(isbn: string): Promise<number> {
-  const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/internal/book/by-isbn/${isbn}`, {
+async function resolveSpecimenId(accessionNumber: string): Promise<number> {
+  const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/internal/specimen/by-accession/${accessionNumber}`, {
     headers: { 'x-internal-secret': INTERNAL_SERVICE_SECRET },
   });
-  if (!res.ok) throw new Error(`Could not resolve book for ISBN ${isbn} (status ${res.status})`);
+  if (!res.ok) throw new Error(`Could not resolve specimen for accession number ${accessionNumber} (status ${res.status})`);
   const data = await res.json();
   return data.id;
 }
@@ -61,10 +61,10 @@ async function main() {
     userIds.push(await resolveUserId(email));
   }
 
-  console.log('Resolving book IDs from grove service...');
-  const bookIds: number[] = [];
-  for (const isbn of bookIsbns) {
-    bookIds.push(await resolveBookId(isbn));
+  console.log('Resolving specimen IDs from grove service...');
+  const specimenIds: number[] = [];
+  for (const accessionNumber of accessionNumbers) {
+    specimenIds.push(await resolveSpecimenId(accessionNumber));
   }
 
   // Mix of session states: active (not due yet), overdue, returned
@@ -84,7 +84,7 @@ async function main() {
     await prisma.loan.create({
       data: {
         userId: userIds[l.userIndex],
-        bookId: bookIds[l.bookIndex],
+        specimenId: specimenIds[l.bookIndex],
         borrowedAt: daysFromNow(l.dueInDays - 14),
         dueAt: daysFromNow(l.dueInDays),
         returnedAt: l.returned ? daysFromNow(l.dueInDays - 2) : null,

@@ -13,12 +13,21 @@ datasource db {
 }
 
 enum Role {
-  admin
-  faculty
-  student
+  curator
+  botanist
+  apprentice
+  caretaker
+  tourist
+  farmer
+  merchant
 }
 
 enum Subject {
+  Botany
+  Ecology
+  Horticulture
+  Mycology
+  Geology
   Geography
   Social_Studies
   Computer_Science
@@ -38,11 +47,15 @@ model user {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  faculty      faculty?
-  student      student?
+  botanist      botanist?
+  apprentice    apprentice?
+  caretaker     caretaker?
+  tourist       tourist?
+  farmer        farmer?
+  merchant      merchant?
 }
 
-model faculty {
+model botanist {
   id        Int       @id @default(autoincrement())
   email     String    @unique
   Fname     String
@@ -57,7 +70,7 @@ model faculty {
   deletedAt DateTime?
 }
 
-model student {
+model apprentice {
   id        Int       @id @default(autoincrement())
   email     String    @unique
   Fname     String
@@ -65,6 +78,56 @@ model student {
   age       Int
   gender    String
   Subjects  Subject
+  userId    Int?      @unique
+  user      user?     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+model caretaker {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  Fname     String
+  Lname     String
+  age       Int
+  gender    String
+  userId    Int?      @unique
+  user      user?     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model tourist {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  Fname     String?
+  Lname     String?
+  userId    Int?      @unique
+  user      user?     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model farmer {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  Fname     String
+  Lname     String
+  userId    Int?      @unique
+  user      user?     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model merchant {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  Fname     String
+  Lname     String
+  approved  Boolean   @default(false)
   userId    Int?      @unique
   user      user?     @relation(fields: [userId], references: [id])
   createdAt DateTime  @default(now())

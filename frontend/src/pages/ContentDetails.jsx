@@ -13,7 +13,7 @@ const ContentDetails = () => {
   const dispatch = useDispatch();
   const specimenmarkedSpecimens = useSelector((state) => state.specimenmark.specimens);
   const { user } = useSelector((state) => state.avatar);
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'curator';
   const [specimen, setSpecimen] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tending, setTending] = useState(false);
@@ -61,7 +61,7 @@ const ContentDetails = () => {
   };
 
   const handleToggleBookmark = () => {
-    dispatch(toggleBookmark({ id: specimen.id, title: specimen.title, author: specimen.author, coverUrl: specimen.coverUrl }));
+    dispatch(toggleBookmark({ id: specimen.id, title: specimen.title, cultivator: specimen.cultivator, coverUrl: specimen.coverUrl }));
   };
 
   if (loading) {
@@ -112,12 +112,12 @@ const ContentDetails = () => {
                 <Bookmark size={22} className={isBookmarked ? 'fill-primary text-primary' : 'text-foreground/60'} />
               </button>
             </div>
-            <p className="text-xl text-foreground/60 mb-6 font-medium">{specimen.author}</p>
+            <p className="text-xl text-foreground/60 mb-6 font-medium">{specimen.cultivator}</p>
 
             <div className="grid grid-cols-2 gap-6 mb-8">
               <div className="space-y-4 text-foreground/70">
-                <div className="flex items-center gap-3"><Building2 size={18} /><span>{specimen.publisher}</span></div>
-                <div className="flex items-center gap-3"><Hash size={18} /><span>ISBN: {specimen.isbn}</span></div>
+                <div className="flex items-center gap-3"><Building2 size={18} /><span>{specimen.nursery}</span></div>
+                <div className="flex items-center gap-3"><Hash size={18} /><span>Accession #: {specimen.accessionNumber}</span></div>
               </div>
               <div className="space-y-4 text-foreground/70">
                 <div className="flex items-center gap-3"><Tag size={18} />

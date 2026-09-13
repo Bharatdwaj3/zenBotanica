@@ -4,9 +4,9 @@ import { Leaf } from 'lucide-react';
 const MAX_RENEWALS = 2;
 
 // Shared Active/History tendings table, used both for a signed-in user's own
-// tendings and for admin's unresolved-tendings view. Pass `onWaivePenalty` to show
-// the admin-only Waive Penalty action; omit it for the non-admin view.
-// Pass `onRenew` to show the Renew action (non-admin view only — renewing
+// tendings and for curator's unresolved-tendings view. Pass `onWaivePenalty` to show
+// the curator-only Waive Penalty action; omit it for the non-curator view.
+// Pass `onRenew` to show the Renew action (non-curator view only — renewing
 // someone else's tending isn't a thing admins do here).
 const TendingsTable = ({
   tendings,

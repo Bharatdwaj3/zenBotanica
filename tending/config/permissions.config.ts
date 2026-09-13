@@ -1,7 +1,8 @@
 const PERMISSIONS: Record<string, string[]> = {
-  admin: ['listSession', 'viewSession', 'returnBook', 'forceReturnBook', 'issuePenalty', 'issueSession'],
-  faculty: ['borrowBook', 'returnBook', 'viewSession', 'payPenalty'],
-  student: ['borrowBook', 'returnBook', 'viewSession', 'payPenalty'],
+  curator: ['listSession', 'viewSession', 'returnBook', 'forceReturnBook', 'issuePenalty', 'issueSession', 'listCareTask', 'manageCareTask', 'waivePenalty', 'completeCareTask'],
+  botanist: ['borrowBook', 'returnBook', 'viewSession', 'payPenalty', 'listCareTask'],
+  apprentice: ['borrowBook', 'returnBook', 'viewSession', 'payPenalty'],
+  caretaker: ['listCareTask', 'completeCareTask'],
 };
 
 export default PERMISSIONS;

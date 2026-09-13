@@ -60,19 +60,24 @@ export const getUsersByIds = async (req: Request, res: Response): Promise<void> 
         id: true,
         email: true,
         role: true,
-        faculty: { select: { Fname: true, Lname: true } },
-        student: { select: { Fname: true, Lname: true } },
+        botanist: { select: { Fname: true, Lname: true } },
+        apprentice: { select: { Fname: true, Lname: true } },
+        caretaker: { select: { Fname: true, Lname: true } },
+        tourist: { select: { Fname: true, Lname: true } },
+        farmer: { select: { Fname: true, Lname: true } },
+        merchant: { select: { Fname: true, Lname: true, approved: true } },
       },
     });
 
     const result = users.map((u) => {
-      const profile = u.faculty || u.student;
+      const profile = u.botanist || u.apprentice || u.caretaker || u.tourist || u.farmer || u.merchant;
       return {
         id: u.id,
         email: u.email,
         role: u.role,
         Fname: profile?.Fname ?? null,
         Lname: profile?.Lname ?? null,
+        approved: u.merchant?.approved ?? null,
       };
     });
 

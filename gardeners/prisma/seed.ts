@@ -1,93 +1,95 @@
-import bcrypt from 'bcryptjs';
-import prisma from '../config/prisma-client.ts';
-import { ADMIN_EMAIL, ADMIN_PASSWORD, DEFAULT_USER_PASSWORD } from '../config/env.config.ts';
+import prisma from "../config/prisma-client.ts";
+import crypto from "crypto";
 
-const ADMIN_USERNAME = 'admin';
+const hashPassword = (password: string) => {
+  return crypto.pbkdf2Sync(password, 'mionchoillte-salt', 10000, 64, 'sha512').toString('hex');
+};
 
-const masterUsers = [
-  { email: 'ravi.sharma@library.local', username: 'ravi.master', Fname: 'Ravi', Lname: 'Sharma', age: 34, gender: 'Male', Expertise: 'Computer_Science' },
-  { email: 'meera.iyer@library.local', username: 'meera.master', Fname: 'Meera', Lname: 'Iyer', age: 41, gender: 'Female', Expertise: 'History' },
-  { email: 'arjun.verma@library.local', username: 'arjun.master', Fname: 'Arjun', Lname: 'Verma', age: 29, gender: 'Male', Expertise: 'Literature' },
-  { email: 'priya.nair@library.local', username: 'priya.master', Fname: 'Priya', Lname: 'Nair', age: 37, gender: 'Female', Expertise: 'Geography' },
+const CURATOR_EMAIL = "curator@mionchoillte.local";
+const CURATOR_PASSWORD = "curator123";
+const CURATOR_USERNAME = "head_curator";
+
+const botanistUsers = [
+  { email: "elara.woods@mionchoillte.local", username: "elara.botanist", Fname: "Elara", Lname: "Woods", age: 34, gender: "Female", Expertise: "Botany" },
+  { email: "silas.green@mionchoillte.local", username: "silas.botanist", Fname: "Silas", Lname: "Green", age: 41, gender: "Male", Expertise: "Ecology" },
+  { email: "aria.leaf@mionchoillte.local", username: "aria.botanist", Fname: "Aria", Lname: "Leaf", age: 29, gender: "Female", Expertise: "Horticulture" },
+  { email: "orion.root@mionchoillte.local", username: "orion.botanist", Fname: "Orion", Lname: "Root", age: 37, gender: "Male", Expertise: "Mycology" },
 ];
 
 const apprenticeUsers = [
-  { email: 'aditya.rao@library.local', username: 'aditya.apprentice', Fname: 'Aditya', Lname: 'Rao', age: 20, gender: 'Male', Subjects: 'Computer_Science' },
-  { email: 'sneha.kulkarni@library.local', username: 'sneha.apprentice', Fname: 'Sneha', Lname: 'Kulkarni', age: 21, gender: 'Female', Subjects: 'Social_Studies' },
-  { email: 'karan.mehta@library.local', username: 'karan.apprentice', Fname: 'Karan', Lname: 'Mehta', age: 19, gender: 'Male', Subjects: 'Literature' },
-  { email: 'divya.menon@library.local', username: 'divya.apprentice', Fname: 'Divya', Lname: 'Menon', age: 22, gender: 'Female', Subjects: 'History' },
+  { email: "luna.bloom@mionchoillte.local", username: "luna.apprentice", Fname: "Luna", Lname: "Bloom", age: 20, gender: "Female", Subjects: "Botany" },
+  { email: "atlas.stone@mionchoillte.local", username: "atlas.apprentice", Fname: "Atlas", Lname: "Stone", age: 21, gender: "Male", Subjects: "Geology" },
+  { email: "nova.seed@mionchoillte.local", username: "nova.apprentice", Fname: "Nova", Lname: "Seed", age: 19, gender: "Female", Subjects: "Horticulture" },
+  { email: "rowan.branch@mionchoillte.local", username: "rowan.apprentice", Fname: "Rowan", Lname: "Branch", age: 22, gender: "Male", Subjects: "Ecology" },
 ];
 
 async function main() {
-  const hashedAdminPassword = await bcrypt.hash(ADMIN_PASSWORD, 10);
-  const admin = await prisma.user.upsert({
-    where: { email: ADMIN_EMAIL },
+  await prisma.user.upsert({
+    where: { email: CURATOR_EMAIL },
     update: {},
     create: {
-      email: ADMIN_EMAIL,
-      username: ADMIN_USERNAME,
-      password: hashedAdminPassword,
-      role: 'admin',
+      email: CURATOR_EMAIL,
+      username: CURATOR_USERNAME,
+      password: hashPassword(CURATOR_PASSWORD),
+      role: "curator",
     },
   });
-  console.log(`Admin ready: ${admin.email} (username: ${admin.username})`);
+  console.log(`Curator ready: ${CURATOR_EMAIL}`);
 
-  const hashedDefaultPassword = await bcrypt.hash(DEFAULT_USER_PASSWORD, 10);
-
-  for (const f of masterUsers) {
-    const user = await prisma.user.upsert({
-      where: { email: f.email },
+  for (const user of botanistUsers) {
+    await prisma.user.upsert({
+      where: { email: user.email },
       update: {},
       create: {
-        email: f.email,
-        username: f.username,
-        password: hashedDefaultPassword,
-        role: 'faculty',
-        faculty: {
+        email: user.email,
+        username: user.username,
+        password: hashPassword("password123"),
+        role: "botanist",
+        botanist: {
           create: {
-            email: f.email,
-            Fname: f.Fname,
-            Lname: f.Lname,
-            age: f.age,
-            gender: f.gender,
-            Expertise: f.Expertise as any,
+            Fname: user.Fname,
+            Lname: user.Lname,
+            age: user.age,
+            gender: user.gender,
+            Expertise: user.Expertise as any,
+            email: user.email, // FIX: Added required email field
           },
         },
       },
     });
-    console.log(`Master ready: ${user.email} (username: ${user.username})`);
+    console.log(`Botanist ready: ${user.email}`);
   }
 
-  for (const s of apprenticeUsers) {
-    const user = await prisma.user.upsert({
-      where: { email: s.email },
+  for (const user of apprenticeUsers) {
+    await prisma.user.upsert({
+      where: { email: user.email },
       update: {},
       create: {
-        email: s.email,
-        username: s.username,
-        password: hashedDefaultPassword,
-        role: 'student',
-        student: {
+        email: user.email,
+        username: user.username,
+        password: hashPassword("password123"),
+        role: "apprentice",
+        apprentice: {
           create: {
-            email: s.email,
-            Fname: s.Fname,
-            Lname: s.Lname,
-            age: s.age,
-            gender: s.gender,
-            Subjects: s.Subjects as any,
+            Fname: user.Fname,
+            Lname: user.Lname,
+            age: user.age,
+            gender: user.gender,
+            Subjects: user.Subjects as any,
+            email: user.email, // FIX: Added required email field
           },
         },
       },
     });
-    console.log(`Apprentice ready: ${user.email} (username: ${user.username})`);
+    console.log(`Apprentice ready: ${user.email}`);
   }
 
-  console.log(`Done. Seeded ${masterUsers.length + apprenticeUsers.length} non-admin users.`);
+  console.log("Done. Seeded users.");
 }
 
 main()
-  .catch((error) => {
-    console.error('Seed failed:', error);
+  .catch((e) => {
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

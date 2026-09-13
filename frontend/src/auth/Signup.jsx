@@ -14,7 +14,7 @@ export default function Signup() {
   const [form, setForm] = useState({
     email: '',
     password: '',
-    role: 'student',
+    role: 'apprentice',
   });
 
   const handleChange = (e) => {
@@ -133,8 +133,8 @@ export default function Signup() {
                     onChange={handleChange}
                     className="w-full bg-transparent border-b border-[#1a2e28] pl-8 py-3 text-[#e7e3d8] focus:outline-none focus:border-[#4f8a6f] transition-colors text-sm appearance-none cursor-pointer"
                   >
-                    <option value="student" className="bg-[#12201b]">Student (Apprentice)</option>
-                    <option value="faculty" className="bg-[#12201b]">Faculty (Master)</option>
+                    <option value="apprentice" className="bg-[#12201b]">Apprentice (Apprentice)</option>
+                    <option value="botanist" className="bg-[#12201b]">Botanist (Botanist)</option>
                   </select>
                   <svg className="absolute right-0 top-1/2 -translate-y-1/2 text-[#e7e3d8]/30 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </div>

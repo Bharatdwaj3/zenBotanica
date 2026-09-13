@@ -1,6 +1,6 @@
 # GitOps Bootstrap
 
-This script restores the core Kubernetes operators and GitOps state for the HonKhana project.
+This script restores the core Kubernetes operators and GitOps state for the Botany project.
 
 ## Prerequisites
 - A running Kind cluster

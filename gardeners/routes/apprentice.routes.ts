@@ -14,27 +14,27 @@ import {
 
 router.get('/',
     authUser,
-    requireRole(['admin', 'master', 'apprentice']),
+    requireRole(['curator', 'apprentice']),
     listApprentice);
 
 router.get('/profile/:id',
     authUser,
-    requireRole(['master', 'apprentice', 'admin']),
+    requireRole(['curator', 'apprentice']),
     getApprentice);
 
 router.post('/',
     authUser,
-    requireRole(['admin']),
+    requireRole(['curator']),
     registerApprentice);
 
 router.put('/profile/:id',
     authUser,
-    requireRole(['admin']),
+    requireRole(['curator']),
     updateApprentice);
 
 router.delete('/profile/:id',
     authUser,
-    requireRole(['admin']),
+    requireRole(['curator']),
     removeApprentice);
 
 export default router;

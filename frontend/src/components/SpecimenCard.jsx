@@ -13,7 +13,7 @@ const SpecimenCard = ({ specimen, index = 0, showAdminActions = false, onDeleted
   const { user } = useSelector((state) => state.avatar);
   const cartItems = useSelector((state) => state.cart.items);
   const wishlistItems = useSelector((state) => state.wishlist.items);
-  const isAdmin = showAdminActions && user?.role === 'admin';
+  const isAdmin = showAdminActions && user?.role === 'curator';
 
   const inCart = cartItems.some((item) => item.specimenId === specimen.id);
   const inWishlist = wishlistItems.some((item) => item.specimenId === specimen.id);

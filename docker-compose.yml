@@ -71,12 +71,12 @@ services:
     container_name: grove_ctr-btny
     restart: unless-stopped
     env_file:
-      - ./grove/.env.prod
+      - ./grove/.env
     ports:
       - 4001:4001
     networks:
       - app_network
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
+    command: sh -c "npx prisma generate && npx prisma db push --accept-data-loss && npm start"
     depends_on:
       grove-db:
         condition: service_healthy
@@ -119,12 +119,12 @@ services:
     container_name: tending_ctr-btny
     restart: unless-stopped
     env_file:
-      - ./tending/.env.prod
+      - ./tending/.env
     ports:
       - 4002:4002
     networks:
       - app_network
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
+    command: sh -c "npx prisma generate && npx prisma db push --accept-data-loss && npm start"
     depends_on:
       tending-db:
         condition: service_healthy
@@ -140,12 +140,12 @@ services:
     container_name: gardeners_ctr-btny
     restart: unless-stopped
     env_file:
-      - ./gardeners/.env.prod
+      - ./gardeners/.env
     ports:
       - 4003:4003
     networks:
       - app_network
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
+    command: sh -c "npx prisma generate && npx prisma db push --accept-data-loss && npm start"
     depends_on:
       gardeners-db:
         condition: service_healthy
@@ -165,6 +165,82 @@ services:
       - tending
       - gardeners
 
+  visitor-db:
+    image: postgres:15-alpine
+    container_name: visitor_db_ctr-btny
+    restart: unless-stopped
+    ports:
+      - 7436:5432
+    environment:
+      POSTGRES_USER: visitor_user
+      POSTGRES_PASSWORD: visitor_pass
+      POSTGRES_DB: visitor_db
+    volumes:
+      - visitor_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U visitor_user -d visitor_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  visitor-services:
+    build:
+      context: ./visitor-services
+      dockerfile: Dockerfile
+    container_name: visitor_services_ctr-btny
+    restart: unless-stopped
+    env_file:
+      - ./visitor-services/.env
+    ports:
+      - 4004:4004
+    networks:
+      - app_network
+    command: sh -c "npx prisma generate && npx prisma db push --accept-data-loss && npm run dev"
+    depends_on:
+      visitor-db:
+        condition: service_healthy
+
+  marketplace-db:
+    image: postgres:15-alpine
+    container_name: marketplace_db_ctr-btny
+    restart: unless-stopped
+    ports:
+      - 7437:5432
+    environment:
+      POSTGRES_USER: marketplace_user
+      POSTGRES_PASSWORD: marketplace_pass
+      POSTGRES_DB: marketplace_db
+    volumes:
+      - marketplace_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketplace_user -d marketplace_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  marketplace:
+    build:
+      context: ./marketplace
+      dockerfile: Dockerfile
+    container_name: marketplace_ctr-btny
+    restart: unless-stopped
+    env_file:
+      - ./marketplace/.env
+    ports:
+      - 4005:4005
+    networks:
+      - app_network
+    command: sh -c "npx prisma generate && npx prisma db push --accept-data-loss && npm run dev"
+    depends_on:
+      marketplace-db:
+        condition: service_healthy
+
 networks:
   app_network:
     driver: bridge
@@ -173,3 +249,5 @@ volumes:
   grove_data:
   tending_data:
   gardeners_data:
+  visitor_data:
+  marketplace_data:

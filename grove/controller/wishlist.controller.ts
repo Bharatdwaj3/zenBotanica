@@ -50,7 +50,7 @@ const listWishlist = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.id;
     const wishlistItems = await prisma.wishlist_item.findMany({
       where: { userId },
-      include: { book: true },
+      include: { specimen: true },
       orderBy: { addedAt: "desc" },
     });
     res.status(200).json(wishlistItems);
