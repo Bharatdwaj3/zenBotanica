@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'development') {
   type: 'service_account',
   project_id: Fbase_project_id,
   private_key_id: Fbase_private_key_id,
-  private_key: Fbase_private_key_id?.replace(/\\n/g, '\n'),  
+  private_key: Fbase_private_key?.replace(/\\n/g, '\n'),  
   client_email: Fbase_client_email,
   client_id: Fbase_client_id,
   auth_uri: Fbase_auth_uri,
