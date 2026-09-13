@@ -84,12 +84,12 @@ jobs:
       - name: Update image tags in kustomization.yaml
         run: |
           sed -i \
-            -e "/^  - name: grove$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: tending$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: gardeners$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: ghcr.io\/bharatdwaj3\/frontend$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: marketplace$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
-            -e "/^  - name: visitor-services$/,/newTag:/ s|newTag: .*|newTag: ${{ env.SHORT_SHA }}|" \
+            -e "/^  - name: grove$/,/newTag:/ s|newTag: "${{ env.SHORT_SHA }}"
+            -e "/^  - name: tending$/,/newTag:/ s|newTag: "${{ env.SHORT_SHA }}"
+            -e "/^  - name: gardeners$/,/newTag:/ s|newTag: "${{ env.SHORT_SHA }}"
+            -e "/^  - name: ghcr.io\/bharatdwaj3\/frontend$/,/newTag:/ s|newTag: "${{ env.SHORT_SHA }}"
+            -e "/^  - name: marketplace$/,/newTag:/ s|newTag: "${{ env.SHORT_SHA }}"
+            -e "/^  - name: visitor-services$/,/newTag:/ s|newTag: "${{ env.SHORT_SHA }}"
             k8s/services/kustomization.yaml
 
       - name: Commit and push updated manifest
