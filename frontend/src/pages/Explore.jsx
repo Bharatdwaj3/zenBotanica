@@ -21,7 +21,7 @@ export default function Explore() {
     setSortBy,
   } = useExploreSpecimens();
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'curator';
 
   return (
     <main className="min-h-screen bg-background text-foreground">

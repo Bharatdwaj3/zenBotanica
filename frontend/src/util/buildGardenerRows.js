@@ -1,6 +1,6 @@
 export const buildGardenerRows = (masterList, apprenticeList, tendings, isOverdue) => {
   const withRole = [
-    ...masterList.map((p) => ({ ...p, role: 'master' })),
+    ...masterList.map((p) => ({ ...p, role: 'botanist' })),
     ...apprenticeList.map((p) => ({ ...p, role: 'apprentice' })),
   ];
 

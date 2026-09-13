@@ -27,7 +27,7 @@ export default function Login() {
       await loginUser(formData);
       const userData = await dispatch(fetchUser()).unwrap();
       // Route based on the updated bonsai theme roles
-      const route = userData.accountType === 'student' ? '/student' : userData.accountType === 'faculty' ? '/faculty' : '/';
+      const route = userData.accountType === 'apprentice' ? '/apprentice' : userData.accountType === 'botanist' ? '/botanist' : '/';
       navigate(route);
     } catch (err) {
       setError('Invalid credentials. Please try again.');

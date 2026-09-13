@@ -5,14 +5,14 @@ import { GROVE_SERVICE_URL, GARDENERS_SERVICE_URL, INTERNAL_SERVICE_SECRET } fro
 
 const DUE_SOON_WINDOW_DAYS = 2;
 
-const getBookTitle = async (bookId: number): Promise<string> => {
+const getSpecimenTitle = async (specimenId: number): Promise<string> => {
   try {
-    const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/book/${bookId}`);
-    if (!res.ok) return `Book #${bookId}`;
-    const book = await res.json();
-    return book.title || `Book #${bookId}`;
+    const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/specimen/${specimenId}`);
+    if (!res.ok) return `Specimen #${specimenId}`;
+    const specimen = await res.json();
+    return specimen.title || `Specimen #${specimenId}`;
   } catch {
-    return `Book #${bookId}`;
+    return `Specimen #${specimenId}`;
   }
 };
 
@@ -53,8 +53,8 @@ export const runCareReminderCheck = async (): Promise<void> => {
       ? Math.ceil((now.getTime() - session.dueAt.getTime()) / (1000 * 60 * 60 * 24))
       : 0;
 
-    const [bookTitle, email] = await Promise.all([
-      getBookTitle(session.bookId),
+    const [specimenTitle, email] = await Promise.all([
+      getSpecimenTitle(session.specimenId),
       getUserEmail(session.userId),
     ]);
 
@@ -64,7 +64,7 @@ export const runCareReminderCheck = async (): Promise<void> => {
     }
 
     try {
-      await sendReminderEmail({ to: email, bookTitle, dueAt: session.dueAt, isOverdue, daysOverdue });
+      await sendReminderEmail({ to: email, specimenTitle, dueAt: session.dueAt, isOverdue, daysOverdue });
       console.log(`[care-reminder.job] Sent care-reminder to ${email} for session ${session.id}`);
     } catch (error) {
       console.error(`[care-reminder.job] Failed to send care-reminder for session ${session.id}:`, error);

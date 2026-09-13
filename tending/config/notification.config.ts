@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 
 interface CareReminderEnotificationParams {
   to: string;
-  bookTitle: string;
+  specimenTitle: string;
   dueAt: Date;
   isOverdue: boolean;
   daysOverdue: number;
@@ -19,21 +19,21 @@ interface CareReminderEnotificationParams {
 
 export const sendReminderEmail = async ({
   to,
-  bookTitle,
+  specimenTitle,
   dueAt,
   isOverdue,
   daysOverdue,
 }: CareReminderEnotificationParams): Promise<void> => {
   const subject = isOverdue
-    ? `Overdue: "${bookTitle}" is ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} late`
-    : `CareReminder: "${bookTitle}" is due soon`;
+    ? `Overdue: "${specimenTitle}" is ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} late`
+    : `CareReminder: "${specimenTitle}" is due soon`;
 
   const body = isOverdue
-    ? `Your session of "${bookTitle}" was due on ${dueAt.toDateString()} and is now ${daysOverdue} day(s) overdue. Please return it as soon as possible to avoid further penaltys.`
-    : `Your session of "${bookTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
+    ? `Your session of "${specimenTitle}" was due on ${dueAt.toDateString()} and is now ${daysOverdue} day(s) overdue. Please return it as soon as possible to avoid further penaltys.`
+    : `Your session of "${specimenTitle}" is due on ${dueAt.toDateString()}. Please return or renew it before then.`;
 
   await transporter.sendMail({
-    from: '"Bonsai Library" <library@bonsai.local>',
+    from: '"Mionchoillte" <notify@mionchoillte.local>',
     to,
     subject,
     text: body,

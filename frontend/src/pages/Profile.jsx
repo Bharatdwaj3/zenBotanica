@@ -11,7 +11,7 @@ const getProfile = (user) => user?.masters || user?.apprentice || null;
 const getDisplayName = (user) => {
   const profile = getProfile(user);
   if (profile) return `${profile.Fname} ${profile.Lname}`;
-  if (user?.role === 'admin') return 'System Administrator';
+  if (user?.role === 'curator') return 'System Administrator';
   return user?.email || 'User';
 };
 
@@ -24,7 +24,7 @@ export default function Profile() {
     if (!user) dispatch(fetchUser());
   }, [user, dispatch]);
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'curator';
   const tendingsState = useTendings(isAdmin);
 
   if (loading || !user) {

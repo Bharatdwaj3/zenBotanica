@@ -12,7 +12,7 @@ const getProfile = (user) => user?.masters || user?.apprentice || null;
 const getDisplayName = (user) => {
   const profile = getProfile(user);
   if (profile) return `${profile.Fname} ${profile.Lname}`;
-  if (user?.role === 'admin') return 'System Administrator';
+  if (user?.role === 'curator') return 'System Administrator';
   return user?.email || 'User';
 };
 
@@ -36,7 +36,7 @@ const Navbar = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (user && user.role !== 'admin') {
+    if (user && user.role !== 'curator') {
       dispatch(fetchCart());
     }
   }, [user, dispatch]);
@@ -108,7 +108,7 @@ const Navbar = () => {
               <Search size={20} className="text-foreground/60" />
             </button>
 
-            {user && user.role !== 'admin' && (
+            {user && user.role !== 'curator' && (
               <Link
                 to="/cart"
                 className="relative p-2 hover:bg-foreground/5 rounded-lg transition-colors"
@@ -172,7 +172,7 @@ const Navbar = () => {
                             <User size={16} />
                             My Profile
                           </Link>
-                          {user.role !== 'admin' && (
+                          {user.role !== 'curator' && (
                             <Link
                               to="/wishlist"
                               onClick={() => setIsMenuOpen(false)}

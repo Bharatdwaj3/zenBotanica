@@ -39,7 +39,7 @@ const TendingListItem = ({ tending, overdue, returning, onReturn, payingPenalty,
             <span className="inline-flex items-center gap-1 text-xs text-red-500 font-semibold">
               Penalty: ₹{tending.penaltyAmount}
             </span>
-            {/* Admin only issues penalties, never pays them on a user's behalf. */}
+            {/* Curator only issues penalties, never pays them on a user's behalf. */}
             {!isAdmin && (
               <button
                 onClick={() => onPayPenalty(tending)}

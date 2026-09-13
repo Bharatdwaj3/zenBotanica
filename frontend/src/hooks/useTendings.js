@@ -120,7 +120,7 @@ export function useTendings(isAdmin) {
     }
   };
 
-  // Admin-only: writes off a tending's penalty entirely, no payment involved.
+  // Curator-only: writes off a tending's penalty entirely, no payment involved.
   const handleWaivePenalty = async (tendingId) => {
     setWaivingPenaltyForTendingId(tendingId);
     setWaivePenaltyError('');

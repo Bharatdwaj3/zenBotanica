@@ -22,8 +22,8 @@ const withOverdueInfo = (careSession: any) => {
   return { ...careSession, isOverdue, daysOverdue };
 };
 
-const adjustBookCopies = async (bookId: number, delta: number): Promise<Response> => {
-  return fetch(`${GROVE_SERVICE_URL}/api/v1/book/${bookId}/copies`, {
+const adjustSpecimenCopies = async (specimenId: number, delta: number): Promise<Response> => {
+  return fetch(`${GROVE_SERVICE_URL}/api/v1/specimen/${specimenId}/copies`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -33,8 +33,8 @@ const adjustBookCopies = async (bookId: number, delta: number): Promise<Response
   }) as unknown as Response;
 };
 
-const getBook = async (bookId: number) => {
-  const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/book/${bookId}`);
+const getSpecimen = async (specimenId: number) => {
+  const res = await fetch(`${GROVE_SERVICE_URL}/api/v1/specimen/${specimenId}`);
   if (!res.ok) return null;
   return res.json();
 };
@@ -43,17 +43,17 @@ const getBook = async (bookId: number) => {
 // and the internal `/internal/borrow` route (called by grove's cart checkout, no user session).
 // Returns a plain { status, body } result instead of writing to `res` directly, so both callers
 // can decide how to respond (one HTTP call vs. one entry in a checkout results list).
-const attemptBorrow = async (userId: number, userRole: string, bookId: number) => {
+const attemptBorrow = async (userId: number, userRole: string, specimenId: number) => {
   const maxActive = MAX_ACTIVE_SESSIONS[userRole] ?? 0;
   if (maxActive === 0) {
     return { status: 403, body: { message: "Your role is not permitted to borrow books" } };
   }
 
-  const book = await getBook(bookId);
-  if (!book) {
-    return { status: 404, body: { message: "Book not found" } };
+  const specimen = await getSpecimen(specimenId);
+  if (!specimen) {
+    return { status: 404, body: { message: "Specimen not found" } };
   }
-  if (book.availableCopies < 1) {
+  if (specimen.availableCopies < 1) {
     return { status: 409, body: { message: "No copies currently available" } };
   }
 
@@ -81,10 +81,10 @@ const attemptBorrow = async (userId: number, userRole: string, bookId: number) =
   dueAt.setDate(dueAt.getDate() + SESSION_PERIOD_DAYS);
 
   const careSession = await prisma.loan.create({
-    data: { bookId: book.id, userId, dueAt },
+    data: { specimenId: specimen.id, userId, dueAt },
   });
 
-  const groveRes = await adjustBookCopies(book.id, -1);
+  const groveRes = await adjustSpecimenCopies(specimen.id, -1);
   if (!(groveRes as any).ok) {
     await prisma.loan.delete({ where: { id: careSession.id } });
     return { status: 502, body: { message: "Could not reserve a copy right now — please try again" } };
@@ -95,19 +95,19 @@ const attemptBorrow = async (userId: number, userRole: string, bookId: number) =
 
 const borrowBook = async (req: AuthRequest, res: ExpressResponse): Promise<void> => {
   try {
-    const { bookId } = req.body;
+    const { specimenId } = req.body;
     const userId = req.user?.id;
     const userRole = req.user?.role || "";
 
-    if (!bookId) {
-      res.status(400).json({ message: "bookId is required" });
+    if (!specimenId) {
+      res.status(400).json({ message: "specimenId is required" });
       return;
     }
 
-    const result = await attemptBorrow(userId!, userRole, Number(bookId));
+    const result = await attemptBorrow(userId!, userRole, Number(specimenId));
     res.status(result.status).json(result.body);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to borrow book";
+    const message = error instanceof Error ? error.message : "Failed to tend specimen";
     res.status(500).json({ message });
   }
 };
@@ -119,13 +119,13 @@ const borrowBook = async (req: AuthRequest, res: ExpressResponse): Promise<void>
 // target member's real role server-side rather than trusting the client.
 const issueCareSessionForMember = async (req: AuthRequest, res: ExpressResponse): Promise<void> => {
   try {
-    const { bookId, userId } = req.body;
-    if (!bookId || !userId) {
-      res.status(400).json({ message: "bookId and userId are required" });
+    const { specimenId, userId } = req.body;
+    if (!specimenId || !userId) {
+      res.status(400).json({ message: "specimenId and userId are required" });
       return;
     }
 
-    const memberRes = await fetch(`${GARDENERS_SERVICE_URL}/internal/users/by-ids?ids=${Number(userId)}`, {
+    const memberRes = await fetch(`${GARDENERS_SERVICE_URL}/api/v1/internal/users/by-ids?ids=${Number(userId)}`, {
       headers: { "x-internal-secret": INTERNAL_SERVICE_SECRET },
     });
     if (!memberRes.ok) {
@@ -139,7 +139,7 @@ const issueCareSessionForMember = async (req: AuthRequest, res: ExpressResponse)
       return;
     }
 
-    const result = await attemptBorrow(Number(userId), member.role, Number(bookId));
+    const result = await attemptBorrow(Number(userId), member.role, Number(specimenId));
     res.status(result.status).json(result.body);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to issue careSession";
@@ -159,7 +159,7 @@ const returnBook = async (req: AuthRequest, res: Response): Promise<void> => {
       return;
     }
     if (careSession.returnedAt) {
-      res.status(409).json({ message: "This book was already returned" });
+      res.status(409).json({ message: "This specimen was already returned" });
       return;
     }
     if (careSession.userId !== userId && !isAdmin) {
@@ -175,14 +175,14 @@ const returnBook = async (req: AuthRequest, res: Response): Promise<void> => {
       where: { id: loanId },
       data: { returnedAt, fineAmount },
     });
-    const groveRes = await adjustBookCopies(careSession.bookId, 1);
+    const groveRes = await adjustSpecimenCopies(careSession.specimenId, 1);
     if (!(groveRes as any).ok) {
       console.error(`CareSession ${loanId} returned, but Catalog copy count was not incremented. Needs manual fix.`);
     }
 
     res.status(200).json(updatedCareSession);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to return book";
+    const message = error instanceof Error ? error.message : "Failed to return specimen";
     res.status(500).json({ message });
   }
 };
@@ -260,7 +260,7 @@ const renewBook = async (req: AuthRequest, res: ExpressResponse): Promise<void> 
       return;
     }
     if (careSession.returnedAt) {
-      res.status(409).json({ message: "This book was already returned" });
+      res.status(409).json({ message: "This specimen was already returned" });
       return;
     }
     if (careSession.userId !== userId && !isAdmin) {
@@ -283,7 +283,7 @@ const renewBook = async (req: AuthRequest, res: ExpressResponse): Promise<void> 
 
     res.status(200).json(updatedCareSession);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to renew book";
+    const message = error instanceof Error ? error.message : "Failed to renew specimen";
     res.status(500).json({ message });
   }
 };

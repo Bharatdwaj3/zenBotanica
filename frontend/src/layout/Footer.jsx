@@ -67,7 +67,7 @@ const Footer = () => {
             <ul className="space-y-3 text-foreground/50 text-sm">
               <li>support@bonsai.app</li>
               <li>+1 555 010 0123</li>
-              <li>0800-HONKHANA</li>
+              <li>0800-BOTANY</li>
             </ul>
           </div>
         </div>

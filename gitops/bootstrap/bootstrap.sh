@@ -13,7 +13,7 @@ done
 echo "=== 3. Operators: CloudNativePG, Argo Rollouts, Argo CD (server-side, avoids the annotation-size error) ==="
 kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.25/releases/cnpg-1.25.0.yaml
 kubectl apply --server-side -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/download/v1.7.2/install.yaml
-kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/manifests/v2.11.0/install.yaml
+kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.11.0/manifests/install.yaml
 
 echo "=== 4. Waiting for operator pods to be ready ==="
 kubectl wait --for=condition=Ready pods --all -n cnpg-system --timeout=120s || true
@@ -83,12 +83,12 @@ cat <<EOF | kubectl apply -f -
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: honkhana-services
+  name: botany-services
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/bharatdwaj3/honkhana.git
+    repoURL: https://github.com/bharatdwaj3/botany.git
     targetRevision: HEAD
     path: k8s/services
   destination:
@@ -102,5 +102,5 @@ EOF
 
 echo "=== Bootstrap complete. Verifying ==="
 kubectl get cluster -n bonsai
-kubectl get application honkhana-services -n argocd
+kubectl get application botany-services -n argocd
 kubectl get pods -n bonsai

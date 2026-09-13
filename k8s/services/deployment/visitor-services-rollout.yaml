@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+metadata:
+  labels:
+    bonsai-service: visitor-services
+  name: visitor-services
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+      - setWeight: 100
+  replicas: 3
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      bonsai-service: visitor-services
+  template:
+    metadata:
+      labels:
+        bonsai-service: visitor-services
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - args:
+            - sh
+            - -c
+            - npx prisma generate && npx prisma migrate deploy && npm start
+          envFrom:
+            - secretRef:
+                name: visitor-services-secrets
+          image: visitor-services
+          name: visitor-services-ctr
+          ports:
+            - containerPort: 4004
+              protocol: TCP
+          resources: {}
+          readinessProbe:
+            tcpSocket:
+              port: 4004
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+status: {}

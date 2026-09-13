@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ticket {
+  id          Int       @id @default(autoincrement())
+  touristId   Int?
+  email       String
+  expiresAt   DateTime
+  purchasedAt DateTime  @default(now())
+}
+
+model violation {
+  id          Int      @id @default(autoincrement())
+  touristId   Int
+  specimenId  Int?
+  type        String
+  fineAmount  Int
+  reportedBy  Int
+  paid        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model help_request {
+  id         Int      @id @default(autoincrement())
+  farmerId   Int
+  message    String
+  status     String   @default("OPEN")
+  assignedTo Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

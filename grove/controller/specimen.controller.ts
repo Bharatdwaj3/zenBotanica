@@ -5,7 +5,7 @@ import type { AuthRequest } from "../middleware/auth.middleware.ts";
 
 const listSpecimens = async (req: Request, res: Response): Promise<void> => {
   try {
-    const specimens = await prisma.book.findMany({ where: { deletedAt: null } });
+    const specimens = await prisma.specimen.findMany({ where: { deletedAt: null } });
     res.status(200).json(specimens);
   } catch (error) {
     const message = error instanceof Error ? error.message : "An error occurred";
@@ -15,7 +15,7 @@ const listSpecimens = async (req: Request, res: Response): Promise<void> => {
 
 const getSpecimen = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   try {
-    const specimen = await prisma.book.findUnique({ where: { id: Number(req.params.id) } });
+    const specimen = await prisma.specimen.findUnique({ where: { id: Number(req.params.id) } });
     if (!specimen || specimen.deletedAt) {
       res.status(404).json({ message: "Specimen not found" });
       return;
@@ -29,18 +29,18 @@ const getSpecimen = async (req: Request<{ id: string }>, res: Response): Promise
 
 const registerSpecimen = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { title, author, publisher, isbn, genre, totalCopies, coverUrl, pdfUrl, description } = req.body;
+    const { title, cultivator, nursery, accessionNumber, genre, totalCopies, coverUrl, pdfUrl, description } = req.body;
 
-    if (!title || !author || !isbn) {
-      res.status(400).json({ message: "title, author, and isbn are required" });
+    if (!title || !cultivator || !accessionNumber) {
+      res.status(400).json({ message: "title, cultivator, and accessionNumber are required" });
       return;
     }
 
     const copies = Number(totalCopies) || 1;
 
-    const specimen = await prisma.book.create({
+    const specimen = await prisma.specimen.create({
       data: {
-        title, author, publisher, isbn, genre,
+        title, cultivator, nursery, accessionNumber, genre,
         description, totalCopies: copies,
         availableCopies: copies,
         coverUrl,
@@ -61,10 +61,10 @@ const registerSpecimen = async (req: AuthRequest, res: Response): Promise<void> 
 
 const updateSpecimen = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   try {
-    const { title, author, publisher, isbn, genre, totalCopies, coverUrl, pdfUrl, description } = req.body;
-    const specimen = await prisma.book.update({
+    const { title, cultivator, nursery, accessionNumber, genre, totalCopies, coverUrl, pdfUrl, description } = req.body;
+    const specimen = await prisma.specimen.update({
       where: { id: Number(req.params.id) },
-      data: { title, author, publisher, isbn, genre, totalCopies, coverUrl, pdfUrl, description },
+      data: { title, cultivator, nursery, accessionNumber, genre, totalCopies, coverUrl, pdfUrl, description },
     });
     res.status(200).json(specimen);
   } catch (error) {
@@ -75,7 +75,7 @@ const updateSpecimen = async (req: Request<{ id: string }>, res: Response): Prom
 
 const removeSpecimen = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   try {
-    const specimen = await prisma.book.update({
+    const specimen = await prisma.specimen.update({
       where: { id: Number(req.params.id) },
       data: { deletedAt: new Date() },
     });
@@ -89,7 +89,7 @@ const removeSpecimen = async (req: Request<{ id: string }>, res: Response): Prom
 const adjustCopies = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   try {
     const { delta } = req.body; 
-    const specimen = await prisma.book.update({
+    const specimen = await prisma.specimen.update({
       where: { id: Number(req.params.id) },
       data: { availableCopies: { increment: Number(delta) } },
     });
@@ -103,7 +103,7 @@ const adjustCopies = async (req: Request<{ id: string }>, res: Response): Promis
 const getNewArrivals = async (req: Request, res: Response): Promise<void> => {
   try {
     const limit = Number(req.query.limit) || 10;
-    const specimens = await prisma.book.findMany({
+    const specimens = await prisma.specimen.findMany({
       where: { deletedAt: null },
       orderBy: { createdAt: "desc" },
       take: limit,
@@ -118,18 +118,18 @@ const getNewArrivals = async (req: Request, res: Response): Promise<void> => {
 const getSimilarSpecimens = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   try {
     const specimenId = Number(req.params.id);
-    const specimen = await prisma.book.findUnique({ where: { id: specimenId } });
+    const specimen = await prisma.specimen.findUnique({ where: { id: specimenId } });
     if (!specimen || specimen.deletedAt) {
       res.status(404).json({ message: "Specimen not found" });
       return;
     }
 
     const [byAuthor, byGenre] = await Promise.all([
-      prisma.book.findMany({
-        where: { author: specimen.author, id: { not: specimenId }, deletedAt: null },
+      prisma.specimen.findMany({
+        where: { cultivator: specimen.cultivator, id: { not: specimenId }, deletedAt: null },
         take: 6,
       }),
-      prisma.book.findMany({
+      prisma.specimen.findMany({
         where: { genre: { hasSome: specimen.genre }, id: { not: specimenId }, deletedAt: null },
         take: 6,
       }),
@@ -161,7 +161,7 @@ const getTrending = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const specimens = await prisma.book.findMany({
+    const specimens = await prisma.specimen.findMany({
       where: { id: { in: topIds }, deletedAt: null },
     });
 
@@ -189,7 +189,7 @@ const bulkSetFeatured = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const result = await prisma.book.updateMany({
+    const result = await prisma.specimen.updateMany({
       where: { id: { in: ids.map(Number) } },
       data: { featured },
     });
@@ -212,7 +212,7 @@ const bulkSetWeeklyRead = async (req: Request, res: Response): Promise<void> => 
       res.status(400).json({ message: "weeklyRead must be a boolean" });
       return;
     }
-    const result = await prisma.book.updateMany({
+    const result = await prisma.specimen.updateMany({
       where: { id: { in: ids.map(Number) } },
       data: { weeklyRead },
     });
@@ -224,7 +224,7 @@ const bulkSetWeeklyRead = async (req: Request, res: Response): Promise<void> => 
 };
 const getFeatured = async (req: Request, res: Response): Promise<void> => {
   try {
-    const specimens = await prisma.book.findMany({
+    const specimens = await prisma.specimen.findMany({
       where: { featured: true, deletedAt: null },
     });
     res.status(200).json(specimens);

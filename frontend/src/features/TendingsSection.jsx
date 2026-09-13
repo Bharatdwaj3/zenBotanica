@@ -116,7 +116,7 @@ const TendingsSection = ({
       {payPenaltyError && <p className="text-sm text-red-500 mb-6">{payPenaltyError}</p>}
       {waivePenaltyError && <p className="text-sm text-red-500 mb-6">{waivePenaltyError}</p>}
 
-      {/* Admin quick-action buttons */}
+      {/* Curator quick-action buttons */}
       <div className="flex flex-wrap gap-3 mb-6">
         <button
           type="button"

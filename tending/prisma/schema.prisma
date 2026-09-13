@@ -14,7 +14,7 @@ datasource db {
 
 model loan {
   id         Int       @id @default(autoincrement())
-  bookId     Int
+  specimenId Int
   userId     Int
   borrowedAt DateTime  @default(now())
   dueAt      DateTime
@@ -32,4 +32,14 @@ model fine {
   waived     Boolean   @default(false)
   createdAt  DateTime  @default(now())
   loanId     Int?      @unique
+}
+
+model care_task {
+  id              Int       @id @default(autoincrement())
+  specimenId      Int
+  caretakerId     Int
+  taskType        String
+  intervalDays    Int
+  nextDueAt       DateTime
+  lastCompletedAt DateTime?
 }
