@@ -69,8 +69,8 @@ jobs:
           context: ./${{ matrix.service }}
           push: true
           tags: ghcr.io/${{ env.OWNER_LC }}/botany-${{ env.SERVICE_LC }}:${{ env.SHORT_SHA }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
   update-manifest:
     needs: docker-build-push
     runs-on: ubuntu-latest
