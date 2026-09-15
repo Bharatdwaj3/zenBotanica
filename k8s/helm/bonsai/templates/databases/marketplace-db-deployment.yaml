@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketplace-db
+  labels:
+  {{- include "bonsai.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.marketplaceDb.replicas }}
+  strategy:
+    type: {{ .Values.marketplaceDb.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app-name: marketplace-db
+    {{- include "bonsai.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app-name: marketplace-db
+      {{- include "bonsai.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_User
+              name: marketplace-secrets
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: marketplace-secrets
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Database
+              name: marketplace-secrets
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.marketplaceDb.marketplaceDbCtr.image.repository }}:{{ .Values.marketplaceDb.marketplaceDbCtr.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - marketplace_user
+            - -d
+            - marketplace_db
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: marketplace-db-ctr
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: marketplace-data
+      nodeSelector: {{- toYaml .Values.marketplaceDb.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      serviceAccountName: {{ include "bonsai.serviceAccountName" . }}
+      tolerations: {{- toYaml .Values.marketplaceDb.tolerations | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.marketplaceDb.topologySpreadConstraints
+        | nindent 8 }}
+      volumes:
+      - name: marketplace-data
+        persistentVolumeClaim:
+          claimName: marketplace-data

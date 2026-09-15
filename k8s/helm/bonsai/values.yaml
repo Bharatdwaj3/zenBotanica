@@ -1,0 +1,191 @@
+db:
+  nodeSelector: {}
+  ports:
+  - name: "7436"
+    port: 5432
+    targetPort: 5432
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+  visitorServicesDbCtr:
+    image:
+      repository: postgres
+      tag: 15-alpine
+firebase:
+  ports:
+  - name: "9099"
+    port: 9099
+    targetPort: 9099
+  - name: "9199"
+    port: 9199
+    targetPort: 9199
+  - name: "4000"
+    port: 4000
+    targetPort: 4000
+  type: ClusterIP
+frontend:
+  ports:
+  - name: "5114"
+    port: 5114
+    targetPort: 80
+  type: ClusterIP
+frontendNginxConfig:
+  defaultConf: |-
+    server {
+        listen 80;
+        server_name localhost;
+        client_max_body_size 300M;
+        root /usr/share/nginx/html;
+        index index.html;
+        location /api/v1/book {
+            proxy_pass http://grove.bonsai.svc.cluster.local:4001;
+        }
+        location /api/v1/storage {
+            proxy_pass http://grove.bonsai.svc.cluster.local:4001;
+        }
+        location /api/v1/fine {
+            proxy_pass http://tending.bonsai.svc.cluster.local:4002;
+        }
+        location /api/v1/loan {
+            proxy_pass http://tending.bonsai.svc.cluster.local:4002;
+        }
+        location /api/v1/auth {
+            proxy_pass http://gardeners.bonsai.svc.cluster.local:4003;
+        }
+        location /api/v1/faculty {
+            proxy_pass http://gardeners.bonsai.svc.cluster.local:4003;
+        }
+        location /firebase-storage/ {
+            proxy_hide_header Content-Disposition;
+            add_header Content-Disposition "inline";
+            proxy_pass http://firebase:9199/;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+        }
+        location /api/v1/student {
+            proxy_pass http://gardeners.bonsai.svc.cluster.local:4003;
+        }
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+    }
+gardeners:
+  ports:
+  - name: "4003"
+    port: 4003
+    targetPort: 4003
+  type: ClusterIP
+gardenersDb:
+  gardenersDbCtr:
+    image:
+      repository: postgres
+      tag: 15-alpine
+  nodeSelector: {}
+  ports:
+  - name: "7435"
+    port: 5432
+    targetPort: 5432
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+grove:
+  ports:
+  - name: "4001"
+    port: 4001
+    targetPort: 4001
+  type: ClusterIP
+groveDb:
+  groveDbCtr:
+    image:
+      repository: postgres
+      tag: 15-alpine
+  nodeSelector: {}
+  ports:
+  - name: "7433"
+    port: 5432
+    targetPort: 5432
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+kubernetesClusterDomain: cluster.local
+mailhog:
+  ports:
+  - name: "8025"
+    port: 8025
+    targetPort: 8025
+  - name: "1025"
+    port: 1025
+    targetPort: 1025
+  type: ClusterIP
+marketplace:
+  ports:
+  - name: "4005"
+    port: 4005
+    targetPort: 4005
+  type: ClusterIP
+marketplaceDb:
+  marketplaceDbCtr:
+    image:
+      repository: postgres
+      tag: 15-alpine
+  nodeSelector: {}
+  ports:
+  - name: "7435"
+    port: 5432
+    targetPort: 5432
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+pvc:
+  data:
+    storageRequest: 100Mi
+  firebaseData:
+    storageRequest: 500Mi
+  gardenersData:
+    storageRequest: 100Mi
+  groveData:
+    storageRequest: 100Mi
+  marketplaceData:
+    storageRequest: 100Mi
+  tendingData:
+    storageRequest: 100Mi
+tending:
+  ports:
+  - name: "4002"
+    port: 4002
+    targetPort: 4002
+  type: ClusterIP
+tendingDb:
+  nodeSelector: {}
+  ports:
+  - name: "7434"
+    port: 5432
+    targetPort: 5432
+  replicas: 1
+  strategy:
+    type: Recreate
+  tendingDbCtr:
+    image:
+      repository: postgres
+      tag: 15-alpine
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+visitorServices:
+  ports:
+  - name: "4004"
+    port: 4004
+    targetPort: 4004
+  type: ClusterIP

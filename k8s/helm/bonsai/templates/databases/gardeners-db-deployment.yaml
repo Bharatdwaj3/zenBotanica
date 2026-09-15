@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gardeners-db
+  labels:
+  {{- include "bonsai.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.gardenersDb.replicas }}
+  strategy:
+    type: {{ .Values.gardenersDb.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: gardeners-db
+    {{- include "bonsai.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: gardeners-db
+      {{- include "bonsai.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_User
+              name: gardeners-secrets
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: gardeners-secrets
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Database
+              name: gardeners-secrets
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.gardenersDb.gardenersDbCtr.image.repository }}:{{ .Values.gardenersDb.gardenersDbCtr.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - gardeners_user
+            - -d
+            - gardeners_db
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: gardeners-db-ctr
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: gardeners-data
+      nodeSelector: {{- toYaml .Values.gardenersDb.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      serviceAccountName: {{ include "bonsai.serviceAccountName" . }}
+      tolerations: {{- toYaml .Values.gardenersDb.tolerations | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.gardenersDb.topologySpreadConstraints
+        | nindent 8 }}
+      volumes:
+      - name: gardeners-data
+        persistentVolumeClaim:
+          claimName: gardeners-data
