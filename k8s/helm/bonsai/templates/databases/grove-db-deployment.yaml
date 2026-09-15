@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grove-db
+  labels:
+  {{- include "bonsai.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.groveDb.replicas }}
+  strategy:
+    type: {{ .Values.groveDb.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: grove-db
+    {{- include "bonsai.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: grove-db
+      {{- include "bonsai.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_User
+              name: grove-secrets
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: grove-secrets
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Database
+              name: grove-secrets
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.groveDb.groveDbCtr.image.repository }}:{{ .Values.groveDb.groveDbCtr.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - grove_user
+            - -d
+            - grove_db
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: grove-db-ctr
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: grove-data
+      nodeSelector: {{- toYaml .Values.groveDb.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      serviceAccountName: {{ include "bonsai.serviceAccountName" . }}
+      tolerations: {{- toYaml .Values.groveDb.tolerations | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.groveDb.topologySpreadConstraints |
+        nindent 8 }}
+      volumes:
+      - name: grove-data
+        persistentVolumeClaim:
+          claimName: grove-data

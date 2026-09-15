@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tending-db
+  labels:
+  {{- include "bonsai.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.tendingDb.replicas }}
+  strategy:
+    type: {{ .Values.tendingDb.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app-name: tending-db
+    {{- include "bonsai.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app-name: tending-db
+      {{- include "bonsai.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_User
+              name: tending-secrets
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: tending-secrets
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Database
+              name: tending-secrets
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.tendingDb.tendingDbCtr.image.repository }}:{{ .Values.tendingDb.tendingDbCtr.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - tending_user
+            - -d
+            - tending_db
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: tending-db-ctr
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: tending-data
+      nodeSelector: {{- toYaml .Values.tendingDb.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      serviceAccountName: {{ include "bonsai.serviceAccountName" . }}
+      tolerations: {{- toYaml .Values.tendingDb.tolerations | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.tendingDb.topologySpreadConstraints
+        | nindent 8 }}
+      volumes:
+      - name: tending-data
+        persistentVolumeClaim:
+          claimName: tending-data

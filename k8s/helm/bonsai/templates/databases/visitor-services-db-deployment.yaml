@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visitor-services-db
+  labels:
+  {{- include "bonsai.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.db.replicas }}
+  strategy:
+    type: {{ .Values.db.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app-name: visitor-services-db
+    {{- include "bonsai.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app-name: visitor-services-db
+      {{- include "bonsai.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_User
+              name: visitor-services-secrets
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: visitor-services-secrets
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Database
+              name: visitor-services-secrets
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.db.visitorServicesDbCtr.image.repository }}:{{ .Values.db.visitorServicesDbCtr.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - visitor_services_user
+            - -d
+            - visitor_services_db
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: visitor-services-db-ctr
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: visitor-services-data
+      nodeSelector: {{- toYaml .Values.db.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      serviceAccountName: {{ include "bonsai.serviceAccountName" . }}
+      tolerations: {{- toYaml .Values.db.tolerations | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.db.topologySpreadConstraints | nindent
+        8 }}
+      volumes:
+      - name: visitor-services-data
+        persistentVolumeClaim:
+          claimName: visitor-services-data

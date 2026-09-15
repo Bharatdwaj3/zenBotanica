@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tending
+  labels:
+    bonsai-service: tending
+  {{- include "bonsai.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml --out k8s/services/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  type: {{ .Values.tending.type }}
+  selector:
+    bonsai-service: tending
+    {{- include "bonsai.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.tending.ports | toYaml | nindent 2 }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: tending
+  labels:
+    bonsai-service: tending
+  {{- include "bonsai.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 120
+  replicas: 3
+  selector:
+    matchLabels:
+      bonsai-service: tending
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause:
+          duration: 30s
+      - setWeight: 40
+      - pause:
+          duration: 30s
+      - setWeight: 60
+      - pause:
+          duration: 30s
+      - setWeight: 80
+      - pause:
+          duration: 30s
+      - setWeight: 100
+  template:
+    metadata:
+      labels:
+        bonsai-service: tending
+    spec:
+      containers:
+      - args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma migrate deploy && npm start
+        envFrom:
+        - secretRef:
+            name: tending-secrets
+        image: ghcr.io/bharatdwaj3/botany-tending:08e7964
+        name: tending-ctr
+        ports:
+        - containerPort: 4002
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          tcpSocket:
+            port: 4002
+        resources: {}
+      imagePullSecrets:
+      - name: ghcr-secret
+      restartPolicy: Always
+status: {}
