@@ -5,13 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/Bharatdwaj3/zenBotanica
-    targetRevision: main
-    path: k8s
-    directory:
-      recurse: true
-      exclude: '{observability/**,helm/**}'
+  sources:
+    - repoURL: https://github.com/Bharatdwaj3/zenBotanica
+      targetRevision: main
+      path: k8s/services
+    - repoURL: https://github.com/Bharatdwaj3/zenBotanica
+      targetRevision: main
+      path: k8s/exposure
   destination:
     server: https://kubernetes.default.svc
     namespace: bonsai
