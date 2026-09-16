@@ -11,7 +11,7 @@ spec:
     path: k8s
     directory:
       recurse: true
-      exclude: 'observability/**'
+      exclude: '{observability/**,helm/**}'
   destination:
     server: https://kubernetes.default.svc
     namespace: bonsai
