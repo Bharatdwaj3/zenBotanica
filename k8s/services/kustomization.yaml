@@ -2,8 +2,7 @@ namespace: bonsai
 
 resources:
   - deployment/grove-rollout.yaml
-  - deployment/grove-db-rollout.yaml
-  - deployment/grove-data-persistentvolumeclaim.yaml
+  - deployment/grove-db-statefulset.yaml
   - deployment/tending-rollout.yaml
   - deployment/tending-db-rollout.yaml
   - deployment/tending-data-persistentvolumeclaim.yaml
@@ -23,6 +22,7 @@ resources:
 
   - service/grove-service.yaml
   - service/grove-db-service.yaml
+  - service/grove-db-headless-service.yaml
   - service/tending-service.yaml
   - service/tending-db-service.yaml
   - service/gardeners-service.yaml
