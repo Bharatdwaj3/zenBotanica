@@ -1,21 +1,22 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: visitor-services-db
 spec:
+  serviceName: visitor-services-db-headless
   replicas: 1
   selector:
     matchLabels:
       app-name: visitor-services-db
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
         app-name: visitor-services-db
     spec:
       containers:
-        - env:
+        - name: visitor-services-db-ctr
+          image: postgres:15-alpine
+          env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -31,29 +32,23 @@ spec:
                 secretKeyRef:
                   name: visitor-services-secrets
                   key: PgSql_Database
-          image: postgres:15-alpine
           livenessProbe:
             exec:
-              command:
-                - pg_isready
-                - -U
-                - visitor_user
-                - -d
-                - visitor_db
+              command: [pg_isready, -U, visitor_services_user, -d, visitor_services_db]
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-          name: visitor-services-db-ctr
           ports:
             - containerPort: 5432
-          resources: {}
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: visitor-services-data
-      restartPolicy: Always
-      volumes:
-        - name: visitor-services-data
-          persistentVolumeClaim:
-            claimName: visitor-services-data
-status: {}
+            - name: visitor-services-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: visitor-services-data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 100Mi

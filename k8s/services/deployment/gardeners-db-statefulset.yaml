@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gardeners-db
+spec:
+  serviceName: gardeners-db-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gardeners-db
+  template:
+    metadata:
+      labels:
+        app: gardeners-db
+    spec:
+      containers:
+        - name: gardeners-db-ctr
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: gardeners-secrets
+                  key: PgSql_User
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gardeners-secrets
+                  key: PgSql_Password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: gardeners-secrets
+                  key: PgSql_Database
+          livenessProbe:
+            exec:
+              command: [pg_isready, -U, gardeners_user, -d, gardeners_db]
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: gardeners-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: gardeners-data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 100Mi

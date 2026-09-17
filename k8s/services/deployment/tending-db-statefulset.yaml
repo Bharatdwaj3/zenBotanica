@@ -1,59 +1,54 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: gardeners-db
+  name: tending-db
 spec:
+  serviceName: tending-db-headless
   replicas: 1
   selector:
     matchLabels:
-      app: gardeners-db
-  strategy:
-    type: Recreate
+      app-name: tending-db
   template:
     metadata:
       labels:
-        app: gardeners-db
+        app-name: tending-db
     spec:
       containers:
-        - env:
+        - name: tending-db-ctr
+          image: postgres:15-alpine
+          env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: gardeners-secrets
+                  name: tending-secrets
                   key: PgSql_User
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: gardeners-secrets
+                  name: tending-secrets
                   key: PgSql_Password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: gardeners-secrets
+                  name: tending-secrets
                   key: PgSql_Database
-          image: postgres:15-alpine
           livenessProbe:
             exec:
-              command:
-                - pg_isready
-                - -U
-                - gardeners_user
-                - -d
-                - gardeners_db
+              command: [pg_isready, -U, tending_user, -d, tending_db]
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-          name: gardeners-db-ctr
           ports:
             - containerPort: 5432
-          resources: {}
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: gardeners-data
-      restartPolicy: Always
-      volumes:
-        - name: gardeners-data
-          persistentVolumeClaim:
-            claimName: gardeners-data
-status: {}
+            - name: tending-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: tending-data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 100Mi
