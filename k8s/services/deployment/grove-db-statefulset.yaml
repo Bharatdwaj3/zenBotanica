@@ -1,21 +1,22 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: grove-db
 spec:
+  serviceName: grove-db-headless
   replicas: 1
   selector:
     matchLabels:
       app: grove-db
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
         app: grove-db
     spec:
       containers:
-        - env:
+        - name: grove-db-ctr
+          image: postgres:15-alpine
+          env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -31,29 +32,23 @@ spec:
                 secretKeyRef:
                   name: grove-secrets
                   key: PgSql_Database
-          image: postgres:15-alpine
           livenessProbe:
             exec:
-              command:
-                - pg_isready
-                - -U
-                - grove_user
-                - -d
-                - grove_db
+              command: [pg_isready, -U, grove_user, -d, grove_db]
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-          name: grove-db-ctr
           ports:
             - containerPort: 5432
-          resources: {}
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: grove-data
-      restartPolicy: Always
-      volumes:
-        - name: grove-data
-          persistentVolumeClaim:
-            claimName: grove-data
-status: {}
+            - name: grove-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: grove-data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 100Mi
