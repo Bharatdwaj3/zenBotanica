@@ -4,33 +4,33 @@ resources:
   - deployment/grove-rollout.yaml
   - deployment/grove-db-statefulset.yaml
   - deployment/tending-rollout.yaml
-  - deployment/tending-db-rollout.yaml
-  - deployment/tending-data-persistentvolumeclaim.yaml
+  - deployment/tending-db-statefulset.yaml
   - deployment/gardeners-rollout.yaml
-  - deployment/gardeners-db-rollout.yaml
-  - deployment/gardeners-data-persistentvolumeclaim.yaml
+  - deployment/gardeners-db-statefulset.yaml
   - deployment/frontend-rollout.yaml
   - deployment/firebase-rollout.yaml
   - deployment/firebase-data-persistentvolumeclaim.yaml
   - deployment/mailhog-rollout.yaml
   - deployment/marketplace-rollout.yaml
-  - deployment/marketplace-db-rollout.yaml
-  - deployment/marketplace-data-persistentvolumeclaim.yaml
+  - deployment/marketplace-db-statefulset.yaml
   - deployment/visitor-services-rollout.yaml
-  - deployment/visitor-services-db-rollout.yaml
-  - deployment/visitor-services-data-persistentvolumeclaim.yaml
+  - deployment/visitor-services-db-statefulset.yaml
 
   - service/grove-service.yaml
   - service/grove-db-service.yaml
   - service/grove-db-headless-service.yaml
   - service/tending-service.yaml
   - service/tending-db-service.yaml
+  - service/tending-db-headless-service.yaml
   - service/gardeners-service.yaml
   - service/gardeners-db-service.yaml
+  - service/gardeners-db-headless-service.yaml
   - service/marketplace-service.yaml
   - service/marketplace-db-service.yaml
+  - service/marketplace-db-headless-service.yaml
   - service/visitor-services-service.yaml
   - service/visitor-services-db-service.yaml
+  - service/visitor-services-db-headless-service.yaml
 
   - service/frontend-service.yaml
   - service/firebase-service.yaml
