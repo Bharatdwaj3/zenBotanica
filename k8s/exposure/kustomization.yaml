@@ -1,5 +1,11 @@
 namespace: bonsai
 
 resources:
-  - frontend-ingress.yaml
   - selfsigned-issuer.yaml
+  - gateway/gateway.yaml
+  - gateway/nginxproxy.yaml
+  - gateway/firebase-storage-route.yaml
+  - gateway/frontend-route.yaml
+  - gateway/gardeners-route.yaml
+  - gateway/grove-route.yaml
+  - gateway/tending-route.yaml

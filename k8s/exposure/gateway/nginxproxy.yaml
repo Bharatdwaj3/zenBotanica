@@ -1,0 +1,14 @@
+apiVersion: gateway.nginx.org/v1alpha2
+kind: NginxProxy
+metadata:
+  name: bonsai-gateway-proxy-config
+  namespace: bonsai
+spec:
+  kubernetes:
+    deployment:
+      container:
+        hostPorts:
+          - containerPort: 80
+            port: 80
+          - containerPort: 443
+            port: 443
