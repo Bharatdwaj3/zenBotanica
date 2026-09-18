@@ -34,7 +34,7 @@ spec:
                   key: PgSql_Database
           livenessProbe:
             exec:
-              command: [pg_isready, -U, visitor_services_user, -d, visitor_services_db]
+              command: [pg_isready, -U, visitor_user, -d, visitor_db]
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 10
