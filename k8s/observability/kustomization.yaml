@@ -16,6 +16,7 @@ configMapGenerator:
 resources:
   - prometheus-data-persistentvolumeclaim.yaml
   - grafana-data-persistentvolumeclaim.yaml
+  - service/grafana-secrets-sealed.yaml
   - deployment/cadvisor-deployment.yaml
   - deployment/grafana-deployment.yaml
   - deployment/loki-deployment.yaml
