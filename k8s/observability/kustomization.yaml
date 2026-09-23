@@ -4,7 +4,6 @@ namespace: bonsai
 configMapGenerator:
 - name: prometheus-config
   files:
-    - prometheus-web.yml
     - prometheus.yml
 - name: loki-config
   files:
@@ -24,6 +23,7 @@ resources:
   - service/grafana-secrets-sealed.yaml
   - service/loki-htpasswd-sealed.yaml
   - service/loki-push-creds-sealed.yaml
+  - service/prometheus-web-config-sealed.yaml
   - deployment/cadvisor-deployment.yaml
   - deployment/grafana-deployment.yaml
   - deployment/loki-deployment.yaml
