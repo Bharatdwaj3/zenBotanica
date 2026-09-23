@@ -11,7 +11,7 @@ metadata:
 spec:
   ports:
     - name: "3010"
-      port: 3010
+      port: 7010
       targetPort: 3100
   selector:
     io.kompose.service: loki
