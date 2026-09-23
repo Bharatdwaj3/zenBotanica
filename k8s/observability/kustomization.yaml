@@ -4,9 +4,11 @@ namespace: bonsai
 configMapGenerator:
 - name: prometheus-config
   files:
+    - prometheus-web.yml
     - prometheus.yml
 - name: loki-config
   files:
+    - loki-nginx.conf
     - loki-config.yml
 - name: promtail-config
   files:
@@ -14,9 +16,14 @@ configMapGenerator:
 
 # 2. List the resources to be managed
 resources:
+  - rbac/promtail-serviceaccount.yaml
+  - rbac/promtail-clusterrole.yaml
+  - rbac/promtail-clusterrolebinding.yaml
   - prometheus-data-persistentvolumeclaim.yaml
   - grafana-data-persistentvolumeclaim.yaml
   - service/grafana-secrets-sealed.yaml
+  - service/loki-htpasswd-sealed.yaml
+  - service/loki-push-creds-sealed.yaml
   - deployment/cadvisor-deployment.yaml
   - deployment/grafana-deployment.yaml
   - deployment/loki-deployment.yaml
