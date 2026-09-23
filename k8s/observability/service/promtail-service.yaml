@@ -11,7 +11,7 @@ metadata:
 spec:
   ports:
     - name: "8180"
-      port: 8180
+      port: 7081
       targetPort: 8180
   selector:
     io.kompose.service: promtail

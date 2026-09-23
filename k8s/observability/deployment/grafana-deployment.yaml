@@ -38,7 +38,7 @@ spec:
           name: bonsai-grafana
           ports:
             - containerPort: 3000
-              hostPort: 3101
+              hostPort: 7001
               protocol: TCP
           resources: {}
           volumeMounts:
