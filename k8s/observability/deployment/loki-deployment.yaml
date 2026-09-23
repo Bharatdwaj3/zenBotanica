@@ -26,28 +26,51 @@ spec:
         io.kompose.service: loki
     spec:
       containers:
+        - name: loki-nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 3100
+              hostPort: 7010
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: loki-config
+              subPath: loki-nginx.conf
+              readOnly: true
+            - mountPath: /etc/nginx/.htpasswd
+              name: loki-htpasswd
+              subPath: loki-htpasswd
+              readOnly: true
         - args:
             - -config.file=/etc/loki/local-config.yml
           image: grafana/loki:latest
           name: bonsai-loki
           ports:
-            - containerPort: 3100
-              hostPort: 3010
+            - containerPort: 3101
               protocol: TCP
           resources: {}
           securityContext:
             runAsUser: 0
           volumeMounts:
             - mountPath: /etc/loki/local-config.yml
-              name: loki-claim0
-              subPath: local-config.yml
+              name: loki-config
+              subPath: loki-config.yml
               readOnly: true
       restartPolicy: Always
       volumes:
-        - name: loki-claim0
+        - name: loki-config
           configMap:
-            name: loki-config-f5mbcmft44
+            name: loki-config
             items:
               - key: loki-config.yml
-                path: local-config.yml
+                path: loki-config.yml
+              - key: loki-nginx.conf
+                path: loki-nginx.conf
+        - name: loki-htpasswd
+          secret:
+            secretName: loki-htpasswd
+            items:
+              - key: loki-htpasswd
+                path: loki-htpasswd
 status: {}
