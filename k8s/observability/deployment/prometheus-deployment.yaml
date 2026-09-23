@@ -29,17 +29,21 @@ spec:
         - args:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.retention.time=7d
+            - --web.config.file=/etc/prometheus/web.yml
           image: prom/prometheus:latest
           name: bonsai-prometheus
           ports:
             - containerPort: 9090
-              hostPort: 9090
+              hostPort: 7090
               protocol: TCP
           resources: {}
           volumeMounts:
             - mountPath: /etc/prometheus/prometheus.yml
               name: prometheus-claim0
               subPath: prometheus.yml
+            - mountPath: /etc/prometheus/web.yml
+              name: prometheus-web-config
+              subPath: web.yml
             - mountPath: /prometheus
               name: prometheus-data
       restartPolicy: Always
@@ -47,6 +51,12 @@ spec:
         - name: prometheus-claim0
           configMap:
             name: prometheus-config
+        - name: prometheus-web-config
+          configMap:
+            name: prometheus-config
+            items:
+              - key: prometheus-web.yml
+                path: web.yml
         - name: prometheus-data
           persistentVolumeClaim:
             claimName: prometheus-data

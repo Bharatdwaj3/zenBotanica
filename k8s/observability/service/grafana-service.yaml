@@ -11,7 +11,7 @@ metadata:
 spec:
   ports:
     - name: "3101"
-      port: 3101
+      port: 7001
       targetPort: 3000
   selector:
     io.kompose.service: grafana

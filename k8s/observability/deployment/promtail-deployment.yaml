@@ -28,32 +28,36 @@ spec:
       containers:
         - args:
             - -config.file=/etc/promtail/config.yml
+            - -config.expand-env=true
           image: grafana/promtail:latest
           name: bonsai-promtail
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          envFrom:
+            - secretRef:
+                name: loki-push-creds
           ports:
             - containerPort: 8180
-              hostPort: 8180
+              hostPort: 7081
               protocol: TCP
           resources: {}
           volumeMounts:
             - mountPath: /etc/promtail/config.yml
               name: promtail-claim0
               subPath: promtail-config.yml
-            - mountPath: /var/lib/docker/containers
-              name: promtail-claim1
+            - mountPath: /var/log/pods
+              name: promtail-varlogpods
               readOnly: true
-            - mountPath: /var/run/docker.sock
-              name: promtail-claim2
+      serviceAccountName: promtail
       restartPolicy: Always
       volumes:
         - name: promtail-claim0
           configMap:
             name: promtail-config
-        - name: promtail-claim1
+        - name: promtail-varlogpods
           hostPath:
-            path: /var/lib/docker/containers
-        - name: promtail-claim2
-          hostPath:
-            path: /var/run/docker.sock
-            type: Socket
+            path: /var/log/pods
 status: {}
