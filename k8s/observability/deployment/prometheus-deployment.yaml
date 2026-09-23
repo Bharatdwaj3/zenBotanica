@@ -52,10 +52,10 @@ spec:
           configMap:
             name: prometheus-config
         - name: prometheus-web-config
-          configMap:
-            name: prometheus-config
+          secret:
+            secretName: prometheus-web-config
             items:
-              - key: prometheus-web.yml
+              - key: web.yml
                 path: web.yml
         - name: prometheus-data
           persistentVolumeClaim:

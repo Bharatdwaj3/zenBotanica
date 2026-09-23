@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: prometheus-web-config
+  namespace: bonsai
+spec:
+  encryptedData:
+    web.yml: AgAaaX3uxF29eHYR1/JP7c769wBRfWNecR1W0xcBbuumsbVgkmJ904joulHsf8FyNWiKh2/F99kdHvQjYX03EHzHjWWs4iuegolMl+vRqgZVJDW3vcDU72F482r1cAbj9Yb1xlFNAtebCcDYj8V4dsHdWaYZDHU3uAYjxKLfDsXH13tQ3NNlRSW6aAryaBprHtzCQNIFqTeliIJ/+FN8HKOHHtirOphw8syrpZzD8kQrIhzk3y7gOdjbhks4lbATJBNh9Ue6rEKM1aMPSS30yuKBw5smfsysydYOk8uJLMlHRk0uL9+dpCLBV0mtWPi55LhX4c7PSnXJPgNPqxTUmhxR9g3F9kuwvVw0G6YySK/G+axUlcdOFWtwoKBWdrhaOd4cmmfOKuKjJLbxuGzEkfRotzu1NRojdp5T1K8ZETvwv77Gh/qRNPmrMcN2sRkcc3UdnLEmIsIk8VkC9CLUjNMIqFsGC6sctQi4ENKVowEIYGy4Dx6YgMkgD/eBq/Y29V12/RXvwiGkPEefpulO1gDZtnQZv8fc8woiR83WMcZKHOjD0d4aUdjxKf1kK66+ZqN5b1Fnl3b1XesBpRiJ/NdhUqDdhPav/mk5HmSMnLjVoMls4hF61tUoLEoRKrybQjs5i4DDrvfJI3WOL3BgdvT/AtBJt4d40nralkTUoGLEvZ3Qzydanm/zAqRic6tQSDSNJVABczL1DXG3BaGwQCWz63L+1RN457MZAkHZdbiiPpp+NPUlmBTmdMi1CxhPf0//2s0xoScFNExoWPeFKYqTU9J17VdLMmJGArsQ41HfymbbMEeqpf+o
+  template:
+    metadata:
+      creationTimestamp: null
+      name: prometheus-web-config
+      namespace: bonsai
