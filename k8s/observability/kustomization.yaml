@@ -24,6 +24,7 @@ resources:
   - service/loki-htpasswd-sealed.yaml
   - service/loki-push-creds-sealed.yaml
   - service/prometheus-web-config-sealed.yaml
+  - service/prometheus-web-creds-sealed.yaml
   - deployment/cadvisor-deployment.yaml
   - deployment/grafana-deployment.yaml
   - deployment/loki-deployment.yaml
