@@ -97,3 +97,14 @@ jobs:
           git add k8s/services/kustomization.yaml
           git commit -m "chore: update image tags to ${SHORT_SHA} [skip ci]" || echo "No changes to commit"
           git push
+
+  validate-observability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Validate observability manifests render correctly
+        run: kubectl kustomize k8s/observability/ > /dev/null
