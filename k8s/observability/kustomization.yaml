@@ -2,6 +2,9 @@ namespace: bonsai
 
 # 1. Automatically turn your local config files into ConfigMaps
 configMapGenerator:
+- name: grafana-datasources
+  files:
+    - grafana-datasources.yml
 - name: prometheus-config
   files:
     - prometheus.yml
