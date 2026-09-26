@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: gardeners-db-headless
+  labels:
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.gardenersDbHeadless.type }}
+  selector:
+    app: gardeners-db
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.gardenersDbHeadless.ports | toYaml | nindent 2 }}

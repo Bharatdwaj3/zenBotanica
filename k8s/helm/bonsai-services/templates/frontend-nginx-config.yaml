@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "bonsai-services.fullname" . }}-frontend-nginx-config
-  labels:
-  {{- include "bonsai-services.labels" . | nindent 4 }}
-data:
-  default.conf: {{ .Values.frontendNginxConfig.defaultConf | toYaml | indent 1 }}

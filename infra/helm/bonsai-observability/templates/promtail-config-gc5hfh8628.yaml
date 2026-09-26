@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: promtail-config-gc5hfh8628
+  labels:
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+data:
+  promtail-config.yml: {{ .Values.promtailConfigGc5Hfh8628.promtailConfigYml | toYaml
+    | indent 1 }}

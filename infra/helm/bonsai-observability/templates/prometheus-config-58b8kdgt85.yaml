@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: prometheus-config-58b8kdgt85
+  labels:
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+data:
+  prometheus.yml: {{ .Values.prometheusConfig58B8Kdgt85.prometheusYml | toYaml |
+    indent 1 }}

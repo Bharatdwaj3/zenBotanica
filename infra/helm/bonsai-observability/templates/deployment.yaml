@@ -1,0 +1,382 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cadvisor
+  labels:
+    io.kompose.service: cadvisor
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  replicas: {{ .Values.cadvisor.replicas }}
+  strategy:
+    type: {{ .Values.cadvisor.strategy.type | quote }}
+  selector:
+    matchLabels:
+      io.kompose.service: cadvisor
+    {{- include "bonsai-observability.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/bonsai-web-application-default: "true"
+        io.kompose.service: cadvisor
+      {{- include "bonsai-observability.selectorLabels" . | nindent 8 }}
+      annotations:
+        kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+        kompose.version: 1.31.2 (a92241f79)
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.cadvisor.bonsaiCadvisor.image.repository }}:{{ .Values.cadvisor.bonsaiCadvisor.image.tag
+          | default .Chart.AppVersion }}
+        name: bonsai-cadvisor
+        ports:
+        - containerPort: 8080
+          hostPort: 7080
+          protocol: TCP
+        resources: {{- toYaml .Values.cadvisor.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /rootfs
+          name: cadvisor-claim0
+          readOnly: true
+        - mountPath: /var/run
+          name: cadvisor-claim1
+          readOnly: true
+        - mountPath: /sys
+          name: cadvisor-claim2
+          readOnly: true
+        - mountPath: /var/lib/docker
+          name: cadvisor-claim3
+          readOnly: true
+      nodeSelector: {{- toYaml .Values.cadvisor.nodeSelector | nindent 10 }}
+      restartPolicy: Always
+      serviceAccountName: cadvisor
+      topologySpreadConstraints: {{- toYaml .Values.cadvisor.topologySpreadConstraints
+        | nindent 10 }}
+      volumes:
+      - hostPath:
+          path: /
+        name: cadvisor-claim0
+      - hostPath:
+          path: /var/run
+        name: cadvisor-claim1
+      - hostPath:
+          path: /sys
+        name: cadvisor-claim2
+      - hostPath:
+          path: /var/lib/docker
+        name: cadvisor-claim3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: grafana
+  labels:
+    io.kompose.service: grafana
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  replicas: {{ .Values.grafana.replicas }}
+  strategy:
+    type: {{ .Values.grafana.strategy.type | quote }}
+  selector:
+    matchLabels:
+      io.kompose.service: grafana
+    {{- include "bonsai-observability.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/bonsai-web-application-default: "true"
+        io.kompose.service: grafana
+      {{- include "bonsai-observability.selectorLabels" . | nindent 8 }}
+      annotations:
+        kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+        kompose.version: 1.31.2 (a92241f79)
+    spec:
+      containers:
+      - env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: GF_SECURITY_ADMIN_PASSWORD
+              name: grafana-secrets
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: {{ quote .Values.grafana.bonsaiGrafana.env.gfUsersAllowSignUp }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        envFrom:
+        - secretRef:
+            name: loki-push-creds
+        - secretRef:
+            name: prometheus-web-creds
+        image: {{ .Values.grafana.bonsaiGrafana.image.repository }}:{{ .Values.grafana.bonsaiGrafana.image.tag
+          | default .Chart.AppVersion }}
+        name: bonsai-grafana
+        ports:
+        - containerPort: 3000
+          hostPort: 7001
+          protocol: TCP
+        resources: {{- toYaml .Values.grafana.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: grafana-data
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources
+      nodeSelector: {{- toYaml .Values.grafana.nodeSelector | nindent 10 }}
+      restartPolicy: Always
+      serviceAccountName: grafana
+      topologySpreadConstraints: {{- toYaml .Values.grafana.topologySpreadConstraints |
+        nindent 10 }}
+      volumes:
+      - name: grafana-data
+        persistentVolumeClaim:
+          claimName: grafana-data
+      - configMap:
+          name: grafana-datasources-6mhkg57dtk
+        name: grafana-datasources
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: loki
+  labels:
+    io.kompose.service: loki
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  replicas: {{ .Values.loki.replicas }}
+  strategy:
+    type: {{ .Values.loki.strategy.type | quote }}
+  selector:
+    matchLabels:
+      io.kompose.service: loki
+    {{- include "bonsai-observability.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/bonsai-web-application-default: "true"
+        io.kompose.service: loki
+      {{- include "bonsai-observability.selectorLabels" . | nindent 8 }}
+      annotations:
+        kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+        kompose.version: 1.31.2 (a92241f79)
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.loki.lokiNginx.image.repository }}:{{ .Values.loki.lokiNginx.image.tag
+          | default .Chart.AppVersion }}
+        name: loki-nginx
+        ports:
+        - containerPort: 3100
+          hostPort: 7010
+          protocol: TCP
+        resources: {{- toYaml .Values.loki.lokiNginx.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: loki-config
+          readOnly: true
+          subPath: loki-nginx.conf
+        - mountPath: /etc/nginx/.htpasswd
+          name: loki-htpasswd
+          readOnly: true
+          subPath: loki-htpasswd
+      - args: {{- toYaml .Values.loki.bonsaiLoki.args | nindent 10 }}
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.loki.bonsaiLoki.image.repository }}:{{ .Values.loki.bonsaiLoki.image.tag
+          | default .Chart.AppVersion }}
+        name: bonsai-loki
+        ports:
+        - containerPort: 3101
+          protocol: TCP
+        resources: {{- toYaml .Values.loki.bonsaiLoki.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.loki.bonsaiLoki.containerSecurityContext |
+          nindent 10 }}
+        volumeMounts:
+        - mountPath: /etc/loki/local-config.yml
+          name: loki-config
+          readOnly: true
+          subPath: loki-config.yml
+      nodeSelector: {{- toYaml .Values.loki.nodeSelector | nindent 10 }}
+      restartPolicy: Always
+      serviceAccountName: loki
+      topologySpreadConstraints: {{- toYaml .Values.loki.topologySpreadConstraints | nindent
+        8 }}
+      volumes:
+      - configMap:
+          items:
+          - key: loki-config.yml
+            path: loki-config.yml
+          - key: loki-nginx.conf
+            path: loki-nginx.conf
+          name: loki-config-k29mk7hb64
+        name: loki-config
+      - name: loki-htpasswd
+        secret:
+          items:
+          - key: loki-htpasswd
+            path: loki-htpasswd
+          secretName: loki-htpasswd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: prometheus
+  labels:
+    io.kompose.service: prometheus
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  replicas: {{ .Values.prometheus.replicas }}
+  strategy:
+    type: {{ .Values.prometheus.strategy.type | quote }}
+  selector:
+    matchLabels:
+      io.kompose.service: prometheus
+    {{- include "bonsai-observability.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/bonsai-web-application-default: "true"
+        io.kompose.service: prometheus
+      {{- include "bonsai-observability.selectorLabels" . | nindent 8 }}
+      annotations:
+        kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+        kompose.version: 1.31.2 (a92241f79)
+    spec:
+      containers:
+      - args: {{- toYaml .Values.prometheus.bonsaiPrometheus.args | nindent 10 }}
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.prometheus.bonsaiPrometheus.image.repository }}:{{ .Values.prometheus.bonsaiPrometheus.image.tag
+          | default .Chart.AppVersion }}
+        name: bonsai-prometheus
+        ports:
+        - containerPort: 9090
+          hostPort: 7090
+          protocol: TCP
+        resources: {{- toYaml .Values.prometheus.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /etc/prometheus/prometheus.yml
+          name: prometheus-claim0
+          subPath: prometheus.yml
+        - mountPath: /etc/prometheus/web.yml
+          name: prometheus-web-config
+          subPath: web.yml
+        - mountPath: /etc/prometheus/self-scrape-password
+          name: prometheus-web-creds
+          readOnly: true
+          subPath: PROM_PASSWORD
+        - mountPath: /prometheus
+          name: prometheus-data
+      nodeSelector: {{- toYaml .Values.prometheus.nodeSelector | nindent 10 }}
+      restartPolicy: Always
+      serviceAccountName: prometheus
+      topologySpreadConstraints: {{- toYaml .Values.prometheus.topologySpreadConstraints
+        | nindent 10 }}
+      volumes:
+      - configMap:
+          name: prometheus-config-58b8kdgt85
+        name: prometheus-claim0
+      - name: prometheus-web-config
+        secret:
+          items:
+          - key: web.yml
+            path: web.yml
+          secretName: prometheus-web-config
+      - name: prometheus-web-creds
+        secret:
+          items:
+          - key: PROM_PASSWORD
+            path: PROM_PASSWORD
+          secretName: prometheus-web-creds
+      - name: prometheus-data
+        persistentVolumeClaim:
+          claimName: prometheus-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: promtail
+  labels:
+    io.kompose.service: promtail
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  replicas: {{ .Values.promtail.replicas }}
+  strategy:
+    type: {{ .Values.promtail.strategy.type | quote }}
+  selector:
+    matchLabels:
+      io.kompose.service: promtail
+    {{- include "bonsai-observability.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/bonsai-web-application-default: "true"
+        io.kompose.service: promtail
+      {{- include "bonsai-observability.selectorLabels" . | nindent 8 }}
+      annotations:
+        kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+        kompose.version: 1.31.2 (a92241f79)
+    spec:
+      containers:
+      - args: {{- toYaml .Values.promtail.bonsaiPromtail.args | nindent 10 }}
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        envFrom:
+        - secretRef:
+            name: loki-push-creds
+        image: {{ .Values.promtail.bonsaiPromtail.image.repository }}:{{ .Values.promtail.bonsaiPromtail.image.tag
+          | default .Chart.AppVersion }}
+        name: bonsai-promtail
+        ports:
+        - containerPort: 8180
+          hostPort: 7081
+          protocol: TCP
+        resources: {{- toYaml .Values.promtail.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /etc/promtail/config.yml
+          name: promtail-claim0
+          subPath: promtail-config.yml
+        - mountPath: /var/log/pods
+          name: promtail-varlogpods
+          readOnly: true
+      nodeSelector: {{- toYaml .Values.promtail.nodeSelector | nindent 10 }}
+      restartPolicy: Always
+      serviceAccountName: promtail
+      topologySpreadConstraints: {{- toYaml .Values.promtail.topologySpreadConstraints
+        | nindent 10 }}
+      volumes:
+      - configMap:
+          name: promtail-config-gc5hfh8628
+        name: promtail-claim0
+      - hostPath:
+          path: /var/log/pods
+        name: promtail-varlogpods

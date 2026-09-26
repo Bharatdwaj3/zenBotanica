@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: visitor-services
+  labels:
+    bonsai-service: visitor-services
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml --out k8s/services/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  type: {{ .Values.visitorServices.type }}
+  selector:
+    bonsai-service: visitor-services
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.visitorServices.ports | toYaml | nindent 2 }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: visitor-services
+  labels:
+    bonsai-service: visitor-services
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 120
+  replicas: 3
+  selector:
+    matchLabels:
+      bonsai-service: visitor-services
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause:
+          duration: 30s
+      - setWeight: 40
+      - pause:
+          duration: 30s
+      - setWeight: 60
+      - pause:
+          duration: 30s
+      - setWeight: 80
+      - pause:
+          duration: 30s
+      - setWeight: 100
+  template:
+    metadata:
+      labels:
+        bonsai-service: visitor-services
+    spec:
+      containers:
+      - args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma migrate deploy && npm start
+        envFrom:
+        - secretRef:
+            name: visitor-services-secrets
+        image: {{ .Values.visitorServices.image.repository }}:{{ .Values.visitorServices.image.tag | default .Chart.AppVersion }}
+        name: visitor-services-ctr
+        ports:
+        - containerPort: 4004
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          tcpSocket:
+            port: 4004
+        resources: {{- toYaml .Values.visitorServices.resources | nindent 10 }}
+      imagePullSecrets:
+      - name: ghcr-secret
+      restartPolicy: Always
+status: {}

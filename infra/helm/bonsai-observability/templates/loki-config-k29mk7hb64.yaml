@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: loki-config-k29mk7hb64
+  labels:
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+data:
+  loki-config.yml: {{ .Values.lokiConfigK29Mk7Hb64.lokiConfigYml | toYaml | indent
+    1 }}
+  loki-nginx.conf: {{ .Values.lokiConfigK29Mk7Hb64.lokiNginxConf | toYaml | indent
+    1 }}
