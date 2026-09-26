@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bonsai-services.fullname" . }}-grove-db-headless
+  labels:
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.groveDbHeadless.type }}
+  selector:
+    app: grove-db
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.groveDbHeadless.ports | toYaml | nindent 2 }}

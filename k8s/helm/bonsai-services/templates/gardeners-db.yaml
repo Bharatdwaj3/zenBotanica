@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bonsai-services.fullname" . }}-gardeners-db
+  labels:
+    app: gardeners-db
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.gardenersDb.type }}
+  selector:
+    app: gardeners-db
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.gardenersDb.ports | toYaml | nindent 2 }}
