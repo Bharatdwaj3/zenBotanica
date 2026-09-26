@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bonsai-observability.fullname" . }}-loki
+  labels:
+    io.kompose.service: loki
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f observability-compose.yml -o k8s/observability/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  type: {{ .Values.loki.type }}
+  selector:
+    io.kompose.service: loki
+    {{- include "bonsai-observability.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.loki.ports | toYaml | nindent 2 }}
