@@ -1,0 +1,218 @@
+cadvisor:
+  bonsaiCadvisor:
+    image:
+      repository: gcr.io/cadvisor/cadvisor
+      tag: latest
+  nodeSelector: {}
+  ports:
+    - name: "8080"
+      port: 7080
+      targetPort: 8080
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+  resources: {}
+grafana:
+  bonsaiGrafana:
+    env:
+      gfUsersAllowSignUp: "false"
+    image:
+      repository: grafana/grafana
+      tag: latest
+  nodeSelector: {}
+  ports:
+    - name: "3101"
+      port: 7001
+      targetPort: 3000
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+  resources: {}
+grafanaDatasources6Mhkg57Dtk:
+  grafanaDatasourcesYml: |-
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki:7010
+        basicAuth: true
+        basicAuthUser: $__env{LOKI_USER}
+        secureJsonData:
+          basicAuthPassword: $__env{LOKI_PASSWORD}
+        isDefault: false
+        editable: true
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:7090
+        basicAuth: true
+        basicAuthUser: $__env{PROM_USER}
+        secureJsonData:
+          basicAuthPassword: $__env{PROM_PASSWORD}
+        isDefault: true
+        editable: true
+kubernetesClusterDomain: cluster.local
+loki:
+  bonsaiLoki:
+    args:
+      - -config.file=/etc/loki/local-config.yml
+    containerSecurityContext:
+      runAsUser: 0
+    image:
+      repository: grafana/loki
+      tag: latest
+    resources: {}
+  lokiNginx:
+    image:
+      repository: nginx
+      tag: latest
+    resources: {}
+  nodeSelector: {}
+  ports:
+    - name: "3010"
+      port: 7010
+      targetPort: 3100
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+lokiConfigK29Mk7Hb64:
+  lokiConfigYml: |-
+    auth_enabled: false
+    server:
+      http_listen_port: 3101
+    common:
+      path_prefix: /tmp/loki
+      storage:
+        filesystem:
+          chunks_directory: /tmp/loki/chunks
+          rules_directory: /tmp/loki/rules
+      replication_factor: 1
+      ring:
+        kvstore:
+          store: inmemory
+    limits_config:
+      allow_structured_metadata: false
+    schema_config:
+      configs:
+        - from: 2020-10-24
+          store: tsdb
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
+  lokiNginxConf: |-
+    events {}
+    http {
+      server {
+        listen 3100;
+        auth_basic "Loki";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        location / {
+          proxy_pass http://localhost:3101;
+          proxy_set_header Host $host;
+        }
+      }
+    }
+prometheus:
+  bonsaiPrometheus:
+    args:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+      - --web.config.file=/etc/prometheus/web.yml
+    image:
+      repository: prom/prometheus
+      tag: latest
+  nodeSelector: {}
+  ports:
+    - name: "9090"
+      port: 7090
+      targetPort: 9090
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+  resources: {}
+prometheusConfig58B8Kdgt85:
+  prometheusYml: |-
+    global:
+      scrape_interval: 15s
+    scrape_configs:
+      - job_name: 'cadvisor'
+        static_configs:
+          - targets: ['cadvisor:7080']
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+        basic_auth:
+          username: admin
+          password_file: /etc/prometheus/self-scrape-password
+promtail:
+  bonsaiPromtail:
+    args:
+      - -config.file=/etc/promtail/config.yml
+      - -config.expand-env=true
+    image:
+      repository: grafana/promtail
+      tag: latest
+  nodeSelector: {}
+  ports:
+    - name: "8180"
+      port: 7081
+      targetPort: 8180
+  replicas: 1
+  strategy:
+    type: Recreate
+  tolerations: []
+  topologySpreadConstraints: []
+  type: ClusterIP
+  resources: {}
+promtailConfigGc5Hfh8628:
+  promtailConfigYml: |-
+    server:
+      http_listen_port: 9080
+    positions:
+      filename: /tmp/positions.yaml
+    clients:
+      - url: http://${LOKI_USER}:${LOKI_PASSWORD}@loki:7010/loki/api/v1/push
+    scrape_configs:
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        pipeline_stages:
+          - cri: {}
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: node
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: pod
+          - source_labels: [__meta_kubernetes_pod_container_name]
+            target_label: container
+          - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_name, __meta_kubernetes_pod_uid, __meta_kubernetes_pod_container_name]
+            separator: /
+            target_label: __path__
+            replacement: /var/log/pods/$1_$2_$3/$4/*.log
+pvc:
+  grafanaData:
+    storageRequest: 500Mi
+  prometheusData:
+    storageRequest: 500Mi
+serviceAccount:
+  annotations: {}
+  automount: true
+  create: true
+  name: ""
