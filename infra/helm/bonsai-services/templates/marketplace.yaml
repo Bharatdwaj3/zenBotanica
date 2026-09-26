@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: marketplace
+  labels:
+    bonsai-service: marketplace
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml --out k8s/services/
+    kompose.version: 1.31.2 (a92241f79)
+spec:
+  type: {{ .Values.marketplace.type }}
+  selector:
+    bonsai-service: marketplace
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.marketplace.ports | toYaml | nindent 2 }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: marketplace
+  labels:
+    bonsai-service: marketplace
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 120
+  replicas: 3
+  selector:
+    matchLabels:
+      bonsai-service: marketplace
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause:
+          duration: 30s
+      - setWeight: 40
+      - pause:
+          duration: 30s
+      - setWeight: 60
+      - pause:
+          duration: 30s
+      - setWeight: 80
+      - pause:
+          duration: 30s
+      - setWeight: 100
+  template:
+    metadata:
+      labels:
+        bonsai-service: marketplace
+    spec:
+      containers:
+      - args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma migrate deploy && npm start
+        envFrom:
+        - secretRef:
+            name: marketplace-secrets
+        image: {{ .Values.marketplace.image.repository }}:{{ .Values.marketplace.image.tag | default .Chart.AppVersion }}
+        name: marketplace-ctr
+        ports:
+        - containerPort: 4005
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          tcpSocket:
+            port: 4005
+        resources: {{- toYaml .Values.marketplace.resources | nindent 10 }}
+      imagePullSecrets:
+      - name: ghcr-secret
+      restartPolicy: Always
+status: {}

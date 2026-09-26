@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: grafana-datasources-6mhkg57dtk
+  labels:
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+data:
+  grafana-datasources.yml: {{ .Values.grafanaDatasources6Mhkg57Dtk.grafanaDatasourcesYml
+    | toYaml | indent 1 }}

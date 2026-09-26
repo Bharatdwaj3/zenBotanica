@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: visitor-services-db
+  labels:
+    app-name: visitor-services-db
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.visitorServicesDb.type }}
+  selector:
+    app-name: visitor-services-db
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.visitorServicesDb.ports | toYaml | nindent 2 }}

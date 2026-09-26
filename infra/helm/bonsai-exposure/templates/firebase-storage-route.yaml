@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: firebase-storage-route
+  labels:
+  {{- include "bonsai-exposure.labels" . | nindent 4 }}
+spec:
+  hostnames:
+  - bonsai.local
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: bonsai-gateway
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: firebase
+      port: 9199
+      weight: 1
+    filters:
+    - responseHeaderModifier:
+        add:
+        - name: Content-Disposition
+          value: inline
+        remove:
+        - Content-Disposition
+      type: ResponseHeaderModifier
+    matches:
+    - path:
+        type: PathPrefix
+        value: /firebase-storage/

@@ -1,0 +1,15 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: prometheus-web-config
+  labels:
+  {{- include "bonsai-observability.labels" . | nindent 4 }}
+spec:
+  encryptedData:
+    web.yml: AgCX6C/mn4+md2w2SIKj8OkPHzMJykpSqwuf2PKjquOrXpvwLqWWD4t3h2pO1Aa1CKE3TCdhKLxqq8waOgn81b6IqvgNxQvFifh2U6qRkFFvFcukDPqBbd1a7XQonIPkbBhGKrwWrE6vSR5l7Ex3klsLCV+xPae8SJ3uGzmFnvR0BRWywF8Gr3EwZSZt/C0dpBIFw2OKt+kxug28dlJbkMoWU57Tx8NC7HeNpv/tP4G1q+TdiEI5b4aiPVvUa0GnR+vGTlx5UKnHwv2lUZ+Inmlu1uLAgq7DHj1UF5ymygXUN5Zaff/exv9j62zYmXmH2Wq0L93B4goQ3jg7QVI+YSv8dKZUwugKHCQC4bxpz8XRiRKWytSQhGH0G9OWfCO4IFvXNgndf8+EKfqLrT1DTC2+7tmKmWEXb5yiRp38gSEzjgaJqw5ZJsP1JkZyp+4UBKgkNmgkxJv6Szt9i/xolNZRQT5jNUAH6yVp4Iyt4uJZt99TFx3GODiZgyfqMhAfI+ilYVGm7T5yO6WWfJM+5BK+sSJGoYyHd8fYmgkTK8taVnZvI54MKwYEKzJbvdVkrtP2koXz5bQR1b6SKngwmZBBXO/IWWpW8+i1J7tXfnKO75OWhDBXp+m7RPm2PsrBw3rHfng8r/eH+pCDBxiOK5KU0ktHgwcC4r10joB3Vybccvb2oYReOhTzIXUAIx87FPwe+6YMlJXISRXp2j/19C5ttrvzXdGAzADBtd8Ek3OZQoGdf5S0i0b7lm9vxO57WKFNp+qWDfHz7sL076KxxYEu0IJ+0YHTAvsoNoftW4UR3tq4/0ufXbTB
+  template:
+    metadata:
+      creationTimestamp: null
+      name: prometheus-web-config
+      namespace: bonsai
