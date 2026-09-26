@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bonsai-services.fullname" . }}-firebase
+  labels:
+    bonsai-service: firebase
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.firebase.type }}
+  selector:
+    bonsai-service: firebase
+    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.firebase.ports | toYaml | nindent 2 }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "bonsai-services.fullname" . }}-firebase
+  labels:
+    bonsai-service: firebase
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 120
+  replicas: 1
+  selector:
+    matchLabels:
+      bonsai-service: firebase
+  strategy:
+    canary:
+      steps:
+      - setWeight: 100
+  template:
+    metadata:
+      labels:
+        bonsai-service: firebase
+    spec:
+      containers:
+      - image: {{ .Values.firebase.image.repository }}:{{ .Values.firebase.image.tag | default .Chart.AppVersion }}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - firebase emulators:export /data/export --project demo-project --force
+        name: firebase-ctr
+        ports:
+        - containerPort: 9099
+          protocol: TCP
+        - containerPort: 9199
+          protocol: TCP
+        - containerPort: 4000
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          tcpSocket:
+            port: 9199
+        resources: {{- toYaml .Values.firebase.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /data
+          name: firebase-data
+      imagePullSecrets:
+      - name: ghcr-secret
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: firebase-data
+        persistentVolumeClaim:
+          claimName: firebase-data
+status: {}
