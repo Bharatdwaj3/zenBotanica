@@ -22,7 +22,7 @@ frontend:
   type: ClusterIP
   image:
     repository: ghcr.io/bharatdwaj3/botany-frontend
-    tag: de10f78
+    tag: "b1d2086"
   resources: {}
 frontendNginxConfig:
   defaultConf: |-
@@ -44,7 +44,7 @@ gardeners:
   type: ClusterIP
   image:
     repository: ghcr.io/bharatdwaj3/botany-gardeners
-    tag: de10f78
+    tag: "b1d2086"
   resources: {}
 gardenersDb:
   gardenersDbCtr:
@@ -78,7 +78,7 @@ grove:
   type: ClusterIP
   image:
     repository: ghcr.io/bharatdwaj3/botany-grove
-    tag: de10f78
+    tag: "b1d2086"
   resources: {}
 groveDb:
   groveDbCtr:
@@ -123,7 +123,7 @@ marketplace:
   type: ClusterIP
   image:
     repository: ghcr.io/bharatdwaj3/botany-marketplace
-    tag: de10f78
+    tag: "b1d2086"
   resources: {}
 marketplaceDb:
   marketplaceDbCtr:
@@ -160,7 +160,7 @@ tending:
   type: ClusterIP
   image:
     repository: ghcr.io/bharatdwaj3/botany-tending
-    tag: de10f78
+    tag: "b1d2086"
   resources: {}
 tendingDb:
   nodeSelector: {}
@@ -194,7 +194,7 @@ visitorServices:
   type: ClusterIP
   image:
     repository: ghcr.io/bharatdwaj3/botany-visitor-services
-    tag: de10f78
+    tag: "b1d2086"
   resources: {}
 visitorServicesDb:
   nodeSelector: {}
