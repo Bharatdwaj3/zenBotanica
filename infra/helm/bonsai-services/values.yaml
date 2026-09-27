@@ -162,6 +162,9 @@ tending:
     repository: ghcr.io/bharatdwaj3/botany-tending
     tag: "b8ea6fe"
   resources: {}
+  careReminder:
+    schedule: 0 8 * * *
+    resources: {}
 tendingDb:
   nodeSelector: {}
   ports:

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsx server.ts",
-    "dev": "nodemon --exec \"tsx server.ts\""
+    "dev": "nodemon --exec \"tsx server.ts\"",
+    "care-reminder": "tsx jobs/run-care-reminder.ts"
   },
   "keywords": [],
   "author": "",
