@@ -8,10 +8,10 @@ spec:
   sources:
     - repoURL: https://github.com/Bharatdwaj3/zenBotanica
       targetRevision: main
-      path: k8s/services
+      path: infra/helm/bonsai-services
     - repoURL: https://github.com/Bharatdwaj3/zenBotanica
       targetRevision: main
-      path: k8s/exposure
+      path: infra/helm/bonsai-exposure
   destination:
     server: https://kubernetes.default.svc
     namespace: bonsai
