@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Bharatdwaj3/zenBotanica
     targetRevision: main
-    path: k8s/observability
+    path: infra/helm/bonsai-observability
   destination:
     server: https://kubernetes.default.svc
     namespace: bonsai
