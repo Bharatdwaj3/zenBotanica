@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: tending-care-reminder
+  labels:
+    bonsai-service: tending
+  {{- include "bonsai-services.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.tending.careReminder.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            bonsai-service: tending-care-reminder
+        spec:
+          containers:
+          - name: tending-care-reminder-ctr
+            image: {{ .Values.tending.image.repository }}:{{ .Values.tending.image.tag | default .Chart.AppVersion }}
+            args:
+            - sh
+            - -c
+            - npm run care-reminder
+            envFrom:
+            - secretRef:
+                name: tending-secrets
+            resources: {{- toYaml .Values.tending.careReminder.resources | nindent 14 }}
+          imagePullSecrets:
+          - name: ghcr-secret
+          restartPolicy: Never
