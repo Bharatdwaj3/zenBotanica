@@ -15,6 +15,7 @@ firebase:
     tag: v3
   resources: {}
 frontend:
+  replicas: 3
   ports:
     - name: "5114"
       port: 5114
@@ -37,6 +38,7 @@ frontendNginxConfig:
         }
     }
 gardeners:
+  replicas: 3
   ports:
     - name: "4003"
       port: 4003
@@ -71,6 +73,7 @@ gardenersDbHeadless:
       targetPort: 5432
   type: ClusterIP
 grove:
+  replicas: 3
   ports:
     - name: "4001"
       port: 4001
@@ -116,6 +119,7 @@ mailhog:
   type: ClusterIP
   resources: {}
 marketplace:
+  replicas: 3
   ports:
     - name: "4005"
       port: 4005
@@ -153,6 +157,7 @@ pvc:
   firebaseData:
     storageRequest: 500Mi
 tending:
+  replicas: 3
   ports:
     - name: "4002"
       port: 4002
@@ -190,6 +195,7 @@ tendingDbHeadless:
       targetPort: 5432
   type: ClusterIP
 visitorServices:
+  replicas: 3
   ports:
     - name: "4004"
       port: 4004
