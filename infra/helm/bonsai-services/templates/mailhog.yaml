@@ -10,7 +10,6 @@ spec:
   type: {{ .Values.mailhog.type }}
   selector:
     bonsai-service: mailhog
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.mailhog.ports | toYaml | nindent 2 }}
 ---

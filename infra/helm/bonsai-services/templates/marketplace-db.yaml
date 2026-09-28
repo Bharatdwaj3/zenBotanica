@@ -10,6 +10,5 @@ spec:
   type: {{ .Values.marketplaceDb.type }}
   selector:
     app-name: marketplace-db
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.marketplaceDb.ports | toYaml | nindent 2 }}

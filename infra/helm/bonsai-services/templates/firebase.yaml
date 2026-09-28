@@ -10,7 +10,6 @@ spec:
   type: {{ .Values.firebase.type }}
   selector:
     bonsai-service: firebase
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.firebase.ports | toYaml | nindent 2 }}
 ---

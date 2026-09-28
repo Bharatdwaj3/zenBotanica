@@ -10,6 +10,5 @@ spec:
   type: {{ .Values.groveDb.type }}
   selector:
     app: grove-db
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.groveDb.ports | toYaml | nindent 2 }}
