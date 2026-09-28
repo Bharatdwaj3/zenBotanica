@@ -13,7 +13,6 @@ spec:
   type: {{ .Values.gardeners.type }}
   selector:
     bonsai-service: gardeners
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.gardeners.ports | toYaml | nindent 2 }}
 ---

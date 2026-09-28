@@ -9,6 +9,5 @@ spec:
   type: {{ .Values.groveDbHeadless.type }}
   selector:
     app: grove-db
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.groveDbHeadless.ports | toYaml | nindent 2 }}

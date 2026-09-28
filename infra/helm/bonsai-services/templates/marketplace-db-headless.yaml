@@ -9,6 +9,5 @@ spec:
   type: {{ .Values.marketplaceDbHeadless.type }}
   selector:
     app-name: marketplace-db
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.marketplaceDbHeadless.ports | toYaml | nindent 2 }}

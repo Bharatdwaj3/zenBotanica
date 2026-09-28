@@ -10,7 +10,6 @@ spec:
   type: {{ .Values.grove.type }}
   selector:
     bonsai-service: grove
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.grove.ports | toYaml | nindent 2 }}
 ---

@@ -9,6 +9,5 @@ spec:
   type: {{ .Values.gardenersDbHeadless.type }}
   selector:
     app: gardeners-db
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.gardenersDbHeadless.ports | toYaml | nindent 2 }}

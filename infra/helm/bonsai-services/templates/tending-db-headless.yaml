@@ -9,6 +9,5 @@ spec:
   type: {{ .Values.tendingDbHeadless.type }}
   selector:
     app-name: tending-db
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.tendingDbHeadless.ports | toYaml | nindent 2 }}

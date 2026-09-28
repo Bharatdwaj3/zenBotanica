@@ -13,7 +13,6 @@ spec:
   type: {{ .Values.tending.type }}
   selector:
     bonsai-service: tending
-    {{- include "bonsai-services.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.tending.ports | toYaml | nindent 2 }}
 ---
