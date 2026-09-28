@@ -26,7 +26,7 @@ metadata:
   {{- include "bonsai-services.labels" . | nindent 4 }}
 spec:
   progressDeadlineSeconds: 120
-  replicas: 3
+  replicas: {{ .Values.gardeners.replicas }}
   selector:
     matchLabels:
       bonsai-service: gardeners
