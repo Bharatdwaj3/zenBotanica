@@ -14,3 +14,10 @@ spec:
           port: 80
         - containerPort: 443
           port: 443
+      patches:
+      - type: StrategicMerge
+        value:
+          spec:
+            strategy:
+              type: Recreate
+              rollingUpdate: null
