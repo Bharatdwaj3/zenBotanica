@@ -25,7 +25,7 @@ spec:
             args:
             - sh
             - -c
-            - npm run care-reminder
+            - npx prisma generate && npm run care-reminder
             envFrom:
             - secretRef:
                 name: tending-secrets
