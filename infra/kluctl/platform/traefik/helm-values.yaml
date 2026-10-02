@@ -37,3 +37,5 @@ certificatesResolvers:
       storage: /data/acme.json
       dnsChallenge:
         provider: duckdns
+      domains:
+        - main: "rudrashayan.duckdns.org"
