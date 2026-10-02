@@ -1,6 +1,7 @@
 helmChart:
   repo: https://helm.traefik.io/traefik
   chartName: traefik
+  chartVersion: "34.1.0"
   releaseName: traefik
   namespace: bonsai-prod
   output: deploy.yaml
