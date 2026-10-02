@@ -3,8 +3,12 @@ name: bonsai CI/CD
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'infra/kluctl/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'infra/kluctl/**'
 
 permissions:
   contents: write
