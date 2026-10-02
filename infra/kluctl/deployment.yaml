@@ -1,7 +1,6 @@
 overrideNamespace: bonsai-prod
 deployments:
   - path: platform/external-secrets
-  - path: platform/external-secrets-store
   - path: platform/gatekeeper
   - path: platform/sealed-secrets
   - path: platform/traefik
