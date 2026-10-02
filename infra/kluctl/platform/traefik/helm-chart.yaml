@@ -4,3 +4,5 @@ helmChart:
   releaseName: traefik
   namespace: bonsai-prod
   output: deploy.yaml
+  valuesFiles:
+    - helm-values.yaml
