@@ -1,0 +1,12 @@
+grove:
+  replicas: 1
+marketplace:
+  replicas: 1
+tending:
+  replicas: 1
+  careReminder:
+    schedule: "*/5 * * * *"
+visitorServices:
+  replicas: 1
+frontend:
+  replicas: 1
