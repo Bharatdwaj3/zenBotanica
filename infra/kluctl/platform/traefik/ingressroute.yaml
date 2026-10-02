@@ -10,7 +10,8 @@ spec:
     - match: Host(`rudrashayan.duckdns.org`) && PathPrefix(`/`)
       kind: Rule
       services:
-        - name: traefik
-          port: 80
+        - name: frontend
+          namespace: bonsai-dev
+          port: 5114
   tls:
     certResolver: default
