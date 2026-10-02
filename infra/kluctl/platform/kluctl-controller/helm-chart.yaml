@@ -1,5 +1,5 @@
 helmChart:
-  repo: oci://ghcr.io/kluctl/template-controller
+  repo: oci://ghcr.io/kluctl/charts/template-controller
   chartVersion: "0.9.4"
   releaseName: template-controller
   namespace: kluctl-system
