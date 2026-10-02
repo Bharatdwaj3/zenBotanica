@@ -5,7 +5,7 @@ podSecurityContext:
   seccompProfile:
     type: RuntimeDefault
 
-containerSecurityContext:
+securityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
   runAsNonRoot: true
