@@ -1,5 +1,5 @@
 helmChart:
-  repo: https://bitnami-labs.github.io/sealed-secrets
+  repo: https://bitnami.github.io/sealed-secrets
   chartName: sealed-secrets
   chartVersion: "2.16.1"
   releaseName: sealed-secrets
