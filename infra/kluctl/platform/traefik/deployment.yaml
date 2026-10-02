@@ -1,0 +1,8 @@
+helm:
+  - name: traefik
+    namespace: bonsai-prod
+    chart:
+      repo: https://helm.traefik.io/traefik
+      name: traefik
+    values:
+      - helm-values.yaml
