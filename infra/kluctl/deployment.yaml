@@ -1,0 +1,5 @@
+overrideNamespace: bonsai-prod
+deployments:
+  - path: platform/external-secrets
+  - path: platform/gatekeeper
+  - path: platform/trivy-operator

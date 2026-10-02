@@ -1,0 +1,7 @@
+helmChart:
+  repo: https://traefik.github.io/charts
+  chartName: traefik
+  chartVersion: 34.1.0
+  releaseName: traefik
+  namespace: bonsai-prod
+  skipPrePull: true

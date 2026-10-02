@@ -1,0 +1,7 @@
+helmChart:
+  repo: https://open-policy-agent.github.io/gatekeeper/charts
+  chartName: gatekeeper
+  chartVersion: 3.23.1
+  releaseName: gatekeeper
+  namespace: bonsai-prod
+  skipPrePull: true

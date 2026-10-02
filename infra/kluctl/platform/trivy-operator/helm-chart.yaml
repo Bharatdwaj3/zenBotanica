@@ -1,0 +1,7 @@
+helmChart:
+  repo: https://aquasecurity.github.io/helm-charts/
+  chartName: trivy-operator
+  chartVersion: 0.36.0
+  releaseName: trivy-operator
+  namespace: bonsai-prod
+  output: deploy.yaml

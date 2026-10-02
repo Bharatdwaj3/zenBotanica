@@ -1,0 +1,6 @@
+deployments:
+  - path: gatekeeper
+  - path: external-secrets
+  - path: trivy-operator
+  - path: external-secrets-store
+  - path: traefik
