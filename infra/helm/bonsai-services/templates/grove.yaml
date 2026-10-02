@@ -49,9 +49,8 @@ spec:
         bonsai-service: grove
     spec:
       containers:
-      - args:
-        - sh
-        - -c
+      - command: ["/bin/sh", "-c"]
+        args:
         - npx prisma generate && npx prisma migrate deploy && npm start
         envFrom:
         - secretRef:
