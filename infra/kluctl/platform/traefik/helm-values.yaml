@@ -23,10 +23,17 @@ podSecurityContext:
   seccompProfile:
     type: RuntimeDefault
 
+env:
+  - name: DUCKDNS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: duckdns-credentials
+        key: token
+
 certificatesResolvers:
   default:
     acme:
       email: admin@zenbotanica.com
       storage: /data/acme.json
-      httpChallenge:
-        entryPoint: web
+      dnsChallenge:
+        provider: duckdns
