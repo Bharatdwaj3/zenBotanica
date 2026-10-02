@@ -1,0 +1,3 @@
+discriminator: "bonsai-prod"
+targets:
+  - name: default
