@@ -1,0 +1,17 @@
+FROM cgr.dev/chainguard/node:latest-dev
+
+USER root
+RUN apk add --no-cache openssl poppler-utils
+
+WORKDIR /app
+
+USER node
+COPY --chown=node:node package*.json ./
+RUN npm install --legacy-peer-deps
+
+COPY --chown=node:node . .
+
+EXPOSE 4001
+
+ENTRYPOINT []
+CMD ["npm", "run", "dev"]
