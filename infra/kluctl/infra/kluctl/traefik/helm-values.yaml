@@ -22,3 +22,11 @@ podSecurityContext:
   runAsGroup: 65532
   seccompProfile:
     type: RuntimeDefault
+
+certificatesResolvers:
+  default:
+    acme:
+      email: REPLACE_WITH_YOUR_EMAIL@example.com
+      storage: /data/acme.json
+      httpChallenge:
+        entryPoint: web
