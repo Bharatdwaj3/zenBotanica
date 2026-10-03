@@ -13,6 +13,9 @@ objects = decode_yaml_stream(rendered)
 objects = [o for o in objects if o.get('kind') != 'SealedSecret']
 k8s_yaml(encode_yaml_stream(objects))
 
+
+load('ext://restart_process', 'restart_process')
+
 docker_build(
     'ghcr.io/bharatdwaj3/botany-grove', 'grove',
     dockerfile='grove/Dockerfile.dev',
@@ -20,13 +23,43 @@ docker_build(
         sync('grove/package.json', '/app/package.json'),
         sync('grove', '/app'),
         run('npm install --legacy-peer-deps', trigger=['grove/package.json']),
+        restart_process(),
     ],
 )
-docker_build('ghcr.io/bharatdwaj3/botany-gardeners', 'gardeners')
-docker_build('ghcr.io/bharatdwaj3/botany-marketplace', 'marketplace')
-docker_build('ghcr.io/bharatdwaj3/botany-tending', 'tending')
-docker_build('ghcr.io/bharatdwaj3/botany-visitor-services', 'visitor-services')
-docker_build('ghcr.io/bharatdwaj3/botany-frontend', 'frontend')
+docker_build(
+    'ghcr.io/bharatdwaj3/botany-gardeners', 'gardeners',
+    live_update=[
+        sync('gardeners', '/app'),
+        restart_process(),
+    ],
+)
+docker_build(
+    'ghcr.io/bharatdwaj3/botany-marketplace', 'marketplace',
+    live_update=[
+        sync('marketplace', '/app'),
+        restart_process(),
+    ],
+)
+docker_build(
+    'ghcr.io/bharatdwaj3/botany-tending', 'tending',
+    live_update=[
+        sync('tending', '/app'),
+        restart_process(),
+    ],
+)
+docker_build(
+    'ghcr.io/bharatdwaj3/botany-visitor-services', 'visitor-services',
+    live_update=[
+        sync('visitor-services', '/app'),
+        restart_process(),
+    ],
+)
+docker_build(
+    'ghcr.io/bharatdwaj3/botany-frontend', 'frontend',
+    live_update=[
+        sync('frontend', '/app'),
+    ],
+)
 
 k8s_resource('grove', port_forwards=9001)
 k8s_resource('gardeners', port_forwards=9003)
