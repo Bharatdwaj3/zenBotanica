@@ -2,10 +2,7 @@ namespace: bonsai-dev
 
 resources:
   - ../../base
-  - ../../base/gateway/caddyfile.yaml
-  - ../../base/gateway/caddy-deployment.yaml
 
-# Set all replicas to 1 for dev
 patches:
   - target:
       kind: Rollout
