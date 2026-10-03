@@ -13,7 +13,7 @@ spec:
           containers:
             - name: tending-care-reminder
               image: ghcr.io/bharatdwaj3/botany-tending:d32fb84
-              command: ["npm", "run", "care-reminder"]
+              command: ["sh", "-c", "npx prisma generate && npm run care-reminder"]
               envFrom:
                 - secretRef:
                     name: tending-secrets
