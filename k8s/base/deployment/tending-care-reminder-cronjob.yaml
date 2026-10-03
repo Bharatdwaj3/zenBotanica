@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tending-care-reminder
+  namespace: bonsai
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: tending-care-reminder
+              image: ghcr.io/bharatdwaj3/botany-tending:d32fb84
+              command: ["npm", "run", "care-reminder"]
+              envFrom:
+                - secretRef:
+                    name: tending-secrets
+          restartPolicy: OnFailure

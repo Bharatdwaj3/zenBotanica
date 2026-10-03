@@ -1,15 +1,10 @@
 namespace: bonsai
 
 resources:
-  - service/ghcr-secret-sealed.yaml
-  - service/grove-secrets-sealed.yaml
-  - service/gardeners-secrets-sealed.yaml
-  - service/marketplace-secrets-sealed.yaml
-  - service/tending-secrets-sealed.yaml
-  - service/visitor-services-secrets-sealed.yaml
   - deployment/grove-rollout.yaml
   - deployment/grove-db-statefulset.yaml
   - deployment/tending-rollout.yaml
+  - deployment/tending-care-reminder-cronjob.yaml
   - deployment/tending-db-statefulset.yaml
   - deployment/gardeners-rollout.yaml
   - deployment/gardeners-db-statefulset.yaml
