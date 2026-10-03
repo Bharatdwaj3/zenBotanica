@@ -36,4 +36,3 @@ k8s_resource('visitor-services', port_forwards=9004)
 k8s_resource('frontend', port_forwards=9010)
 
 k8s_yaml(listdir("infra/dev/secrets"))
-k8s_yaml(listdir("infra/dev/routes"))
