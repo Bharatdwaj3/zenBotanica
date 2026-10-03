@@ -1,9 +1,9 @@
 namespace: bonsai-dev
 
 resources:
-  - ../../gateway/caddyfile.yaml
-  - ../../gateway/caddy-deployment.yaml
   - ../../base
+  - ../../base/gateway/caddyfile.yaml
+  - ../../base/gateway/caddy-deployment.yaml
 
 # Set all replicas to 1 for dev
 patches:
