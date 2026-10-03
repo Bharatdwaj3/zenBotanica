@@ -60,4 +60,6 @@ k8s_resource('tending', port_forwards='9002:4002')
 k8s_resource('visitor-services', port_forwards='9004:4004')
 k8s_resource('frontend', port_forwards='9010:80')
 
-k8s_yaml(listdir("infra/dev/secrets"))
+for f in listdir("infra/dev/secrets"):
+    if f.endswith(".sops.yaml"):
+        k8s_yaml(local(f"sops -d {f}"))
