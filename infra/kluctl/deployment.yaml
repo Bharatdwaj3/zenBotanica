@@ -3,6 +3,5 @@ deployments:
   - path: platform/external-secrets
   - path: platform/gatekeeper
   - path: platform/kluctl-controller
-  - path: platform/sealed-secrets
   - path: platform/traefik
   - path: platform/trivy-operator

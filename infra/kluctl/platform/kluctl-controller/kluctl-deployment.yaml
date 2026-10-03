@@ -2,7 +2,7 @@ apiVersion: gitops.kluctl.io/v1beta1
 kind: KluctlDeployment
 metadata:
   name: zenbotanica-prod
-  namespace: kluctl-system
+  namespace: bonsai-prod
 spec:
   interval: 5m
   source:
@@ -11,5 +11,5 @@ spec:
       path: "infra/kluctl"
   timeout: 2m
   target: prod
-  prune: true
-  delete: true
+  prune: false
+  delete: false
