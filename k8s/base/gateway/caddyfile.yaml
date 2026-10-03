@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: bonsai-dev
+data:
+  Caddyfile: |
+    your-domain.duckdns.org {
+        tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
+        reverse_proxy frontend:80
+    }
