@@ -5,7 +5,7 @@ metadata:
   namespace: bonsai-dev
 data:
   Caddyfile: |
-    mybotany.duckdns.org {
+    rudrashayan.duckdns.org {
         tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
         reverse_proxy frontend:80
     }
