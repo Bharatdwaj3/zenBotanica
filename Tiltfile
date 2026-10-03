@@ -1,13 +1,10 @@
 k8s_kind('Rollout', image_json_path='{.spec.template.spec.containers[*].image}')
 
 # Render the chart, then drop any SealedSecret objects it defines.
-# Secrets for bonsai-dev are managed separately, in infra/dev/secrets/,
-# so the chart's own (bonsai-scoped) secret templates must never be applied here.
-rendered = local(
-    'helm template bonsai-dev infra/helm/bonsai-services --namespace bonsai-dev --values infra/helm/bonsai-services/values-dev.yaml',
-    quiet=True,
-)
-watch_file('infra/helm/bonsai-services')
+
+# Render Kustomize overlay for bonsai-dev, then drop any SealedSecret objects.
+# Secrets for bonsai-dev are managed separately via SOPS in infra/dev/secrets/
+rendered = local('kubectl kustomize k8s/overlays/dev', quiet=True)
 
 objects = decode_yaml_stream(rendered)
 objects = [o for o in objects if o.get('kind') != 'SealedSecret']
@@ -62,4 +59,4 @@ k8s_resource('frontend', port_forwards='9010:80')
 
 for f in listdir("infra/dev/secrets"):
     if f.endswith(".sops.yaml"):
-        k8s_yaml(local(f"sops -d {f}"))
+        k8s_yaml(local("/usr/local/bin/sops -d " + f))
