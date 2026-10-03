@@ -7,5 +7,5 @@ data:
   Caddyfile: |
     rudrashayan.duckdns.org {
         tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
-        reverse_proxy frontend:80
+        reverse_proxy frontend:5114
     }

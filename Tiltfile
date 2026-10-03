@@ -59,4 +59,4 @@ k8s_resource('frontend', port_forwards='9010:80')
 
 for f in listdir("infra/dev/secrets"):
     if f.endswith(".sops.yaml"):
-        k8s_yaml(local("/usr/local/bin/sops -d " + f))
+        k8s_yaml(local("/usr/local/bin/sops -d " + f, quiet=True))
