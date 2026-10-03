@@ -13,47 +13,52 @@ objects = decode_yaml_stream(rendered)
 objects = [o for o in objects if o.get('kind') != 'SealedSecret']
 k8s_yaml(encode_yaml_stream(objects))
 
+# Load the restart_process extension correctly
+load('ext://restart_process', 'docker_build_with_restart')
 
-load('ext://restart_process', 'restart_process')
-
-docker_build(
+docker_build_with_restart(
     'ghcr.io/bharatdwaj3/botany-grove', 'grove',
+    entrypoint='npm run dev', # <-- REPLACE THIS with your actual start command (e.g., 'tsx server.ts' or 'npm start')
     dockerfile='grove/Dockerfile.dev',
     live_update=[
         sync('grove/package.json', '/app/package.json'),
         sync('grove', '/app'),
         run('npm install --legacy-peer-deps', trigger=['grove/package.json']),
-        restart_process(),
     ],
 )
-docker_build(
+
+docker_build_with_restart(
     'ghcr.io/bharatdwaj3/botany-gardeners', 'gardeners',
+    entrypoint='npm run dev', # <-- REPLACE THIS
     live_update=[
         sync('gardeners', '/app'),
-        restart_process(),
     ],
 )
-docker_build(
+
+docker_build_with_restart(
     'ghcr.io/bharatdwaj3/botany-marketplace', 'marketplace',
+    entrypoint='npm run dev', # <-- REPLACE THIS
     live_update=[
         sync('marketplace', '/app'),
-        restart_process(),
     ],
 )
-docker_build(
+
+docker_build_with_restart(
     'ghcr.io/bharatdwaj3/botany-tending', 'tending',
+    entrypoint='npm run dev', # <-- REPLACE THIS
     live_update=[
         sync('tending', '/app'),
-        restart_process(),
     ],
 )
-docker_build(
+
+docker_build_with_restart(
     'ghcr.io/bharatdwaj3/botany-visitor-services', 'visitor-services',
+    entrypoint='npm run dev', # <-- REPLACE THIS
     live_update=[
         sync('visitor-services', '/app'),
-        restart_process(),
     ],
 )
+
 docker_build(
     'ghcr.io/bharatdwaj3/botany-frontend', 'frontend',
     live_update=[
