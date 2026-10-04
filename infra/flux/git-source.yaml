@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: zenbotanica
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://github.com/Bharatdwaj3/zenBotanica.git
+  ref:
+    branch: main
