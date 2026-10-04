@@ -1,0 +1,18 @@
+namespace: bonsai-prod
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      kind: Rollout
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
+  - target:
+      kind: StatefulSet
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
