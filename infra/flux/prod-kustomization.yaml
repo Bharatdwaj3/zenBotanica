@@ -1,0 +1,19 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: bonsai-prod
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: zenbotanica
+  path: ./k8s/overlays/prod
+  prune: true
+  wait: false
+  timeout: 5m0s
+  targetNamespace: bonsai-prod
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
