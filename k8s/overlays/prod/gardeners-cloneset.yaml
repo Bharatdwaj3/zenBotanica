@@ -1,0 +1,33 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: CloneSet
+metadata:
+  name: gardeners
+  namespace: bonsai-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gardeners
+  template:
+    metadata:
+      labels:
+        app: gardeners
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "bonsai-prod-role"
+        vault.hashicorp.com/agent-inject-secret-secrets.env: "secret/data/bonsai-prod/gardeners"
+        vault.hashicorp.com/agent-inject-template-secrets.env: |
+          {{- with secret "secret/data/bonsai-prod/gardeners" -}}
+          {{- range $key, $value := .Data.data }}
+          {{ $key }}={{ $value }}
+          {{- end }}
+          {{- end }}
+    spec:
+      serviceAccountName: gardeners-sa
+      containers:
+      - name: gardeners
+        image: bonsai-gardeners:latest # Note: Update this to your actual GHCR image tag once CI/CD is fixed!
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: SECRETS_FILE
+          value: "/vault/secrets/secrets.env"
