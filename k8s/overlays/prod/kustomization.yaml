@@ -1,16 +1,29 @@
 namespace: bonsai-prod
 
 resources:
+  - gardeners-sa.yaml
+  - gardeners-cloneset.yaml
   - ../../base
   - secrets
 
 patches:
+  - patch: |-
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      metadata:
+        name: gardeners
+      $patch: delete
+    target:
+      kind: Rollout
+      name: gardeners
+
   - target:
       kind: Rollout
     patch: |-
       - op: replace
         path: /spec/replicas
         value: 2
+
   - target:
       kind: StatefulSet
     patch: |-
