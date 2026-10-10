@@ -1,17 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bonsai
+  name: bonsai-infra
   namespace: argocd
 spec:
   project: default
-  sources:
-    - repoURL: https://github.com/Bharatdwaj3/zenBotanica
-      targetRevision: main
-      path: infra/helm/bonsai-services
-    - repoURL: https://github.com/Bharatdwaj3/zenBotanica
-      targetRevision: main
-      path: infra/helm/bonsai-exposure
+  source:
+    repoURL: https://github.com/Bharatdwaj3/zenBotanica.git
+    targetRevision: HEAD
+    path: k8s/bonsai
   destination:
     server: https://kubernetes.default.svc
     namespace: bonsai
@@ -19,13 +16,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-  ignoreDifferences:
-  - group: apps
-    kind: StatefulSet
-    jqPathExpressions:
-    - .spec.volumeClaimTemplates[]?.apiVersion
-    - .spec.volumeClaimTemplates[]?.kind
-    - .spec.volumeClaimTemplates[]?.status
-    - .spec.volumeClaimTemplates[]?.spec.volumeMode
