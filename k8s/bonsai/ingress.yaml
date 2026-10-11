@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: bonsai-ingress
-  namespace: bonsai
+  namespace: nam-bonsai
   annotations:
     cert-manager.io/issuer: selfsigned-issuer
     nginx.ingress.kubernetes.io/ssl-redirect: "true"

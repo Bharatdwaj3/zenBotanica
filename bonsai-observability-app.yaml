@@ -11,7 +11,7 @@ spec:
     path: infra/helm/bonsai-observability
   destination:
     server: https://kubernetes.default.svc
-    namespace: bonsai
+    namespace: nam-bonsai
   syncPolicy:
     automated:
       prune: true

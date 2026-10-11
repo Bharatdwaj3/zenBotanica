@@ -3,7 +3,7 @@ kind: Gateway
 metadata:
   annotations: {}
   name: bonsai-gateway
-  namespace: bonsai
+  namespace: nam-bonsai
 spec:
   gatewayClassName: nginx
   infrastructure:

@@ -11,7 +11,7 @@ spec:
     path: k8s/bonsai
   destination:
     server: https://kubernetes.default.svc
-    namespace: bonsai
+    namespace: nam-bonsai
   syncPolicy:
     automated:
       prune: true

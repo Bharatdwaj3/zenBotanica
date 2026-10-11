@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: tending-care-reminder
-  namespace: bonsai
+  namespace: nam-bonsai
 spec:
   schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
