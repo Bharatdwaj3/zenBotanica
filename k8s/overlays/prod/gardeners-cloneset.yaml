@@ -2,9 +2,9 @@ apiVersion: apps.kruise.io/v1alpha1
 kind: CloneSet
 metadata:
   name: gardeners
-  namespace: bonsai-prod
+  namespace: jam-bonsai
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: gardeners
