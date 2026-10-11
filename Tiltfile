@@ -2,8 +2,8 @@ k8s_kind('Rollout', image_json_path='{.spec.template.spec.containers[*].image}')
 
 # Render the chart, then drop any SealedSecret objects it defines.
 
-# Render Kustomize overlay for bonsai-dev, then drop any SealedSecret objects.
-# Secrets for bonsai-dev are managed separately via SOPS in infra/dev/secrets/
+# Render Kustomize overlay for kam-bomsai, then drop any SealedSecret objects.
+# Secrets for kam-bomsai are managed separately via SOPS in infra/dev/secrets/
 rendered = local('kubectl kustomize k8s/overlays/dev', quiet=True)
 
 objects = decode_yaml_stream(rendered)
