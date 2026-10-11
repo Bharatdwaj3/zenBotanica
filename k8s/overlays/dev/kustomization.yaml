@@ -1,6 +1,7 @@
-namespace: bonsai-dev
+namespace: kam-bomsai
 
 resources:
+  - namespace.yaml
   - ../../base
 
 patches:
