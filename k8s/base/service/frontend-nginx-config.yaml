@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frontend-nginx-config
-  namespace: bonsai
+  namespace: nam-bonsai
 data:
   default.conf: |
     server {

@@ -2,7 +2,7 @@ apiVersion: gateway.nginx.org/v1alpha2
 kind: NginxProxy
 metadata:
   name: bonsai-gateway-proxy-config
-  namespace: bonsai
+  namespace: nam-bonsai
 spec:
   kubernetes:
     deployment:

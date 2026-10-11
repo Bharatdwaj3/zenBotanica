@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: promtail
-    namespace: bonsai
+    namespace: nam-bonsai
 roleRef:
   kind: ClusterRole
   name: promtail-pod-reader

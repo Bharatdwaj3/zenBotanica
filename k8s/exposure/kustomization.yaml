@@ -1,4 +1,4 @@
-namespace: bonsai
+namespace: nam-bonsai
 
 resources:
   - selfsigned-issuer.yaml
