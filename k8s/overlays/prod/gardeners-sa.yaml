@@ -2,4 +2,4 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: gardeners-sa
-  namespace: bonsai-prod
+  namespace: jam-bonsai

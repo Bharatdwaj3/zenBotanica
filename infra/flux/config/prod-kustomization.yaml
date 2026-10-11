@@ -14,7 +14,7 @@ spec:
   prune: true
   wait: false
   timeout: 5m0s
-  targetNamespace: bonsai-prod
+  targetNamespace: jam-bonsai
   serviceAccountName: bonsai-prod-reconciler
   decryption:
     provider: sops
