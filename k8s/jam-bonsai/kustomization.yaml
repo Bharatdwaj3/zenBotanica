@@ -65,17 +65,38 @@ patches:
         value: 2
   - target:
       kind: CloneSet
-    patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 2
-  - target:
-      kind: CloneSet
       name: gardeners
     patch: |-
       - op: remove
         path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject
       - op: remove
-        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-secret
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1role
       - op: remove
-        path: /spec/template/metadata/annotations/openbao.org~1agent-inject
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-secret-secrets.env
+      - op: remove
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-template-secrets.env
+      - op: replace
+        path: /spec/replicas
+        value: 2
+images:
+  - name: grove
+    newName: bonsai-grove
+    newTag: latest
+  - name: gardeners
+    newName: bonsai-gardeners
+    newTag: latest
+  - name: marketplace
+    newName: bonsai-marketplace
+    newTag: latest
+  - name: tending
+    newName: bonsai-tending
+    newTag: latest
+  - name: visitor-services
+    newName: bonsai-visitor-services
+    newTag: latest
+  - name: frontend
+    newName: bonsai-frontend
+    newTag: latest
+  - name: firebase
+    newName: bonsai-firebase
+    newTag: latest
