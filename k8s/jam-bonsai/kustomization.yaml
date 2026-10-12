@@ -69,3 +69,13 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 2
+  - target:
+      kind: CloneSet
+      name: gardeners
+    patch: |-
+      - op: remove
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject
+      - op: remove
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-secret
+      - op: remove
+        path: /spec/template/metadata/annotations/openbao.org~1agent-inject
