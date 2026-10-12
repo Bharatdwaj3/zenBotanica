@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml --out k8s/services/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    bonsai-service: visitor-services
+  name: visitor-services
+spec:
+  ports:
+    - name: "4004"
+      port: 4004
+      targetPort: 4004
+  selector:
+    bonsai-service: visitor-services
+status:
+  loadBalancer: {}

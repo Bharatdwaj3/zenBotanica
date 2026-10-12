@@ -3,5 +3,5 @@ helmChart:
   chartName: trivy-operator
   chartVersion: 0.36.0
   releaseName: trivy-operator
-  namespace: bonsai-prod
+  namespace: jam-bonsai
   output: deploy.yaml

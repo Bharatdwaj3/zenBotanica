@@ -3,5 +3,5 @@ helmChart:
   chartName: gatekeeper
   chartVersion: 3.23.1
   releaseName: gatekeeper
-  namespace: bonsai-prod
+  namespace: jam-bonsai
   skipPrePull: true

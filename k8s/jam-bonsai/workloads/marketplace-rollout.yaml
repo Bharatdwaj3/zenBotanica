@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+metadata:
+  labels:
+    bonsai-service: marketplace
+  name: marketplace
+spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+      - setWeight: 100
+  replicas: 3
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      bonsai-service: marketplace
+  template:
+    metadata:
+      labels:
+        bonsai-service: marketplace
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - args:
+            - sh
+            - -c
+            - npx prisma generate && npx prisma migrate deploy && npm start
+          envFrom:
+            - secretRef:
+                name: marketplace-secrets
+          image: marketplace
+          name: marketplace-ctr
+          ports:
+            - containerPort: 4005
+              protocol: TCP
+          resources: {}
+          readinessProbe:
+            tcpSocket:
+              port: 4005
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+status: {}

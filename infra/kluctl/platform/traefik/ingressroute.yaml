@@ -2,7 +2,7 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: rudrashayan-route
-  namespace: bonsai-prod
+  namespace: jam-bonsai
 spec:
   entryPoints:
     - websecure
@@ -11,7 +11,7 @@ spec:
       kind: Rule
       services:
         - name: frontend
-          namespace: bonsai-dev
+          namespace: kam-bomsai
           port: 5114
   tls:
     certResolver: default

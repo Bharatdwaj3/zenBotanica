@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: marketplace-db
+spec:
+  serviceName: marketplace-db-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: marketplace-db
+  template:
+    metadata:
+      labels:
+        app-name: marketplace-db
+    spec:
+      containers:
+        - name: marketplace-db-ctr
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: marketplace-secrets
+                  key: PgSql_User
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: marketplace-secrets
+                  key: PgSql_Password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: marketplace-secrets
+                  key: PgSql_Database
+          livenessProbe:
+            exec:
+              command: [pg_isready, -U, marketplace_user, -d, marketplace_db]
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: marketplace-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: marketplace-data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 100Mi

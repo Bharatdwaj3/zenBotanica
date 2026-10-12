@@ -13,4 +13,4 @@ spec:
     metadata:
       creationTimestamp: null
       name: loki-push-creds
-      namespace: bonsai
+      namespace: nam-bonsai

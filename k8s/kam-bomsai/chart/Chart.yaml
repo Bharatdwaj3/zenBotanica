@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kam-bomsai
+description: A Helm chart for kam-bomsai dev lane
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
