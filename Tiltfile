@@ -1,3 +1,4 @@
+update_settings(max_parallel_updates=1)
 k8s_kind('Rollout', image_json_path='{.spec.template.spec.containers[*].image}')
 
 # Render the chart, then drop any SealedSecret objects it defines.
