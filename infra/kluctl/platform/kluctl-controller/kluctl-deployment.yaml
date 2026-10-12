@@ -2,7 +2,7 @@ apiVersion: gitops.kluctl.io/v1beta1
 kind: KluctlDeployment
 metadata:
   name: zenbotanica-prod
-  namespace: bonsai-prod
+  namespace: jam-bonsai
 spec:
   interval: 5m
   source:

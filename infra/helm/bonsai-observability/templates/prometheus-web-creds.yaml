@@ -13,4 +13,4 @@ spec:
     metadata:
       creationTimestamp: null
       name: prometheus-web-creds
-      namespace: bonsai
+      namespace: nam-bonsai

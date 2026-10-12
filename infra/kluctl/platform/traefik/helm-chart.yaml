@@ -3,5 +3,5 @@ helmChart:
   chartName: traefik
   chartVersion: "34.1.0"
   releaseName: traefik
-  namespace: bonsai-prod
+  namespace: jam-bonsai
   output: deploy.yaml

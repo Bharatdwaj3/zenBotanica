@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: visitor-services-db
+spec:
+  serviceName: visitor-services-db-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: visitor-services-db
+  template:
+    metadata:
+      labels:
+        app-name: visitor-services-db
+    spec:
+      containers:
+        - name: visitor-services-db-ctr
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: visitor-services-secrets
+                  key: PgSql_User
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: visitor-services-secrets
+                  key: PgSql_Password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: visitor-services-secrets
+                  key: PgSql_Database
+          livenessProbe:
+            exec:
+              command: [pg_isready, -U, visitor_user, -d, visitor_db]
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: visitor-services-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: visitor-services-data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 100Mi
