@@ -1,0 +1,40 @@
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
+  kubernetesIngress:
+    enabled: true
+  kubernetesGateway:
+    enabled: false
+
+persistence:
+  enabled: true
+  name: traefik-acme
+  accessMode: ReadWriteOnce
+  size: 128Mi
+  path: /data
+
+service:
+  type: NodePort
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+env:
+  - name: DUCKDNS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: duckdns-credentials
+        key: token
+
+certificatesResolvers:
+  default:
+    acme:
+      email: admin@zenbotanica.com
+      storage: /data/acme.json
+      dnsChallenge:
+        provider: duckdns

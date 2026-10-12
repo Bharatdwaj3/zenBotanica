@@ -3,6 +3,7 @@ resources:
   - workloads
   - databases
   - secrets
+  - platform
   - gardeners-sa.yaml
   - gardeners-cloneset.yaml
 patches:
