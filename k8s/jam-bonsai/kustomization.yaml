@@ -78,6 +78,18 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 2
+  - target:
+      kind: Rollout
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
+  - target:
+      kind: CloneSet
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
 images:
   - name: grove
     newName: bonsai-grove
