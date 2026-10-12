@@ -15,7 +15,7 @@ spec:
   wait: false
   timeout: 5m0s
   targetNamespace: jam-bonsai
-  serviceAccountName: bonsai-prod-reconciler
+  serviceAccountName: jam-bonsai-reconciler
   decryption:
     provider: sops
     secretRef:
