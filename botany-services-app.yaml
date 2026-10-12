@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: botany-services
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Bharatdwaj3/zenBotanica.git
+    targetRevision: HEAD
+    path: k8s/overlays/nam-bonsai
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nam-bonsai
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      jqPathExpressions:
+        - .spec.volumeClaimTemplates[]?.apiVersion
+        - .spec.volumeClaimTemplates[]?.kind
+        - .spec.volumeClaimTemplates[]?.status
+        - .spec.volumeClaimTemplates[]?.spec.volumeMode
