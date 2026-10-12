@@ -2,7 +2,42 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: jam-bonsai
 resources:
-  - workloads
   - secrets
+  - workloads/caddy-deployment.yaml
+  - workloads/caddyfile.yaml
+  - workloads/firebase-data-persistentvolumeclaim.yaml
+  - workloads/firebase-rollout.yaml
+  - workloads/firebase-service.yaml
+  - workloads/frontend-nginx-config.yaml
+  - workloads/frontend-rollout.yaml
+  - workloads/frontend-service.yaml
+  - workloads/gardeners-db-headless-service.yaml
+  - workloads/gardeners-db-service.yaml
+  - workloads/gardeners-db-statefulset.yaml
+  - workloads/gardeners-rollout.yaml
+  - workloads/gardeners-service.yaml
+  - workloads/grove-db-headless-service.yaml
+  - workloads/grove-db-service.yaml
+  - workloads/grove-db-statefulset.yaml
+  - workloads/grove-rollout.yaml
+  - workloads/grove-service.yaml
+  - workloads/mailhog-rollout.yaml
+  - workloads/mailhog-service.yaml
+  - workloads/marketplace-db-headless-service.yaml
+  - workloads/marketplace-db-service.yaml
+  - workloads/marketplace-db-statefulset.yaml
+  - workloads/marketplace-rollout.yaml
+  - workloads/marketplace-service.yaml
+  - workloads/tending-care-reminder-cronjob.yaml
+  - workloads/tending-db-headless-service.yaml
+  - workloads/tending-db-service.yaml
+  - workloads/tending-db-statefulset.yaml
+  - workloads/tending-rollout.yaml
+  - workloads/tending-service.yaml
+  - workloads/visitor-services-db-headless-service.yaml
+  - workloads/visitor-services-db-service.yaml
+  - workloads/visitor-services-db-statefulset.yaml
+  - workloads/visitor-services-rollout.yaml
+  - workloads/visitor-services-service.yaml
   - gardeners-sa.yaml
   - gardeners-cloneset.yaml
