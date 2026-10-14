@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mailhog
+  name: mailhog
+spec:
+  ports:
+    - name: "8025"
+      port: 8025
+      targetPort: 8025
+    - name: "1025"
+      port: 1025
+      targetPort: 1025
+  selector:
+    io.kompose.service: mailhog
+status:
+  loadBalancer: {}

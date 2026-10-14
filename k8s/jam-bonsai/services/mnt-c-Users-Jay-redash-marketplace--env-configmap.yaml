@@ -1,0 +1,25 @@
+apiVersion: v1
+data:
+  ADMIN_EMAIL: admin@gardener.local
+  ADMIN_PASSWORD: REDACTED
+  DATABASE_URL: REDACTED
+  DEFAULT_USER_PASSWORD: REDACTED
+  FRONTEND_ORIGIN: http://localhost:5173
+  GARDENERS_SERVICE_URL: http://gardeners:4003
+  INTERNAL_SERVICE_SECRET: REDACTED
+  JWT_ACC_EXPIRES_IN: 15m
+  JWT_ACC_SECRECT: REDACTED
+  JWT_REF_EXPIRES_IN: 7d
+  JWT_REF_SECRECT: REDACTED
+  PORT: "4005"
+  PgSql_Database: marketplace_db
+  PgSql_Host: marketplace-db
+  PgSql_Password: REDACTED
+  PgSql_Port: "5432"
+  PgSql_User: marketplace_user
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: marketplace-mnt-c-Users-Jay-redash-marketplace--env
+  name: mnt-c-Users-Jay-redash-marketplace--env

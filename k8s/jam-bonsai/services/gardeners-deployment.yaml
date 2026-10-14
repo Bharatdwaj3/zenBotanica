@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gardeners
+  name: gardeners
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gardeners
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: gardeners
+    spec:
+      containers:
+        - args:
+            - sh
+            - -c
+            - npx prisma generate && npx prisma db push --accept-data-loss && npm start
+          env:
+            - name: ADMIN_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  key: ADMIN_EMAIL
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: ADMIN_PASSWORD
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: DEFAULT_USER_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DEFAULT_USER_PASSWORD
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: FRONTEND_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  key: FRONTEND_ORIGIN
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: INTERNAL_SERVICE_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: INTERNAL_SERVICE_SECRET
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: JWT_ACC_EXPIRES_IN
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_ACC_EXPIRES_IN
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: JWT_ACC_SECRECT
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_ACC_SECRECT
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: JWT_REF_EXPIRES_IN
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_REF_EXPIRES_IN
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: JWT_REF_SECRECT
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_REF_SECRECT
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PORT
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: PgSql_Database
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Database
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: PgSql_Host
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Host
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: PgSql_Password
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Password
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: PgSql_Port
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Port
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+            - name: PgSql_User
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_User
+                  name: mnt-c-Users-Jay-redash-gardeners--env
+          image: gardeners
+          name: gardeners-ctr-btny
+          ports:
+            - containerPort: 4003
+              hostPort: 4003
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

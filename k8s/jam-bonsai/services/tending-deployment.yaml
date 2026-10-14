@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: tending
+  name: tending
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: tending
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: tending
+    spec:
+      containers:
+        - args:
+            - sh
+            - -c
+            - npx prisma generate && npx prisma db push --accept-data-loss && npm start
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: FRONTEND_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  key: FRONTEND_ORIGIN
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: GARDENERS_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: GARDENERS_SERVICE_URL
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: GROVE_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: GROVE_SERVICE_URL
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: INTERNAL_SERVICE_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: INTERNAL_SERVICE_SECRET
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: JWT_ACC_SECRECT
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_ACC_SECRECT
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: MAILHOG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: MAILHOG_HOST
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: MAILHOG_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MAILHOG_PORT
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PORT
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: PgSql_Database
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Database
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: PgSql_Host
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Host
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: PgSql_Password
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Password
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: PgSql_Port
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_Port
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: PgSql_User
+              valueFrom:
+                configMapKeyRef:
+                  key: PgSql_User
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: RAZORPAY_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: RAZORPAY_KEY_ID
+                  name: mnt-c-Users-Jay-redash-tending--env
+            - name: RAZORPAY_KEY_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: RAZORPAY_KEY_SECRET
+                  name: mnt-c-Users-Jay-redash-tending--env
+          image: tending
+          name: tending-ctr-btny
+          ports:
+            - containerPort: 4002
+              hostPort: 4002
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

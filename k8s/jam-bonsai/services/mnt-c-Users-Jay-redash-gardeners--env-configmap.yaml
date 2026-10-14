@@ -1,0 +1,24 @@
+apiVersion: v1
+data:
+  ADMIN_EMAIL: admin@gardener.local
+  ADMIN_PASSWORD: REDACTED
+  DATABASE_URL: REDACTED
+  DEFAULT_USER_PASSWORD: REDACTED
+  FRONTEND_ORIGIN: http://localhost:5173
+  INTERNAL_SERVICE_SECRET: REDACTED
+  JWT_ACC_EXPIRES_IN: 15m
+  JWT_ACC_SECRECT: REDACTED
+  JWT_REF_EXPIRES_IN: 7d
+  JWT_REF_SECRECT: REDACTED
+  PORT: "4003"
+  PgSql_Database: gardeners_db
+  PgSql_Host: gardeners-db
+  PgSql_Password: REDACTED
+  PgSql_Port: "5432"
+  PgSql_User: gardeners_user
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gardeners-mnt-c-Users-Jay-redash-gardeners--env
+  name: mnt-c-Users-Jay-redash-gardeners--env
