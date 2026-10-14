@@ -34,87 +34,87 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: ADMIN_EMAIL
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: ADMIN_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: ADMIN_PASSWORD
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: DATABASE_URL
               valueFrom:
                 configMapKeyRef:
                   key: DATABASE_URL
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: DEFAULT_USER_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: DEFAULT_USER_PASSWORD
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: FRONTEND_ORIGIN
               valueFrom:
                 configMapKeyRef:
                   key: FRONTEND_ORIGIN
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: GARDENERS_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
                   key: GARDENERS_SERVICE_URL
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: INTERNAL_SERVICE_SECRET
               valueFrom:
                 configMapKeyRef:
                   key: INTERNAL_SERVICE_SECRET
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: JWT_ACC_EXPIRES_IN
               valueFrom:
                 configMapKeyRef:
                   key: JWT_ACC_EXPIRES_IN
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: JWT_ACC_SECRECT
               valueFrom:
                 configMapKeyRef:
                   key: JWT_ACC_SECRECT
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: JWT_REF_EXPIRES_IN
               valueFrom:
                 configMapKeyRef:
                   key: JWT_REF_EXPIRES_IN
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: JWT_REF_SECRECT
               valueFrom:
                 configMapKeyRef:
                   key: JWT_REF_SECRECT
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: PORT
               valueFrom:
                 configMapKeyRef:
                   key: PORT
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: PgSql_Database
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Database
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: PgSql_Host
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Host
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: PgSql_Password
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Password
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: PgSql_Port
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Port
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
             - name: PgSql_User
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_User
-                  name: mnt-c-Users-Jay-redash-marketplace--env
+                  name: marketplace-env-configmap
           image: marketplace
           name: marketplace-ctr-btny
           ports:

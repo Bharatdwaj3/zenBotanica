@@ -11,15 +11,15 @@ data:
   JWT_ACC_SECRECT: REDACTED
   JWT_REF_EXPIRES_IN: 7d
   JWT_REF_SECRECT: REDACTED
-  PORT: "4005"
-  PgSql_Database: marketplace_db
-  PgSql_Host: marketplace-db
+  PORT: "4004"
+  PgSql_Database: visitor_db
+  PgSql_Host: visitor-services-db
   PgSql_Password: REDACTED
   PgSql_Port: "5432"
-  PgSql_User: marketplace_user
+  PgSql_User: visitor_user
 kind: ConfigMap
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: marketplace-mnt-c-Users-Jay-redash-marketplace--env
-  name: mnt-c-Users-Jay-redash-marketplace--env
+    io.kompose.service: visitor-services-mnt-c-Users-Jay-redash-visitor-services--env
+  name: visitor-services-env-configmap

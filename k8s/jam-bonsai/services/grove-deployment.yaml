@@ -34,72 +34,72 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DATABASE_URL
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: FRONTEND_ORIGIN
               valueFrom:
                 configMapKeyRef:
                   key: FRONTEND_ORIGIN
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: Fbase_project_id
               valueFrom:
                 configMapKeyRef:
                   key: Fbase_project_id
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: GARDENERS_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
                   key: GARDENERS_SERVICE_URL
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: INTERNAL_SERVICE_SECRET
               valueFrom:
                 configMapKeyRef:
                   key: INTERNAL_SERVICE_SECRET
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: JWT_ACC_SECRECT
               valueFrom:
                 configMapKeyRef:
                   key: JWT_ACC_SECRECT
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: NODE_ENV
               valueFrom:
                 configMapKeyRef:
                   key: NODE_ENV
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: PORT
               valueFrom:
                 configMapKeyRef:
                   key: PORT
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: PgSql_Database
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Database
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: PgSql_Host
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Host
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: PgSql_Password
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Password
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: PgSql_Port
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Port
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: PgSql_User
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_User
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
             - name: TENDING_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
                   key: TENDING_SERVICE_URL
-                  name: mnt-c-Users-Jay-redash-grove--env
+                  name: grove-env-configmap
           image: grove
           name: grove-ctr-btny
           ports:

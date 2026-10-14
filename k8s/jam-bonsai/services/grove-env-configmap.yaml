@@ -19,4 +19,4 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: grove-mnt-c-Users-Jay-redash-grove--env
-  name: mnt-c-Users-Jay-redash-grove--env
+  name: grove-env-configmap

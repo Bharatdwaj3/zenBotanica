@@ -40,11 +40,11 @@ resources:
   - services/mailhog-service.yaml
   - services/marketplace-deployment.yaml
   - services/marketplace-service.yaml
-  - services/mnt-c-Users-Jay-redash-gardeners--env-configmap.yaml
-  - services/mnt-c-Users-Jay-redash-grove--env-configmap.yaml
-  - services/mnt-c-Users-Jay-redash-marketplace--env-configmap.yaml
-  - services/mnt-c-Users-Jay-redash-tending--env-configmap.yaml
-  - services/mnt-c-Users-Jay-redash-visitor-services--env-configmap.yaml
+  - services/gardeners-env-configmap.yaml
+  - services/grove-env-configmap.yaml
+  - services/marketplace-env-configmap.yaml
+  - services/tending-env-configmap.yaml
+  - services/visitor-services-env-configmap.yaml
   - services/tending-care-reminder-cronjob.yaml
   - services/tending-deployment.yaml
   - services/tending-service.yaml
