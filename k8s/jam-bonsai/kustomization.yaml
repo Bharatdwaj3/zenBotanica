@@ -3,66 +3,71 @@ kind: Kustomization
 namespace: jam-bonsai
 resources:
   - secrets
-  - workloads/caddy-deployment.yaml
-  - workloads/caddyfile.yaml
-  - workloads/firebase-data-persistentvolumeclaim.yaml
-  - workloads/firebase-rollout.yaml
-  - workloads/firebase-service.yaml
-  - workloads/frontend-nginx-config.yaml
-  - workloads/frontend-rollout.yaml
-  - workloads/frontend-service.yaml
-  - workloads/gardeners-db-headless-service.yaml
-  - workloads/gardeners-db-service.yaml
-  - workloads/gardeners-db-statefulset.yaml
-  - workloads/gardeners-rollout.yaml
-  - workloads/gardeners-service.yaml
-  - workloads/grove-db-headless-service.yaml
-  - workloads/grove-db-service.yaml
-  - workloads/grove-db-statefulset.yaml
-  - workloads/grove-rollout.yaml
-  - workloads/grove-service.yaml
-  - workloads/mailhog-rollout.yaml
-  - workloads/mailhog-service.yaml
-  - workloads/marketplace-db-headless-service.yaml
-  - workloads/marketplace-db-service.yaml
-  - workloads/marketplace-db-statefulset.yaml
-  - workloads/marketplace-rollout.yaml
-  - workloads/marketplace-service.yaml
-  - workloads/tending-care-reminder-cronjob.yaml
-  - workloads/tending-db-headless-service.yaml
-  - workloads/tending-db-service.yaml
-  - workloads/tending-db-statefulset.yaml
-  - workloads/tending-rollout.yaml
-  - workloads/tending-service.yaml
-  - workloads/visitor-services-db-headless-service.yaml
-  - workloads/visitor-services-db-service.yaml
-  - workloads/visitor-services-db-statefulset.yaml
-  - workloads/visitor-services-rollout.yaml
-  - workloads/visitor-services-service.yaml
+  - databases/firebase-data-persistentvolumeclaim.yaml
+  - databases/gardeners-data-persistentvolumeclaim.yaml
+  - databases/gardeners-db-deployment.yaml
+  - databases/gardeners-db-headless-service.yaml
+  - databases/gardeners-db-service.yaml
+  - databases/grove-data-persistentvolumeclaim.yaml
+  - databases/grove-db-deployment.yaml
+  - databases/grove-db-headless-service.yaml
+  - databases/grove-db-service.yaml
+  - databases/marketplace-data-persistentvolumeclaim.yaml
+  - databases/marketplace-db-deployment.yaml
+  - databases/marketplace-db-headless-service.yaml
+  - databases/marketplace-db-service.yaml
+  - databases/tending-data-persistentvolumeclaim.yaml
+  - databases/tending-db-deployment.yaml
+  - databases/tending-db-headless-service.yaml
+  - databases/tending-db-service.yaml
+  - databases/visitor-data-persistentvolumeclaim.yaml
+  - databases/visitor-db-deployment.yaml
+  - databases/visitor-db-service.yaml
+  - databases/visitor-services-db-headless-service.yaml
+  - databases/visitor-services-db-service.yaml
+  - services/caddy-deployment.yaml
+  - services/caddyfile.yaml
+  - services/firebase-deployment.yaml
+  - services/firebase-service.yaml
+  - services/frontend-deployment.yaml
+  - services/frontend-nginx-config.yaml
+  - services/frontend-service.yaml
+  - services/gardeners-deployment.yaml
+  - services/gardeners-service.yaml
+  - services/grove-deployment.yaml
+  - services/grove-service.yaml
+  - services/mailhog-deployment.yaml
+  - services/mailhog-service.yaml
+  - services/marketplace-deployment.yaml
+  - services/marketplace-service.yaml
+  - services/mnt-c-Users-Jay-redash-gardeners--env-configmap.yaml
+  - services/mnt-c-Users-Jay-redash-grove--env-configmap.yaml
+  - services/mnt-c-Users-Jay-redash-marketplace--env-configmap.yaml
+  - services/mnt-c-Users-Jay-redash-tending--env-configmap.yaml
+  - services/mnt-c-Users-Jay-redash-visitor-services--env-configmap.yaml
+  - services/tending-care-reminder-cronjob.yaml
+  - services/tending-deployment.yaml
+  - services/tending-service.yaml
+  - services/visitor-services-deployment.yaml
+  - services/visitor-services-service.yaml
   - gardeners-sa.yaml
   - gardeners-cloneset.yaml
 patches:
-  - patch: |-
-      apiVersion: argoproj.io/v1alpha1
-      kind: Rollout
-      metadata:
-        name: gardeners
-      $patch: delete
-    target:
-      kind: Rollout
-      name: gardeners
+  # 1. Force local image usage for all Deployments and CloneSets
   - target:
-      kind: Rollout
+      kind: Deployment
     patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 2
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
   - target:
-      kind: StatefulSet
+      kind: CloneSet
     patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 2
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
+
+  # 2. Strip Vault/OpenBao annotations from gardeners CloneSet for local dev
   - target:
       kind: CloneSet
       name: gardeners
@@ -75,21 +80,22 @@ patches:
         path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-secret-secrets.env
       - op: remove
         path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-template-secrets.env
+
+  # 3. Set replicas to 2 for Deployments and CloneSets
+  - target:
+      kind: Deployment
+    patch: |-
       - op: replace
         path: /spec/replicas
-        value: 2
-  - target:
-      kind: Rollout
-    patch: |-
-      - op: add
-        path: /spec/template/spec/containers/0/imagePullPolicy
-        value: IfNotPresent
+        value: 1
   - target:
       kind: CloneSet
+      name: gardeners
     patch: |-
-      - op: add
-        path: /spec/template/spec/containers/0/imagePullPolicy
-        value: IfNotPresent
+      - op: replace
+        path: /spec/replicas
+        value: 1
+
 images:
   - name: grove
     newName: bonsai-grove
