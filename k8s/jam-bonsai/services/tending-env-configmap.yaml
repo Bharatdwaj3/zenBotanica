@@ -21,4 +21,4 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: tending-mnt-c-Users-Jay-redash-tending--env
-  name: mnt-c-Users-Jay-redash-tending--env
+  name: tending-env-configmap

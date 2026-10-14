@@ -34,82 +34,82 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DATABASE_URL
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: FRONTEND_ORIGIN
               valueFrom:
                 configMapKeyRef:
                   key: FRONTEND_ORIGIN
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: GARDENERS_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
                   key: GARDENERS_SERVICE_URL
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: GROVE_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
                   key: GROVE_SERVICE_URL
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: INTERNAL_SERVICE_SECRET
               valueFrom:
                 configMapKeyRef:
                   key: INTERNAL_SERVICE_SECRET
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: JWT_ACC_SECRECT
               valueFrom:
                 configMapKeyRef:
                   key: JWT_ACC_SECRECT
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: MAILHOG_HOST
               valueFrom:
                 configMapKeyRef:
                   key: MAILHOG_HOST
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: MAILHOG_PORT
               valueFrom:
                 configMapKeyRef:
                   key: MAILHOG_PORT
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: PORT
               valueFrom:
                 configMapKeyRef:
                   key: PORT
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: PgSql_Database
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Database
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: PgSql_Host
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Host
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: PgSql_Password
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Password
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: PgSql_Port
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_Port
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: PgSql_User
               valueFrom:
                 configMapKeyRef:
                   key: PgSql_User
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: RAZORPAY_KEY_ID
               valueFrom:
                 configMapKeyRef:
                   key: RAZORPAY_KEY_ID
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
             - name: RAZORPAY_KEY_SECRET
               valueFrom:
                 configMapKeyRef:
                   key: RAZORPAY_KEY_SECRET
-                  name: mnt-c-Users-Jay-redash-tending--env
+                  name: tending-env-configmap
           image: tending
           name: tending-ctr-btny
           ports:

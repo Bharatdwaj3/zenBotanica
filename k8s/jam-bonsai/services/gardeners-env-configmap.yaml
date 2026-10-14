@@ -21,4 +21,4 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: gardeners-mnt-c-Users-Jay-redash-gardeners--env
-  name: mnt-c-Users-Jay-redash-gardeners--env
+  name: gardeners-env-configmap
