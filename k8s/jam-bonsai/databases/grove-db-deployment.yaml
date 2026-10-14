@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grove-db
+  name: grove-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: grove-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: grove-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: grove_db
+            - name: POSTGRES_PASSWORD
+              value: grove_pass
+            - name: POSTGRES_USER
+              value: grove_user
+          image: postgres:15-alpine
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready -U grove_user -d grove_db
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: grove-db-ctr-btny
+          ports:
+            - containerPort: 5432
+              hostPort: 7433
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: grove-data
+      restartPolicy: Always
+      volumes:
+        - name: grove-data
+          persistentVolumeClaim:
+            claimName: grove-data
+status: {}

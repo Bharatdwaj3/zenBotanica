@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grove-db
+  name: grove-db
+spec:
+  ports:
+    - name: "7433"
+      port: 7433
+      targetPort: 5432
+  selector:
+    io.kompose.service: grove-db
+status:
+  loadBalancer: {}

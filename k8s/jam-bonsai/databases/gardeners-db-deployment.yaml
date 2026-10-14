@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gardeners-db
+  name: gardeners-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gardeners-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: gardeners-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: gardeners_db
+            - name: POSTGRES_PASSWORD
+              value: gardeners_pass
+            - name: POSTGRES_USER
+              value: gardeners_user
+          image: postgres:15-alpine
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready -U gardeners_user -d gardeners_db
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: gardeners-db-ctr-btny
+          ports:
+            - containerPort: 5432
+              hostPort: 7435
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: gardeners-data
+      restartPolicy: Always
+      volumes:
+        - name: gardeners-data
+          persistentVolumeClaim:
+            claimName: gardeners-data
+status: {}

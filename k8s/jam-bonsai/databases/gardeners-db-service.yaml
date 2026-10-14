@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gardeners-db
+  name: gardeners-db
+spec:
+  ports:
+    - name: "7435"
+      port: 7435
+      targetPort: 5432
+  selector:
+    io.kompose.service: gardeners-db
+status:
+  loadBalancer: {}

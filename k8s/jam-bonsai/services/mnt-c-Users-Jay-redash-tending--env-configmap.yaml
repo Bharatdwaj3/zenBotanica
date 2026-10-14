@@ -1,0 +1,24 @@
+apiVersion: v1
+data:
+  DATABASE_URL: postgresql://tending_user:tending_pass@tending-db:5432/tending_db?schema=public
+  FRONTEND_ORIGIN: http://localhost:5173
+  GARDENERS_SERVICE_URL: http://gardeners:4003
+  GROVE_SERVICE_URL: http://grove:4001
+  INTERNAL_SERVICE_SECRET: Kaderim-pskll-belam
+  JWT_ACC_SECRECT: Sahibin
+  MAILHOG_HOST: mailhog
+  MAILHOG_PORT: "1025"
+  PORT: "4002"
+  PgSql_Database: tending_db
+  PgSql_Host: tending-db
+  PgSql_Password: tending_pass
+  PgSql_Port: "5432"
+  PgSql_User: tending_user
+  RAZORPAY_KEY_ID: rzp_test_RBV4INziaCjUNO
+  RAZORPAY_KEY_SECRET: JJiab6BsVX4yKmN4v3Of0Xcp
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: tending-mnt-c-Users-Jay-redash-tending--env
+  name: mnt-c-Users-Jay-redash-tending--env

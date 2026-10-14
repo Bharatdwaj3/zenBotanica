@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: firebase
+  name: firebase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: firebase
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s/jam-bonsai/workloads/
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: firebase
+    spec:
+      containers:
+        - image: firebase
+          livenessProbe:
+            exec:
+              command:
+                - curl -s http://localhost:9199 > /dev/null
+            failureThreshold: 5
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: firebase-ctr-btny
+          ports:
+            - containerPort: 9099
+              hostPort: 9099
+              protocol: TCP
+            - containerPort: 9199
+              hostPort: 9199
+              protocol: TCP
+            - containerPort: 4000
+              hostPort: 4000
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
