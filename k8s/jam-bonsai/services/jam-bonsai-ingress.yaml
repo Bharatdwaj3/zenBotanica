@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jam-bonsai-frontend-ingress
+  namespace: jam-bonsai
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: duckdns-letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - rudrashayan.duckdns.org
+    secretName: jam-bonsai-tls-secret
+  rules:
+  - host: rudrashayan.duckdns.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 5114
