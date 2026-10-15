@@ -4,9 +4,9 @@ metadata:
   name: jam-bonsai-frontend-ingress
   namespace: jam-bonsai
   annotations:
-    kubernetes.io/ingress.class: traefik
     cert-manager.io/cluster-issuer: duckdns-letsencrypt-prod
 spec:
+  ingressClassName: traefik
   tls:
   - hosts:
     - rudrashayan.duckdns.org
