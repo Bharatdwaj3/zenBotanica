@@ -13,7 +13,7 @@ data:
   JWT_REF_SECRECT: REDACTED
   PORT: "4004"
   PgSql_Database: visitor_db
-  PgSql_Host: visitor-services-db
+  PgSql_Host: visitor-db
   PgSql_Password: REDACTED
   PgSql_Port: "5432"
   PgSql_User: visitor_user
