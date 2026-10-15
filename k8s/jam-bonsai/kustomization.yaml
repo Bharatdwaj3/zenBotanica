@@ -50,6 +50,8 @@ resources:
   - services/tending-service.yaml
   - services/visitor-services-deployment.yaml
   - services/visitor-services-service.yaml
+  - services/jam-bonsai-ingress.yaml
+  - services/jam-bonsai-certificate.yaml
   - gardeners-sa.yaml
   - gardeners-cloneset.yaml
 patches:
