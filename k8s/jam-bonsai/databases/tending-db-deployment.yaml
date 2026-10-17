@@ -30,7 +30,10 @@ spec:
             - name: POSTGRES_DB
               value: tending_db
             - name: POSTGRES_PASSWORD
-              value: REDACTED
+              valueFrom:
+                secretKeyRef:
+                  key: PgSql_Password
+                  name: tending-secrets
             - name: POSTGRES_USER
               value: tending_user
           image: postgres:15-alpine

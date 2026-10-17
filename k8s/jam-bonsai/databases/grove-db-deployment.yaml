@@ -30,7 +30,10 @@ spec:
             - name: POSTGRES_DB
               value: grove_db
             - name: POSTGRES_PASSWORD
-              value: REDACTED
+              valueFrom:
+                secretKeyRef:
+                  key: PgSql_Password
+                  name: grove-secrets
             - name: POSTGRES_USER
               value: grove_user
           image: postgres:15-alpine
