@@ -30,7 +30,10 @@ spec:
             - name: POSTGRES_DB
               value: visitor_db
             - name: POSTGRES_PASSWORD
-              value: visitor_pass
+              valueFrom:
+                secretKeyRef:
+                  key: PgSql_Password
+                  name: visitor-services-secrets
             - name: POSTGRES_USER
               value: visitor_user
           image: postgres:15-alpine

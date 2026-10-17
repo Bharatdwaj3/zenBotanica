@@ -30,7 +30,10 @@ spec:
             - name: POSTGRES_DB
               value: marketplace_db
             - name: POSTGRES_PASSWORD
-              value: marketplace_pass
+              valueFrom:
+                secretKeyRef:
+                  key: PgSql_Password
+                  name: marketplace-secrets
             - name: POSTGRES_USER
               value: marketplace_user
           image: postgres:15-alpine
