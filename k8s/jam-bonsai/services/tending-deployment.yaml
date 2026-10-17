@@ -114,7 +114,6 @@ spec:
           name: tending-ctr-btny
           ports:
             - containerPort: 4002
-              hostPort: 4002
               protocol: TCP
           resources: {}
       restartPolicy: Always

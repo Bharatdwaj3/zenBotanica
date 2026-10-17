@@ -119,7 +119,6 @@ spec:
           name: marketplace-ctr-btny
           ports:
             - containerPort: 4005
-              hostPort: 4005
               protocol: TCP
           resources: {}
       restartPolicy: Always
