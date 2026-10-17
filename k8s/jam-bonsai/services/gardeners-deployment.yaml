@@ -114,7 +114,6 @@ spec:
           name: gardeners-ctr-btny
           ports:
             - containerPort: 4003
-              hostPort: 4003
               protocol: TCP
           resources: {}
       restartPolicy: Always
