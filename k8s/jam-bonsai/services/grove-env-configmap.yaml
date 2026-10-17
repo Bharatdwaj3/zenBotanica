@@ -1,16 +1,12 @@
 apiVersion: v1
 data:
-  DATABASE_URL: postgresql://grove_user:grove_pass@grove-db:5432/grove_db?schema=public
   FRONTEND_ORIGIN: http://localhost:5173
   Fbase_project_id: demo-project
   GARDENERS_SERVICE_URL: http://gardeners:4003
-  INTERNAL_SERVICE_SECRET: Kaderim-pskll-belam
-  JWT_ACC_SECRECT: Sahibin
   NODE_ENV: development
   PORT: "4001"
   PgSql_Database: grove_db
   PgSql_Host: grove-db
-  PgSql_Password: grove_pass
   PgSql_Port: "5432"
   PgSql_User: grove_user
   TENDING_SERVICE_URL: http://tending:4002

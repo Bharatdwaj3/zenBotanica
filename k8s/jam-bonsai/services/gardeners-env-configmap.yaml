@@ -1,19 +1,12 @@
 apiVersion: v1
 data:
   ADMIN_EMAIL: admin@gardener.local
-  ADMIN_PASSWORD: Oturduk
-  DATABASE_URL: postgresql://gardeners_user:gardeners_pass@gardeners-db:5432/gardeners_db?schema=public
-  DEFAULT_USER_PASSWORD: UZ67xuWa8rGOUpc8SojszIM8m7PqoHDo
   FRONTEND_ORIGIN: http://localhost:5173
-  INTERNAL_SERVICE_SECRET: Kaderim-pskll-belam
   JWT_ACC_EXPIRES_IN: 15m
-  JWT_ACC_SECRECT: Sahibin
   JWT_REF_EXPIRES_IN: 7d
-  JWT_REF_SECRECT: mahvolduk
   PORT: "4003"
   PgSql_Database: gardeners_db
   PgSql_Host: gardeners-db
-  PgSql_Password: gardeners_pass
   PgSql_Port: "5432"
   PgSql_User: gardeners_user
 kind: ConfigMap
