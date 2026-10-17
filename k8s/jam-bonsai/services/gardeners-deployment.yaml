@@ -37,19 +37,19 @@ spec:
                   name: gardeners-env-configmap
             - name: ADMIN_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: ADMIN_PASSWORD
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: DATABASE_URL
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: DEFAULT_USER_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: DEFAULT_USER_PASSWORD
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: FRONTEND_ORIGIN
               valueFrom:
                 configMapKeyRef:
@@ -57,9 +57,9 @@ spec:
                   name: gardeners-env-configmap
             - name: INTERNAL_SERVICE_SECRET
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: INTERNAL_SERVICE_SECRET
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: JWT_ACC_EXPIRES_IN
               valueFrom:
                 configMapKeyRef:
@@ -67,9 +67,9 @@ spec:
                   name: gardeners-env-configmap
             - name: JWT_ACC_SECRECT
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: JWT_ACC_SECRECT
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: JWT_REF_EXPIRES_IN
               valueFrom:
                 configMapKeyRef:
@@ -77,9 +77,9 @@ spec:
                   name: gardeners-env-configmap
             - name: JWT_REF_SECRECT
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: JWT_REF_SECRECT
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: PORT
               valueFrom:
                 configMapKeyRef:
@@ -97,9 +97,9 @@ spec:
                   name: gardeners-env-configmap
             - name: PgSql_Password
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: PgSql_Password
-                  name: gardeners-env-configmap
+                  name: gardeners-secrets
             - name: PgSql_Port
               valueFrom:
                 configMapKeyRef:

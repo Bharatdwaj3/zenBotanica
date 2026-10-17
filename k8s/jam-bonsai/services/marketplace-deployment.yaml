@@ -37,19 +37,19 @@ spec:
                   name: marketplace-env-configmap
             - name: ADMIN_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: ADMIN_PASSWORD
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: DATABASE_URL
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: DEFAULT_USER_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: DEFAULT_USER_PASSWORD
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: FRONTEND_ORIGIN
               valueFrom:
                 configMapKeyRef:
@@ -62,9 +62,9 @@ spec:
                   name: marketplace-env-configmap
             - name: INTERNAL_SERVICE_SECRET
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: INTERNAL_SERVICE_SECRET
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: JWT_ACC_EXPIRES_IN
               valueFrom:
                 configMapKeyRef:
@@ -72,9 +72,9 @@ spec:
                   name: marketplace-env-configmap
             - name: JWT_ACC_SECRECT
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: JWT_ACC_SECRECT
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: JWT_REF_EXPIRES_IN
               valueFrom:
                 configMapKeyRef:
@@ -82,9 +82,9 @@ spec:
                   name: marketplace-env-configmap
             - name: JWT_REF_SECRECT
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: JWT_REF_SECRECT
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: PORT
               valueFrom:
                 configMapKeyRef:
@@ -102,9 +102,9 @@ spec:
                   name: marketplace-env-configmap
             - name: PgSql_Password
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: PgSql_Password
-                  name: marketplace-env-configmap
+                  name: marketplace-secrets
             - name: PgSql_Port
               valueFrom:
                 configMapKeyRef:

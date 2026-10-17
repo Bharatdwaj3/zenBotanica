@@ -32,9 +32,9 @@ spec:
           env:
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: DATABASE_URL
-                  name: tending-env-configmap
+                  name: tending-secrets
             - name: FRONTEND_ORIGIN
               valueFrom:
                 configMapKeyRef:
@@ -52,14 +52,14 @@ spec:
                   name: tending-env-configmap
             - name: INTERNAL_SERVICE_SECRET
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: INTERNAL_SERVICE_SECRET
-                  name: tending-env-configmap
+                  name: tending-secrets
             - name: JWT_ACC_SECRECT
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: JWT_ACC_SECRECT
-                  name: tending-env-configmap
+                  name: tending-secrets
             - name: MAILHOG_HOST
               valueFrom:
                 configMapKeyRef:
@@ -87,9 +87,9 @@ spec:
                   name: tending-env-configmap
             - name: PgSql_Password
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: PgSql_Password
-                  name: tending-env-configmap
+                  name: tending-secrets
             - name: PgSql_Port
               valueFrom:
                 configMapKeyRef:
@@ -102,14 +102,14 @@ spec:
                   name: tending-env-configmap
             - name: RAZORPAY_KEY_ID
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: RAZORPAY_KEY_ID
-                  name: tending-env-configmap
+                  name: tending-secrets
             - name: RAZORPAY_KEY_SECRET
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: RAZORPAY_KEY_SECRET
-                  name: tending-env-configmap
+                  name: tending-secrets
           image: tending
           name: tending-ctr-btny
           ports:
