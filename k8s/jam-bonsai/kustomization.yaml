@@ -54,6 +54,7 @@ resources:
   - grove-cloneset.yaml
   - marketplace-cloneset.yaml
   - tending-cloneset.yaml
+  - visitor-services-cloneset.yaml
 patches:
   # 1. Force local image usage for all Deployments and CloneSets
   - target:
