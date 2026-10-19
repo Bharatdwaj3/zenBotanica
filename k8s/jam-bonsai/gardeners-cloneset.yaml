@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         app: gardeners
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: gardeners
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "bonsai-prod-role"
@@ -28,6 +30,91 @@ spec:
       - name: gardeners
         image: bonsai-gardeners:latest # Note: Update this to your actual GHCR image tag once CI/CD is fixed!
         imagePullPolicy: IfNotPresent
+        args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma db push --accept-data-loss && npm start
+        ports:
+        - containerPort: 4003
+          protocol: TCP
         env:
-        - name: SECRETS_FILE
-          value: "/vault/secrets/secrets.env"
+        - name: ADMIN_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              key: ADMIN_EMAIL
+              name: gardeners-env-configmap
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: ADMIN_PASSWORD
+              name: gardeners-secrets
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: gardeners-secrets
+        - name: DEFAULT_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DEFAULT_USER_PASSWORD
+              name: gardeners-secrets
+        - name: FRONTEND_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              key: FRONTEND_ORIGIN
+              name: gardeners-env-configmap
+        - name: INTERNAL_SERVICE_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: INTERNAL_SERVICE_SECRET
+              name: gardeners-secrets
+        - name: JWT_ACC_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              key: JWT_ACC_EXPIRES_IN
+              name: gardeners-env-configmap
+        - name: JWT_ACC_SECRECT
+          valueFrom:
+            secretKeyRef:
+              key: JWT_ACC_SECRECT
+              name: gardeners-secrets
+        - name: JWT_REF_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              key: JWT_REF_EXPIRES_IN
+              name: gardeners-env-configmap
+        - name: JWT_REF_SECRECT
+          valueFrom:
+            secretKeyRef:
+              key: JWT_REF_SECRECT
+              name: gardeners-secrets
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              key: PORT
+              name: gardeners-env-configmap
+        - name: PgSql_Database
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Database
+              name: gardeners-env-configmap
+        - name: PgSql_Host
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Host
+              name: gardeners-env-configmap
+        - name: PgSql_Password
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: gardeners-secrets
+        - name: PgSql_Port
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Port
+              name: gardeners-env-configmap
+        - name: PgSql_User
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_User
+              name: gardeners-env-configmap
