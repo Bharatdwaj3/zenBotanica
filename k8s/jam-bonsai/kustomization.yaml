@@ -37,7 +37,6 @@ resources:
   - services/grove-service.yaml
   - services/mailhog-deployment.yaml
   - services/mailhog-service.yaml
-  - services/marketplace-deployment.yaml
   - services/marketplace-service.yaml
   - services/gardeners-env-configmap.yaml
   - services/grove-env-configmap.yaml
