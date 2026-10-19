@@ -1,0 +1,99 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: CloneSet
+metadata:
+  name: grove
+  namespace: jam-bonsai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grove
+  template:
+    metadata:
+      labels:
+        app: grove
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: grove
+    spec:
+      containers:
+      - name: grove
+        image: bonsai-grove:latest
+        imagePullPolicy: IfNotPresent
+        args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma db push --accept-data-loss && npm start
+        ports:
+        - containerPort: 4001
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: grove-secrets
+        - name: FRONTEND_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              key: FRONTEND_ORIGIN
+              name: grove-env-configmap
+        - name: Fbase_project_id
+          valueFrom:
+            configMapKeyRef:
+              key: Fbase_project_id
+              name: grove-env-configmap
+        - name: GARDENERS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: GARDENERS_SERVICE_URL
+              name: grove-env-configmap
+        - name: INTERNAL_SERVICE_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: INTERNAL_SERVICE_SECRET
+              name: grove-secrets
+        - name: JWT_ACC_SECRECT
+          valueFrom:
+            secretKeyRef:
+              key: JWT_ACC_SECRECT
+              name: grove-secrets
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              key: NODE_ENV
+              name: grove-env-configmap
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              key: PORT
+              name: grove-env-configmap
+        - name: PgSql_Database
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Database
+              name: grove-env-configmap
+        - name: PgSql_Host
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Host
+              name: grove-env-configmap
+        - name: PgSql_Password
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: grove-secrets
+        - name: PgSql_Port
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Port
+              name: grove-env-configmap
+        - name: PgSql_User
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_User
+              name: grove-env-configmap
+        - name: TENDING_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: TENDING_SERVICE_URL
+              name: grove-env-configmap
