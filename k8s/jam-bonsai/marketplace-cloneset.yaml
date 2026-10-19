@@ -1,0 +1,114 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: CloneSet
+metadata:
+  name: marketplace
+  namespace: jam-bonsai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: marketplace
+  template:
+    metadata:
+      labels:
+        app: marketplace
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: marketplace
+    spec:
+      containers:
+      - name: marketplace
+        image: bonsai-marketplace:latest
+        imagePullPolicy: IfNotPresent
+        args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma db push --accept-data-loss && npm run dev
+        ports:
+        - containerPort: 4005
+          protocol: TCP
+        env:
+        - name: ADMIN_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              key: ADMIN_EMAIL
+              name: marketplace-env-configmap
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: ADMIN_PASSWORD
+              name: marketplace-secrets
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: marketplace-secrets
+        - name: DEFAULT_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DEFAULT_USER_PASSWORD
+              name: marketplace-secrets
+        - name: FRONTEND_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              key: FRONTEND_ORIGIN
+              name: marketplace-env-configmap
+        - name: GARDENERS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: GARDENERS_SERVICE_URL
+              name: marketplace-env-configmap
+        - name: INTERNAL_SERVICE_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: INTERNAL_SERVICE_SECRET
+              name: marketplace-secrets
+        - name: JWT_ACC_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              key: JWT_ACC_EXPIRES_IN
+              name: marketplace-env-configmap
+        - name: JWT_ACC_SECRECT
+          valueFrom:
+            secretKeyRef:
+              key: JWT_ACC_SECRECT
+              name: marketplace-secrets
+        - name: JWT_REF_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              key: JWT_REF_EXPIRES_IN
+              name: marketplace-env-configmap
+        - name: JWT_REF_SECRECT
+          valueFrom:
+            secretKeyRef:
+              key: JWT_REF_SECRECT
+              name: marketplace-secrets
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              key: PORT
+              name: marketplace-env-configmap
+        - name: PgSql_Database
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Database
+              name: marketplace-env-configmap
+        - name: PgSql_Host
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Host
+              name: marketplace-env-configmap
+        - name: PgSql_Password
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: marketplace-secrets
+        - name: PgSql_Port
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Port
+              name: marketplace-env-configmap
+        - name: PgSql_User
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_User
+              name: marketplace-env-configmap

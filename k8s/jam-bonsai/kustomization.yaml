@@ -54,6 +54,7 @@ resources:
   - gardeners-sa.yaml
   - gardeners-cloneset.yaml
   - grove-cloneset.yaml
+  - marketplace-cloneset.yaml
 patches:
   # 1. Force local image usage for all Deployments and CloneSets
   - target:
