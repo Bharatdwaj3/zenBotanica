@@ -32,7 +32,6 @@ resources:
   - services/frontend-deployment.yaml
   - services/frontend-nginx-config.yaml
   - services/frontend-service.yaml
-  - services/gardeners-deployment.yaml
   - services/gardeners-service.yaml
   - services/grove-deployment.yaml
   - services/grove-service.yaml
