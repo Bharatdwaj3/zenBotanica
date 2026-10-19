@@ -33,7 +33,6 @@ resources:
   - services/frontend-nginx-config.yaml
   - services/frontend-service.yaml
   - services/gardeners-service.yaml
-  - services/grove-deployment.yaml
   - services/grove-service.yaml
   - services/mailhog-deployment.yaml
   - services/mailhog-service.yaml
@@ -45,7 +44,6 @@ resources:
   - services/visitor-services-env-configmap.yaml
   - services/tending-care-reminder-cronjob.yaml
   - services/tending-service.yaml
-  - services/visitor-services-deployment.yaml
   - services/visitor-services-service.yaml
   - services/jam-bonsai-ingress.yaml
   - services/jam-bonsai-certificate.yaml
