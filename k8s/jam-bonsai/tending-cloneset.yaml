@@ -1,0 +1,109 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: CloneSet
+metadata:
+  name: tending
+  namespace: jam-bonsai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tending
+  template:
+    metadata:
+      labels:
+        app: tending
+        io.kompose.network/bonsai-app-network: "true"
+        io.kompose.service: tending
+    spec:
+      containers:
+      - name: tending
+        image: bonsai-tending:latest
+        imagePullPolicy: IfNotPresent
+        args:
+        - sh
+        - -c
+        - npx prisma generate && npx prisma db push --accept-data-loss && npm start
+        ports:
+        - containerPort: 4002
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: tending-secrets
+        - name: FRONTEND_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              key: FRONTEND_ORIGIN
+              name: tending-env-configmap
+        - name: GARDENERS_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: GARDENERS_SERVICE_URL
+              name: tending-env-configmap
+        - name: GROVE_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: GROVE_SERVICE_URL
+              name: tending-env-configmap
+        - name: INTERNAL_SERVICE_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: INTERNAL_SERVICE_SECRET
+              name: tending-secrets
+        - name: JWT_ACC_SECRECT
+          valueFrom:
+            secretKeyRef:
+              key: JWT_ACC_SECRECT
+              name: tending-secrets
+        - name: MAILHOG_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MAILHOG_HOST
+              name: tending-env-configmap
+        - name: MAILHOG_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: MAILHOG_PORT
+              name: tending-env-configmap
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              key: PORT
+              name: tending-env-configmap
+        - name: PgSql_Database
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Database
+              name: tending-env-configmap
+        - name: PgSql_Host
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Host
+              name: tending-env-configmap
+        - name: PgSql_Password
+          valueFrom:
+            secretKeyRef:
+              key: PgSql_Password
+              name: tending-secrets
+        - name: PgSql_Port
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_Port
+              name: tending-env-configmap
+        - name: PgSql_User
+          valueFrom:
+            configMapKeyRef:
+              key: PgSql_User
+              name: tending-env-configmap
+        - name: RAZORPAY_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: RAZORPAY_KEY_ID
+              name: tending-secrets
+        - name: RAZORPAY_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: RAZORPAY_KEY_SECRET
+              name: tending-secrets
