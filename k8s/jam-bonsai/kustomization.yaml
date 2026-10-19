@@ -44,7 +44,6 @@ resources:
   - services/tending-env-configmap.yaml
   - services/visitor-services-env-configmap.yaml
   - services/tending-care-reminder-cronjob.yaml
-  - services/tending-deployment.yaml
   - services/tending-service.yaml
   - services/visitor-services-deployment.yaml
   - services/visitor-services-service.yaml
