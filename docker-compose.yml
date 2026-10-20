@@ -9,7 +9,7 @@ services:
       - 7433:5432
     environment:
       POSTGRES_USER: grove_user
-      POSTGRES_PASSWORD: REDACTED
+      POSTGRES_PASSWORD: ${GROVE_DB_PASSWORD:?set GROVE_DB_PASSWORD in .env}
       POSTGRES_DB: grove_db
     volumes:
       - grove_data:/var/lib/postgresql/data
@@ -30,7 +30,7 @@ services:
       - 7434:5432
     environment:
       POSTGRES_USER: tending_user
-      POSTGRES_PASSWORD: REDACTED
+      POSTGRES_PASSWORD: ${TENDING_DB_PASSWORD:?set TENDING_DB_PASSWORD in .env}
       POSTGRES_DB: tending_db
     volumes:
       - tending_data:/var/lib/postgresql/data
@@ -51,7 +51,7 @@ services:
       - 7435:5432
     environment:
       POSTGRES_USER: gardeners_user
-      POSTGRES_PASSWORD: REDACTED
+      POSTGRES_PASSWORD: ${GARDENERS_DB_PASSWORD:?set GARDENERS_DB_PASSWORD in .env}
       POSTGRES_DB: gardeners_db
     volumes:
       - gardeners_data:/var/lib/postgresql/data
@@ -173,7 +173,7 @@ services:
       - 7436:5432
     environment:
       POSTGRES_USER: visitor_user
-      POSTGRES_PASSWORD: REDACTED
+      POSTGRES_PASSWORD: ${VISITOR_DB_PASSWORD:?set VISITOR_DB_PASSWORD in .env}
       POSTGRES_DB: visitor_db
     volumes:
       - visitor_data:/var/lib/postgresql/data
@@ -211,7 +211,7 @@ services:
       - 7437:5432
     environment:
       POSTGRES_USER: marketplace_user
-      POSTGRES_PASSWORD: REDACTED
+      POSTGRES_PASSWORD: ${MARKETPLACE_DB_PASSWORD:?set MARKETPLACE_DB_PASSWORD in .env}
       POSTGRES_DB: marketplace_db
     volumes:
       - marketplace_data:/var/lib/postgresql/data
