@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: jam-bonsai-frontend-ingress
   namespace: jam-bonsai
-  annotations:
-    cert-manager.io/cluster-issuer: duckdns-letsencrypt-prod
 spec:
   ingressClassName: traefik
   tls:
