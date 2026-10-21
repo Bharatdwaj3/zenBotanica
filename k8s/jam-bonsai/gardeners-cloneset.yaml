@@ -14,16 +14,6 @@ spec:
         app: gardeners
         io.kompose.network/bonsai-app-network: "true"
         io.kompose.service: gardeners
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "bonsai-prod-role"
-        vault.hashicorp.com/agent-inject-secret-secrets.env: "secret/data/bonsai-prod/gardeners"
-        vault.hashicorp.com/agent-inject-template-secrets.env: |
-          {{- with secret "secret/data/bonsai-prod/gardeners" -}}
-          {{- range $key, $value := .Data.data }}
-          {{ $key }}={{ $value }}
-          {{- end }}
-          {{- end }}
     spec:
       serviceAccountName: gardeners-sa
       containers:

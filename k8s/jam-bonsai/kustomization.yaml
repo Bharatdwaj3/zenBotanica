@@ -68,20 +68,6 @@ patches:
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: IfNotPresent
 
-  # 2. Strip Vault/OpenBao annotations from gardeners CloneSet for local dev
-  - target:
-      kind: CloneSet
-      name: gardeners
-    patch: |-
-      - op: remove
-        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject
-      - op: remove
-        path: /spec/template/metadata/annotations/vault.hashicorp.com~1role
-      - op: remove
-        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-secret-secrets.env
-      - op: remove
-        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-template-secrets.env
-
   # 3. Set replicas to 2 for Deployments and CloneSets
   - target:
       kind: Deployment
