@@ -1,6 +1,13 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma-client.ts";
 import crypto from "crypto";
+import { setAccessToken, setRefreshToken, clearAuthCookies } from "../middleware/token.middleware.ts";
+
+// never send the password hash or stored refresh token to a client
+export const toSafeUser = <T extends { password?: unknown; refreshToken?: unknown }>(user: T) => {
+  const { password, refreshToken, ...safe } = user;
+  return safe;
+};
 
 const hashPassword = (password: string) => {
   return crypto.pbkdf2Sync(password, 'mionchoillte-salt', 10000, 64, 'sha512').toString('hex');
@@ -17,7 +24,7 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) return res.status(400).json({ error: "User already exists" });
     const user = await prisma.user.create({ data: { email, username, password: hashPassword(password), role } });
-    res.status(201).json({ message: "User registered", user });
+    res.status(201).json({ message: "User registered", user: toSafeUser(user) });
   } catch (error) { res.status(500).json({ error: "Registration failed" }); }
 };
 
@@ -26,19 +33,21 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !comparePassword(password, user.password)) return res.status(401).json({ error: "Invalid credentials" });
-    res.json({ message: "Login successful", user });
+    setAccessToken(res, user);
+    await setRefreshToken(res, user);
+    res.json({ message: "Login successful", user: toSafeUser(user) });
   } catch (error) { res.status(500).json({ error: "Login failed" }); }
 };
 
 export const logout = async (req: Request, res: Response) => {
-  res.clearCookie('token');
+  clearAuthCookies(res);
   res.json({ message: "Logged out successfully" });
 };
 
 export const getProfile = async (req: any, res: Response) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.user.id }, include: { botanist: true, apprentice: true } });
-    res.json(user);
+    res.json(user && toSafeUser(user));
   } catch (error) { res.status(500).json({ error: "Failed to get profile" }); }
 };
 
@@ -46,7 +55,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
   try {
     const { userId, role } = req.body;
     const user = await prisma.user.update({ where: { id: Number(userId) }, data: { role } });
-    res.json({ message: "Role updated", user });
+    res.json({ message: "Role updated", user: toSafeUser(user) });
   } catch (error) { res.status(500).json({ error: "Failed to update role" }); }
 };
 

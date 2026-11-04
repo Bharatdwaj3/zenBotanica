@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma-client.ts";
+import { toSafeUser } from "./auth.controller.ts";
 
 export const listBotanist = async (req: Request, res: Response) => {
   try {
@@ -7,7 +8,7 @@ export const listBotanist = async (req: Request, res: Response) => {
       where: { role: "botanist" },
       include: { botanist: true },
     });
-    res.json(botanists);
+    res.json(botanists.map(toSafeUser));
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch botanists" });
   }
@@ -21,7 +22,7 @@ export const getBotanist = async (req: Request, res: Response) => {
       include: { botanist: true },
     });
     if (!botanist) return res.status(404).json({ error: "Botanist not found" });
-    res.json(botanist);
+    res.json(toSafeUser(botanist));
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch botanist" });
   }
@@ -38,7 +39,7 @@ export const registerBotanist = async (req: Request, res: Response) => {
       },
       include: { botanist: true }
     });
-    res.status(201).json(user);
+    res.status(201).json(toSafeUser(user));
   } catch (error) {
     res.status(500).json({ error: "Failed to register botanist" });
   }
