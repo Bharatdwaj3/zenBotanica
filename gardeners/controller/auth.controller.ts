@@ -9,7 +9,7 @@ export const toSafeUser = <T extends { password?: unknown; refreshToken?: unknow
   return safe;
 };
 
-const hashPassword = (password: string) => {
+export const hashPassword = (password: string) => {
   return crypto.pbkdf2Sync(password, 'mionchoillte-salt', 10000, 64, 'sha512').toString('hex');
 };
 

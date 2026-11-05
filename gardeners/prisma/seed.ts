@@ -6,7 +6,15 @@ const hashPassword = (password: string) => {
 };
 
 const CURATOR_EMAIL = "curator@mionchoillte.local";
-const CURATOR_PASSWORD = "curator123";
+// seed passwords come from the environment so no credential lives in the repo
+const requireEnv = (name: string): string => {
+  const value = process.env[name];
+  if (!value) { console.error(`Set ${name} before running the seed.`); process.exit(1); }
+  return value;
+};
+const CURATOR_PASSWORD = requireEnv("SEED_CURATOR_PASSWORD");
+const BOTANIST_PASSWORD = requireEnv("SEED_BOTANIST_PASSWORD");
+const APPRENTICE_PASSWORD = requireEnv("SEED_APPRENTICE_PASSWORD");
 const CURATOR_USERNAME = "head_curator";
 
 const botanistUsers = [
@@ -43,7 +51,7 @@ async function main() {
       create: {
         email: user.email,
         username: user.username,
-        password: hashPassword("password123"),
+        password: hashPassword(BOTANIST_PASSWORD),
         role: "botanist",
         botanist: {
           create: {
@@ -67,7 +75,7 @@ async function main() {
       create: {
         email: user.email,
         username: user.username,
-        password: hashPassword("password123"),
+        password: hashPassword(APPRENTICE_PASSWORD),
         role: "apprentice",
         apprentice: {
           create: {

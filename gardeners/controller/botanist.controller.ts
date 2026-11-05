@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma-client.ts";
-import { toSafeUser } from "./auth.controller.ts";
+import { toSafeUser, hashPassword } from "./auth.controller.ts";
 
 export const listBotanist = async (req: Request, res: Response) => {
   try {
@@ -31,7 +31,7 @@ export const getBotanist = async (req: Request, res: Response) => {
 export const registerBotanist = async (req: Request, res: Response) => {
   try {
     const { email, username, password, Fname, Lname, age, gender, Expertise } = req.body;
-    const hashedPassword = Buffer.from(password).toString('base64');
+    const hashedPassword = hashPassword(password);
     const user = await prisma.user.create({
       data: {
         email, username, password: hashedPassword, role: "botanist",
