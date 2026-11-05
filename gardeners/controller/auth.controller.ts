@@ -18,9 +18,13 @@ const comparePassword = (password: string, hashedPassword: string) => {
   return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(hashedPassword));
 };
 
+// roles a visitor may pick at signup; privileged roles are assigned server-side only
+const SIGNUP_ROLES = ["apprentice", "botanist"];
+
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, username, password, role } = req.body;
+    if (!SIGNUP_ROLES.includes(role)) return res.status(400).json({ error: "Invalid role" });
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) return res.status(400).json({ error: "User already exists" });
     const user = await prisma.user.create({ data: { email, username, password: hashPassword(password), role } });
@@ -39,9 +43,12 @@ export const login = async (req: Request, res: Response) => {
   } catch (error) { res.status(500).json({ error: "Login failed" }); }
 };
 
-export const logout = async (req: Request, res: Response) => {
-  clearAuthCookies(res);
-  res.json({ message: "Logged out successfully" });
+export const logout = async (req: any, res: Response) => {
+  try {
+    await prisma.user.update({ where: { id: req.user.id }, data: { refreshToken: null } });
+    clearAuthCookies(res);
+    res.json({ message: "Logged out successfully" });
+  } catch (error) { res.status(500).json({ error: "Logout failed" }); }
 };
 
 export const getProfile = async (req: any, res: Response) => {
