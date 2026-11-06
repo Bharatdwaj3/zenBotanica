@@ -4,3 +4,4 @@ resources:
   - argo-rollouts-kustomization.yaml
   - jam-bonsai-kustomization.yaml
   - jam-bonsai-namespace.yaml
+  - monitoring-kustomization.yaml
