@@ -44,3 +44,4 @@ yarn-error.log*
 next-env.d.tskubeseal
 kubeseal-*.tar.gz
 tilt.log
+.infisical.json
