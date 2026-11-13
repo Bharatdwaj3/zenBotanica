@@ -1,15 +1,7 @@
 update_settings(max_parallel_updates=1)
 k8s_kind('Rollout', image_json_path='{.spec.template.spec.containers[*].image}')
 
-# Render the chart, then drop any SealedSecret objects it defines.
-
-# Render Kustomize overlay for kam-bomsai, then drop any SealedSecret objects.
-# Secrets for kam-bomsai are managed separately via SOPS in infra/dev/secrets/
-rendered = local('kubectl kustomize k8s/overlays/dev', quiet=True)
-
-objects = decode_yaml_stream(rendered)
-objects = [o for o in objects if o.get('kind') != 'SealedSecret']
-k8s_yaml(encode_yaml_stream(objects))
+k8s_yaml(local('kubectl kustomize k8s/overlays/dev', quiet=True))
 
 docker_build(
     'ghcr.io/bharatdwaj3/botany-grove', 'grove',
@@ -22,26 +14,38 @@ docker_build(
 )
 docker_build(
     'ghcr.io/bharatdwaj3/botany-gardeners', 'gardeners',
+    dockerfile='gardeners/Dockerfile.dev',
     live_update=[
+        sync('gardeners/package.json', '/app/package.json'),
         sync('gardeners', '/app'),
+        run('npm install --legacy-peer-deps', trigger=['gardeners/package.json']),
     ],
 )
 docker_build(
     'ghcr.io/bharatdwaj3/botany-marketplace', 'marketplace',
+    dockerfile='marketplace/Dockerfile.dev',
     live_update=[
+        sync('marketplace/package.json', '/app/package.json'),
         sync('marketplace', '/app'),
+        run('npm install --legacy-peer-deps', trigger=['marketplace/package.json']),
     ],
 )
 docker_build(
     'ghcr.io/bharatdwaj3/botany-tending', 'tending',
+    dockerfile='tending/Dockerfile.dev',
     live_update=[
+        sync('tending/package.json', '/app/package.json'),
         sync('tending', '/app'),
+        run('npm install --legacy-peer-deps', trigger=['tending/package.json']),
     ],
 )
 docker_build(
     'ghcr.io/bharatdwaj3/botany-visitor-services', 'visitor-services',
+    dockerfile='visitor-services/Dockerfile.dev',
     live_update=[
+        sync('visitor-services/package.json', '/app/package.json'),
         sync('visitor-services', '/app'),
+        run('npm install --legacy-peer-deps', trigger=['visitor-services/package.json']),
     ],
 )
 docker_build(
@@ -58,6 +62,10 @@ k8s_resource('tending', port_forwards='9002:4002')
 k8s_resource('visitor-services', port_forwards='9004:4004')
 k8s_resource('frontend', port_forwards='9010:80')
 
-for f in listdir("infra/dev/secrets"):
-    if f.endswith(".sops.yaml"):
-        k8s_yaml(local("/usr/local/bin/sops -d " + f, quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/dev-tls-secret.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/gardeners-secrets.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/ghcr-secret.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/grove-secrets.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/marketplace-secrets.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/tending-secrets.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/visitor-services-secrets.sops.yaml', quiet=True))

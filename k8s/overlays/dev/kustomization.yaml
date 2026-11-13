@@ -1,0 +1,63 @@
+namespace: kam-bomsai
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      kind: Rollout
+    patch: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      metadata:
+        name: not-used
+      spec:
+        replicas: 1
+        template:
+          spec:
+            containers:
+              - name: not-used
+                resources:
+                  requests:
+                    cpu: 25m
+                    memory: 64Mi
+                  limits:
+                    cpu: 500m
+                    memory: 384Mi
+  - target:
+      kind: StatefulSet
+    patch: |
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: not-used
+      spec:
+        replicas: 1
+        template:
+          spec:
+            containers:
+              - name: not-used
+                resources:
+                  requests:
+                    cpu: 50m
+                    memory: 128Mi
+                  limits:
+                    cpu: 500m
+                    memory: 512Mi
+  - target:
+      kind: CronJob
+      name: tending-care-reminder
+    patch: |
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: tending-care-reminder
+      spec:
+        suspend: true
+  - target:
+      kind: Service
+      name: visitor-services-db
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: visitor-db
