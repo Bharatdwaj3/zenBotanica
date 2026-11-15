@@ -1,7 +1,7 @@
 update_settings(max_parallel_updates=1)
 k8s_kind('Rollout', image_json_path='{.spec.template.spec.containers[*].image}')
 
-k8s_yaml(local('kubectl kustomize k8s/overlays/dev', quiet=True))
+k8s_yaml(local('kubectl kustomize k8s/kam-bomsai', quiet=True))
 
 docker_build(
     'ghcr.io/bharatdwaj3/botany-grove', 'grove',
