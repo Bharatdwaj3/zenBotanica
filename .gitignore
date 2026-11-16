@@ -45,3 +45,8 @@ next-env.d.tskubeseal
 kubeseal-*.tar.gz
 tilt.log
 .infisical.json
+scrub-work-old-*
+env-backups
+scrub-work-old-*/
+env-backups/
+k8s/kam-bomsai/fix-labels-patch.yaml

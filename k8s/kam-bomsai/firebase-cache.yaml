@@ -1,0 +1,6 @@
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: firebase-data
+    mountPath: /root/.cache/firebase
+    subPath: emulator-cache
