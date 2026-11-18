@@ -6,6 +6,7 @@ namespace: kam-bomsai
 resources:
   - ../base
   - ingress.yaml
+  - ingress-frontend-api.yaml
 
 patches:
   - target:
