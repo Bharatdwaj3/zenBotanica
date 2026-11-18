@@ -25,3 +25,7 @@ patches:
       kind: Rollout
       name: firebase
     path: firebase-cache.yaml
+  - target:
+      kind: Rollout
+      name: visitor-services
+    path: visitor-db-host.yaml
