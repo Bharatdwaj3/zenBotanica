@@ -1,8 +1,0 @@
-# This patch replaces the malformed "Bonsai - Service" label with the valid "bonsai-service" label
-# It applies to all Rollout resources in the namespace
-- op: replace
-  path: /spec/selector/matchLabels/bonsai-service
-  value: gardeners
-- op: replace
-  path: /spec/template/metadata/labels/bonsai-service
-  value: gardeners
