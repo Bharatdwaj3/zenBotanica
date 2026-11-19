@@ -1,0 +1,44 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kam-bomsai-alias-tending
+  namespace: kam-bomsai
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/v1/session/$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: frontend.127.0.0.1.sslip.io
+      http:
+        paths:
+          - path: /api/v1/tending(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: tending
+                port:
+                  number: 4002
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kam-bomsai-alias-masters
+  namespace: kam-bomsai
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/v1/botanist/$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: frontend.127.0.0.1.sslip.io
+      http:
+        paths:
+          - path: /api/v1/masters(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: gardeners
+                port:
+                  number: 4003
