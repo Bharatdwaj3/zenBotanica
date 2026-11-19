@@ -48,3 +48,8 @@ marketplace 4005, frontend 80. Tilt forwards 9001 to 9005 and 9010 (frontend).
 - marketplace.127.0.0.1.sslip.io
 - tending.127.0.0.1.sslip.io
 - visitor-services.127.0.0.1.sslip.io
+
+## Kept on purpose (no references found, may serve other lanes)
+
+- `chart/`: stub Helm chart. Only `Chart.yaml` is tracked and `templates/` has no tracked files.
+- `secrets/`: empty directory. Git does not track empty directories.
