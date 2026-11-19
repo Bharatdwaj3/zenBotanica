@@ -1,0 +1,3 @@
+- op: replace
+  path: /spec/template/spec/containers/0/args/2
+  value: "n=0; until npx prisma generate && npx prisma migrate deploy; do n=$((n+1)); [ $n -ge 40 ] && exit 1; echo prisma-retry-$n; sleep 3; done; npm run dev"

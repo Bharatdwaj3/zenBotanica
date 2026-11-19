@@ -31,3 +31,7 @@ patches:
       kind: Rollout
       name: visitor-services
     path: visitor-db-host.yaml
+  - target:
+      kind: Rollout
+      name: ^(grove|gardeners|marketplace|tending|visitor-services)$
+    path: dev-command.yaml

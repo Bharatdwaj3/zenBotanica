@@ -21,6 +21,7 @@ Namespace: `kam-bomsai`. Context: `kind-kind`.
 - `scale-rollouts.yaml`, `scale-statefulsets.yaml`: replicas 1
 - `firebase-cache.yaml`: persists the firebase emulator cache
 - `visitor-db-host.yaml`: sets `PgSql_Host` for visitor-services
+- `dev-command.yaml`: runs the five backends with `npm run dev` (nodemon) so synced edits reload, and retries Prisma until cluster DNS is up
 
 ## Service ports
 
