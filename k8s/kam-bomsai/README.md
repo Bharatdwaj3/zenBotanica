@@ -5,7 +5,7 @@ Namespace: `kam-bomsai`. Context: `kind-kind`.
 
 ## Run it
 
-- Start Tilt: `(nohup tilt up --stream=true > ~/tilt.log 2>&1 &)`
+- Start Tilt: see the Dev loop section below (an empty Docker config is needed on this host).
 - Never run `tilt down`.
 - Never run `kubectl apply -k` here. It overwrites the images Tilt injects.
 - Reload after editing manifests: `touch Tiltfile`
@@ -58,3 +58,25 @@ marketplace 4005, frontend 80. Tilt forwards 9001 to 9005 and 9010 (frontend).
 ## Outside this folder
 
 - `k8s/overlays/dev/kustomization.yaml`: an older dev overlay on `../../base` with namespace `kam-bomsai`, superseded by this folder. Nothing references it. It still has `not-used` placeholder patches and renames Service `visitor-services-db` to `visitor-db`. Left untouched. Do not apply it alongside this overlay.
+
+## Dev loop (observed 2026-11-20)
+
+Start Tilt in the background with an empty Docker config. Docker's credential helper
+(`docker-credential-desktop.exe`) fails on this host, which breaks image builds that
+need Docker Hub metadata.
+
+    mkdir -p "$HOME/.cache/botany-tilt"
+    printf '{"auths":{}}\n' > "$HOME/.cache/botany-tilt/config.json"
+    nohup env DOCKER_CONFIG="$HOME/.cache/botany-tilt" tilt up --stream=true \
+      > "$HOME/.cache/botany-tilt/tilt.log" 2>&1 < /dev/null &
+
+Never run `tilt down`. Tilt dies whenever Docker or WSL restarts, so start it again.
+
+Automatic `live_update` did not fire for edits in `grove/` while the repo is on `/mnt/c`
+(Tilt's file watcher reported no events). The cause is not fully pinned down.
+Rebuild a service by hand instead:
+
+    tilt trigger grove
+    kubectl rollout status rollout/grove -n kam-bomsai --timeout=120s
+
+The same works for gardeners, marketplace, tending, visitor-services and frontend.
