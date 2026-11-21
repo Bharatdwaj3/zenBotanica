@@ -82,3 +82,13 @@ Rebuild a service by hand instead:
     kubectl rollout status rollout/grove -n kam-bomsai --timeout=120s
 
 The same works for gardeners, marketplace, tending, visitor-services and frontend.
+
+## Reinstall ingress-nginx (pinned)
+
+The cluster runs ingress-nginx controller v1.15.1. The install is not defined anywhere in
+this repo. To reinstall the same release, use the tagged manifest, never `main`:
+
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.15.1/deploy/static/provider/kind/deploy.yaml
+
+Checked 2026-11-21: that manifest ships the same image digest as the running controller
+(sha256:594ceea76b01c592858f803f9ff4d2cb40542cae2060410b2c95f75907d659e1).
