@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kam-bomsai-dev-tools
+  namespace: kam-bomsai
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: mailhog.127.0.0.1.sslip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mailhog
+                port:
+                  number: 8025

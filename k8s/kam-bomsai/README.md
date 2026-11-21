@@ -18,6 +18,7 @@ Namespace: `kam-bomsai`. Context: `kind-kind`.
 - `ingress.yaml`: one host per service, each routing `/` to its Service
 - `ingress-frontend-api.yaml`: same-origin `/api/v1/*` paths on the frontend host
 - `ingress-frontend-alias.yaml`: `/api/v1/tending` to session, `/api/v1/masters` to botanist
+- `ingress-tools.yaml`: MailHog UI on its own host
 - `scale-rollouts.yaml`, `scale-statefulsets.yaml`: replicas 1
 - `firebase-cache.yaml`: persists the firebase emulator cache
 - `visitor-db-host.yaml`: sets `PgSql_Host` for visitor-services
@@ -49,6 +50,7 @@ marketplace 4005, frontend 80. Tilt forwards 9001 to 9005 and 9010 (frontend).
 - marketplace.127.0.0.1.sslip.io
 - tending.127.0.0.1.sslip.io
 - visitor-services.127.0.0.1.sslip.io
+- mailhog.127.0.0.1.sslip.io (MailHog UI)
 
 ## Kept on purpose (no references found, may serve other lanes)
 

@@ -8,6 +8,7 @@ resources:
   - ingress.yaml
   - ingress-frontend-api.yaml
   - ingress-frontend-alias.yaml
+  - ingress-tools.yaml
 
 patches:
   - target:
