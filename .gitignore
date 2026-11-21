@@ -50,3 +50,4 @@ env-backups
 scrub-work-old-*/
 env-backups/
 k8s/kam-bomsai/fix-labels-patch.yaml
+*.bak
