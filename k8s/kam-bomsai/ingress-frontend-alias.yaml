@@ -42,3 +42,25 @@ spec:
                 name: gardeners
                 port:
                   number: 4003
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kam-bomsai-alias-masters-profile
+  namespace: kam-bomsai
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/v1/botanist/$1
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: frontend.127.0.0.1.sslip.io
+      http:
+        paths:
+          - path: /api/v1/masters/profile/(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: gardeners
+                port:
+                  number: 4003

@@ -17,7 +17,7 @@ Namespace: `kam-bomsai`. Context: `kind-kind`.
 - `kustomization.yaml`: resources and patches for the overlay
 - `ingress.yaml`: one host per service, each routing `/` to its Service
 - `ingress-frontend-api.yaml`: same-origin `/api/v1/*` paths on the frontend host
-- `ingress-frontend-alias.yaml`: `/api/v1/tending` to session, `/api/v1/masters` to botanist
+- `ingress-frontend-alias.yaml`: `/api/v1/tending` to session, `/api/v1/masters` to botanist (also masters/profile/:id to PUT /:id)
 - `ingress-tools.yaml`: MailHog UI on its own host
 - `scale-rollouts.yaml`, `scale-statefulsets.yaml`: replicas 1
 - `firebase-cache.yaml`: persists the firebase emulator cache
