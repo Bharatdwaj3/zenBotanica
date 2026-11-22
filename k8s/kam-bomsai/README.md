@@ -79,7 +79,7 @@ Automatic `live_update` did not fire for edits in `grove/` while the repo is on 
 Rebuild a service by hand instead:
 
     tilt trigger grove
-    kubectl rollout status rollout/grove -n kam-bomsai --timeout=120s
+    kubectl wait --for=jsonpath='{.status.phase}'=Healthy rollout/grove -n kam-bomsai --timeout=120s
 
 The same works for gardeners, marketplace, tending, visitor-services and frontend.
 
