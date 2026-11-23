@@ -69,3 +69,4 @@ k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/grove-secrets.sops.yaml
 k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/marketplace-secrets.sops.yaml', quiet=True))
 k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/tending-secrets.sops.yaml', quiet=True))
 k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/visitor-services-secrets.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/kam-tls-secret.sops.yaml', quiet=True))
