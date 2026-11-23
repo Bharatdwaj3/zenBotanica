@@ -36,3 +36,33 @@ patches:
       kind: Rollout
       name: ^(grove|gardeners|marketplace|tending|visitor-services)$
     path: dev-command.yaml
+  - target:
+      kind: Ingress
+    patch: |-
+      - op: add
+        path: /spec/tls
+        value:
+          - secretName: kam-tls
+            hosts:
+              - gardeners.127.0.0.1.sslip.io
+              - grove.127.0.0.1.sslip.io
+              - marketplace.127.0.0.1.sslip.io
+              - tending.127.0.0.1.sslip.io
+              - visitor-services.127.0.0.1.sslip.io
+              - frontend.127.0.0.1.sslip.io
+              - mailhog.127.0.0.1.sslip.io
+  - target:
+      kind: Ingress
+      name: ^kam-bomsai-dev-tools$
+    patch: |-
+      - op: add
+        path: /metadata/annotations
+        value:
+          nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  - target:
+      kind: Ingress
+      name: ^(kam-bomsai-alias-masters|kam-bomsai-alias-masters-profile|kam-bomsai-alias-tending|kam-bomsai-dev-frontend-api|kam-bomsai-dev-ingress)$
+    patch: |-
+      - op: add
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1ssl-redirect
+        value: "false"
