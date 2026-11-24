@@ -1,0 +1,123 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Connects the shared k8s/observability stack to kam-bomsai only. That folder is not edited.
+namespace: kam-bomsai
+
+resources:
+  - ../../observability
+  - ingress.yaml
+
+patches:
+  # The upstream SealedSecrets cannot decrypt here. Plain SOPS secrets with the same
+  # names live in ./secrets and are loaded by the Tiltfile once this folder is hooked in.
+  - target:
+      kind: SealedSecret
+    patch: |-
+      $patch: delete
+      apiVersion: bitnami.com/v1alpha1
+      kind: SealedSecret
+      metadata:
+        name: placeholder
+  - target:
+      kind: Deployment
+      name: grafana
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: grafana
+      spec:
+        template:
+          spec:
+            containers:
+              - name: bonsai-grafana
+                resources:
+                  requests:
+                    cpu: 20m
+                    memory: 96Mi
+                  limits:
+                    memory: 256Mi
+  - target:
+      kind: Deployment
+      name: prometheus
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: prometheus
+      spec:
+        template:
+          spec:
+            containers:
+              - name: bonsai-prometheus
+                resources:
+                  requests:
+                    cpu: 20m
+                    memory: 128Mi
+                  limits:
+                    memory: 512Mi
+  - target:
+      kind: Deployment
+      name: loki
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: loki
+      spec:
+        template:
+          spec:
+            containers:
+              - name: loki-nginx
+                resources:
+                  requests:
+                    cpu: 5m
+                    memory: 16Mi
+                  limits:
+                    memory: 64Mi
+              - name: bonsai-loki
+                resources:
+                  requests:
+                    cpu: 20m
+                    memory: 128Mi
+                  limits:
+                    memory: 384Mi
+  - target:
+      kind: Deployment
+      name: promtail
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: promtail
+      spec:
+        template:
+          spec:
+            containers:
+              - name: bonsai-promtail
+                resources:
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                  limits:
+                    memory: 128Mi
+  - target:
+      kind: Deployment
+      name: cadvisor
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: cadvisor
+      spec:
+        template:
+          spec:
+            containers:
+              - name: bonsai-cadvisor
+                resources:
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                  limits:
+                    memory: 256Mi
