@@ -9,6 +9,7 @@ resources:
   - ingress-frontend-api.yaml
   - ingress-frontend-alias.yaml
   - ingress-tools.yaml
+  - observability
 
 patches:
   - target:

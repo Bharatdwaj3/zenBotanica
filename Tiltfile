@@ -70,3 +70,15 @@ k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/marketplace-secrets.sop
 k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/tending-secrets.sops.yaml', quiet=True))
 k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/visitor-services-secrets.sops.yaml', quiet=True))
 k8s_yaml(local('/usr/local/bin/sops -d infra/dev/secrets/kam-tls-secret.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d k8s/kam-bomsai/observability/secrets/grafana-secrets.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d k8s/kam-bomsai/observability/secrets/loki-htpasswd.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d k8s/kam-bomsai/observability/secrets/loki-push-creds.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d k8s/kam-bomsai/observability/secrets/prometheus-web-config.sops.yaml', quiet=True))
+k8s_yaml(local('/usr/local/bin/sops -d k8s/kam-bomsai/observability/secrets/prometheus-web-creds.sops.yaml', quiet=True))
+
+# observability: defined, started on demand with: tilt trigger <name>
+k8s_resource('prometheus', auto_init=False, labels=['observability'])
+k8s_resource('grafana', auto_init=False, labels=['observability'])
+k8s_resource('loki', auto_init=False, labels=['observability'])
+k8s_resource('promtail', auto_init=False, labels=['observability'])
+k8s_resource('cadvisor', auto_init=False, labels=['observability'])
