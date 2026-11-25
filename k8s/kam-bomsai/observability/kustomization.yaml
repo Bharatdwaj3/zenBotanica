@@ -37,7 +37,7 @@ patches:
                     cpu: 20m
                     memory: 96Mi
                   limits:
-                    memory: 256Mi
+                    memory: 512Mi
   - target:
       kind: Deployment
       name: prometheus
